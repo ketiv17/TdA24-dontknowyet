@@ -9,5 +9,5 @@ echo "nginx loaded!"
 echo "php-fpm loaded!"
 
 echo "done!"
-# so the container doesn't quit
+# so the container doesn't quit (replace with bash for debugging)
 tail -f /dev/null
