@@ -1,0 +1,30 @@
+/* fonts and colors from brandmanual */
+
+/* fonts */
+.lalezar
+{
+  font-family: Lalezar, Arial, sans-serif;
+}
+.opensans
+{
+  font-family: "Open Sans", Arial, sans-serif;
+  font-weight: 400;
+}
+.opensans-bold
+{
+  font-family: "Open Sans", Arial, sans-serif;
+  font-weight: 700;
+}
+
+/* colors */
+.white  {color: #FFFFFF;}
+.jet    {color: #333333;}
+.skyblue{color: #74C7D3;}
+.sunglow{color: #FECB2E;}
+.prublue{color: #00384D;}
+/* background colors */
+.backwhite  {background-color: #FFFFFF;}
+.backjet    {background-color: #333333;}
+.backskyblue{background-color: #74C7D3;}
+.backsunglow{background-color: #FECB2E;}
+.backprublue{background-color: #00384D;}
