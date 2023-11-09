@@ -5,6 +5,6 @@ EXPOSE 80
 WORKDIR /srv
 RUN pacman -Sy --noconfirm nginx php-fpm
 COPY ./files /srv/
-RUN cp /srv/nginx.conf /etc/nginx/nginx.conf
+RUN mv /srv/nginx.conf /etc/nginx/nginx.conf
 
 ENTRYPOINT ["/srv/start.sh"]
