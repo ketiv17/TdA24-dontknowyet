@@ -7,9 +7,7 @@ body
 /* sizes and positions */
 .logo 
 {
-  position: relative;
-  left: 30px;
-  top: 30px;
+  padding: 30px;
   height: 75px;
 }
 .icon

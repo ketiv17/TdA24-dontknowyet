@@ -10,6 +10,7 @@
  
   <link rel="stylesheet" href="./assist/css.css" type="text/css">
   <link rel="stylesheet" href="./assist/brand.css" type="text/css">
+  <!-- favicon -->
   <link rel="icon" href="./icons/TdA_sipka/TdA_sipka_bila.svg" type="image/sgv">
 
   <!-- google fonts -->

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-  $title="Hello TdA";
+  $title="Hello TdA!";
   $keywords="tourdeaap, Tour, de, App, TdA, Hello";
   $deskription="fáze 1 TdA24";
   include_once "./assist/head.php";
@@ -17,9 +17,9 @@
 
 
 
-  <p class="heading lalezar">Hello TdA!</p>
+  <p class="heading lalezar sunglow">Hello TdA!</p>
   <p class="text opensans">Hello TdA!</p>
-  <p class="text opensans-bold">Hello TdA!</p>
+  <p class="text opensans-bold prublue">Hello TdA!</p>
 
 </body>
 </html>
