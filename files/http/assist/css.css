@@ -1,8 +1,5 @@
-body
-{
-  margin: 0;
-  background-color: #FFFFFF;
-}
+body{margin: 0;}
+a{text-decoration: none;}
 
 /* sizes and positions */
 .logo 
@@ -14,12 +11,20 @@ body
 {
   height: 50px;
 }
+
+/* topmenu */
 .topmenu
 {
   height: 135px;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
-
+.topmenu a
+{
+  font-size: 40px;
+  transition: color 500ms;
+}
 /* texts */
 .heading
 {

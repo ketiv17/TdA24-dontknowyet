@@ -9,9 +9,10 @@
 <body>  
   <!-- top menubar -->
   <div class="backskyblue topmenu">
-    <a href="/">
+    <a href="/" id="logo">
       <img src="./icons/TdA_LOGO/TeacherDigitalAgency_LOGO_white.svg" alt="tdalogowhite" class="logo">
     </a>
+    <a href="/hello/">Hello</a>
   </div>
 
 
