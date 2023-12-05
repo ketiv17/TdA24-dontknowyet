@@ -1,17 +1,19 @@
-<html lang = "cs">
-   <body>
-      <?php
-         $servername = "resurrectiongc.live";
-         $username = "dbaccess";
-         $password = "smrdis2";
-         $dbname = "test";
-         $conn = new mysqli($servername, $username, $password, $dbname); //Odkaz (Vytvoreni spojeni)
-         $sql = "SELECT name, id, permlvl, created FROM users"; //Odkaz (Vytvoreni dotazu v jazyce MySQL)
-         $result = mysqli_query($conn, $sql); //Odkaz (Odeslani a zpracovani dotazu serverem)
-         while($row = $result->fetch_assoc()) {
-            echo "id: " . $row["id"]. " - Jmeno: " . $row["name"]. " - PermLVL: " . $row["permlvl"]. " - Creation date: " . $row["created"]."<br>"; }
-         $conn->close(); //Odkaz (Uzavreni spojeni)
+<?php
+    //open connection to mysql db
+    $connection = mysqli_connect("resurrectiongc.live","dbaccess","smrdis2","test") or die("Error " . mysqli_error($connection));
 
-      ?>
-   </body>
-</html>
+    //fetch table rows from mysql db
+    $sql = "select * from users";
+    $result = mysqli_query($connection, $sql) or die("Error in Selecting " . mysqli_error($connection));
+
+    //create an array
+    $emparray = array();
+    while($row =mysqli_fetch_assoc($result))
+    {
+        $emparray[] = $row;
+    }
+    echo json_encode($emparray);
+
+    //close the db connection
+    mysqli_close($connection);
+?>
