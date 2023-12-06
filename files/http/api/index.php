@@ -1,5 +1,5 @@
 <?php
-// api.php
+// /api
 
 // Set the path to the file you want to serve
 $file_path = 'secret.json';
