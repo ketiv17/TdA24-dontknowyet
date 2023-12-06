@@ -7,7 +7,7 @@ $file_path = 'secret.json';
 // Check if the file exists
 if (file_exists($file_path)) {
     // Set the appropriate headers for file download
-    header('Content-Type: application/octet-stream');
+    header('Content-Type: application/json');
     header('Content-Disposition: attachment; filename="' . basename($file_path) . '"');
     header('Content-Length: ' . filesize($file_path));
 
