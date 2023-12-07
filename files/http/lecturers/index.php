@@ -112,6 +112,26 @@ if ($result->num_rows > 0) {
         echo json_encode(['error' => 'Invalid request']);
     }
 }
+elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    // Prepare a DELETE statement
+    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+
+    // Bind the id to the statement
+    $stmt->bind_param("i", $id);
+
+    // Set the id to 10
+    $id = 10;
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Check if any rows were deleted
+    if ($stmt->affected_rows > 0) {
+        echo "Row deleted successfully";
+    } else {
+        echo "No row with id = 10 found";
+    }
+}
 
 $conn->close();
 ?>
@@ -119,23 +139,3 @@ $conn->close();
 
 
 ///////////////////////////////////////// DELETE /////////////////////////////////////////
-
-<?php
-// Prepare a DELETE statement
-$stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-
-// Bind the id to the statement
-$stmt->bind_param("i", $id);
-
-// Set the id to 10
-$id = 10;
-
-// Execute the statement
-$stmt->execute();
-
-// Check if any rows were deleted
-if ($stmt->affected_rows > 0) {
-    echo "Row deleted successfully";
-} else {
-    echo "No row with id = 10 found";
-}
