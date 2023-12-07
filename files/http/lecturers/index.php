@@ -4,13 +4,13 @@ $username = "api";
 $password = "Ahoj-Jaksemas5";
 $dbname = "api";
 
-print_r($_SERVER);
-
-if (isset($_SERVER['REQUEST_METHOD'])) {
+//Shows current REQUEST_METHOD at the top of the document
+/*if (isset($_SERVER['REQUEST_METHOD'])) {
     echo 'Request method: ' . $_SERVER['REQUEST_METHOD'];
 } else {
     echo 'No request method set';
-}
+} */
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -113,14 +113,31 @@ if ($result->num_rows > 0) {
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
+    $uuid = isset($_GET['uuid']) ? $_GET['uuid'] : null;
+
+    if ($uuid !== null) {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
+        $stmt->bind_param("s", $uuid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if (mysqli_num_rows($result) === 0) {
+            http_response_code(404);
+            echo json_encode(['error' => 'No user found with this UUID']);
+            exit;
+        }
+    }
+    else {
+        http_response_code(400);
+        echo json_encode(["error" => "No UUID provied to delete"])
+    }
+
     // Prepare a DELETE statement
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM users WHERE uuid = ?");
 
     // Bind the id to the statement
     $stmt->bind_param("i", $id);
-
-    // Set the id to 10
-    $id = 10;
 
     // Execute the statement
     $stmt->execute();
@@ -135,7 +152,3 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
 $conn->close();
 ?>
-
-
-
-///////////////////////////////////////// DELETE /////////////////////////////////////////
