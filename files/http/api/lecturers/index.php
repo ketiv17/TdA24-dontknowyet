@@ -130,7 +130,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     }
     else {
         http_response_code(400);
-        echo json_encode(["error" => "No UUID provied to delete"])
+        echo json_encode(["error" => "No UUID provied to delete"]);
     }
 
     // Prepare a DELETE statement
