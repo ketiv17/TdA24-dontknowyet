@@ -136,8 +136,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Prepare a DELETE statement
     $stmt = $conn->prepare("DELETE FROM users WHERE uuid = ?");
 
-    // Bind the id to the statement
-    $stmt->bind_param("i", $id);
+    // Bind the uuid to the statement
+    $stmt->bind_param("s", $uuid);
 
     // Execute the statement
     $stmt->execute();
