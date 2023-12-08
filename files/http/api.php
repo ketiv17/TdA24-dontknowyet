@@ -1,8 +1,19 @@
 <?php
+
+//Head of the document ----------------------------------------------
+
 $servername = "resurrectiongc.live";
 $username = "api";
 $password = "Ahoj-Jaksemas5";
 $dbname = "api";
+
+// Error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Validate and sanitize input
+$uuid = isset($_GET['uuid']) ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_STRING) : null;
 
 //Shows current REQUEST_METHOD at the top of the document
 /*if (isset($_SERVER['REQUEST_METHOD'])) {
@@ -14,7 +25,6 @@ $dbname = "api";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $uuid = isset($_GET['uuid']) ? $_GET['uuid'] : null;
 
     if ($uuid !== null) {
         $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
@@ -61,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         $data[] = $user;
+        http_response_code(200);
     }
 
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -114,8 +125,6 @@ if ($result->num_rows > 0) {
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
-    $uuid = isset($_GET['uuid']) ? $_GET['uuid'] : null;
-
     if ($uuid !== null) {
         $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
         $stmt->bind_param("s", $uuid);
@@ -145,8 +154,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Check if any rows were deleted
     if ($stmt->affected_rows > 0) {
         echo "Row deleted successfully";
+        http_response_code(200);
     } else {
         echo "No row with specified UUID found";
+        http_response_code(404);
     }
 }
 
