@@ -121,7 +121,7 @@ if ($result->num_rows > 0) {
             $stmt->execute();
         }
 
-        http_response_code(201);
+        http_response_code(200);
         echo json_encode(['message' => 'User created successfully']);
     } else {
         http_response_code(400);
