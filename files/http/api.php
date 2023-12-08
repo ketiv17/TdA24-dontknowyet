@@ -22,7 +22,7 @@ $uuid = isset($_GET['uuid']) ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_S
     echo 'No request method set';
 } */
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = mysqli_connect($servername, $username, $password, $dbname);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
