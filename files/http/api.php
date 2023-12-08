@@ -15,6 +15,11 @@ error_reporting(E_ALL);
 // Validate and sanitize input
 $uuid = isset($_GET['uuid']) ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_STRING) : null;
 
+//Setting request method when not set
+if (!isset($_SERVER['REQUEST_METHOD'])) {
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+}
+
 //Shows current REQUEST_METHOD at the top of the document
 /*if (isset($_SERVER['REQUEST_METHOD'])) {
     echo 'Request method: ' . $_SERVER['REQUEST_METHOD'];
