@@ -7,6 +7,11 @@ $username = "api";
 $password = "Ahoj-Jaksemas5";
 $dbname = "api";
 
+// Error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Validate and sanitize input
 $uuid = isset($_GET['uuid']) ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_STRING) : null;
 
