@@ -146,7 +146,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     if ($stmt->affected_rows > 0) {
         echo "Row deleted successfully";
     } else {
-        echo "No row with id = 10 found";
+        echo "No row with specified UUID found";
     }
 }
 
