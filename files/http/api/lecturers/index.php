@@ -7,10 +7,11 @@ $username = "api";
 $password = "Ahoj-Jaksemas5";
 $dbname = "api";
 
-// Error reporting
+// Error reporting ---
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 
 // Validate and sanitize input
 $uuid = isset($_GET['uuid']) ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_STRING) : null;
@@ -28,6 +29,11 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 } */
 
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+//Check if MYSQL database is online
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
