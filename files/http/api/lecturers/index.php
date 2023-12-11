@@ -2,6 +2,8 @@
 
 //Head of the document ----------------------------------------------
 
+header('Content-Type: application/json');
+
 $servername = "resurrectiongc.live";
 $username = "api";
 $password = "Ahoj-Jaksemas5";
