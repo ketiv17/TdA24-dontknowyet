@@ -87,17 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $telephoneNumbersSql = "SELECT * FROM telephone_numbers WHERE uuid = '" . $row["uuid"] . "'";
         $telephoneNumbersResult = mysqli_query($conn, $telephoneNumbersSql);
         while($telephoneNumberRow = $telephoneNumbersResult->fetch_assoc()) {
-            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["num1"];
-            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["num2"];
-            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["num3"];
+            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["number"];
         }
 
         $emailsSql = "SELECT * FROM emails WHERE uuid = '" . $row["uuid"] . "'";
         $emailsResult = mysqli_query($conn, $emailsSql);
         while($emailRow = $emailsResult->fetch_assoc()) {
-            $user["contact"]["emails"][] = $emailRow["email1"];
-            $user["contact"]["emails"][] = $emailRow["email2"];
-            $user["contact"]["emails"][] = $emailRow["email3"];
+            $user["contact"]["emails"][] = $emailRow["email"];
         }
 
         $data[] = $user;
@@ -107,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response = [
         "data" => $data,
     ];
-    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+    convertToUtf8AndPrint($response);
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -150,10 +146,11 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         http_response_code(200);
-        echo json_encode($data); // Return the newly created lecturer
+        convertToUtf8AndPrint($data); // Return the newly created lecturer
     } else {
         http_response_code(400);
-        echo json_encode(['error' => 'Invalid request']);
+        $response = ['error' => 'Invalid request'];
+        convertToUtf8AndPrint($response);
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
@@ -195,4 +192,20 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 }
 
 $conn->close();
+?>
+<?php
+function convertToUtf8AndPrint($data) {
+    // Convert all strings in $data to UTF-8
+array_walk_recursive($data, function (&$item, $key) {
+    if (is_string($item)) {
+        $item = utf8_encode($item);
+    }
+});
+
+// Set the Content-Type header to application/json
+header('Content-Type: application/json');
+
+// Encode $data to JSON and print it
+echo json_encode($data, JSON_UNESCAPED_UNICODE);
+}
 ?>
