@@ -132,8 +132,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         foreach ($data['contact']['telephone_numbers'] as $telephone) {
-            $stmt = $conn->prepare("INSERT INTO telephone_numbers (uuid, number) VALUES (?, ?)");
-            $stmt->bind_param("ss", $data['uuid'], $telephone);
+            $stmt = $conn->prepare("INSERT INTO telephone_numbers (uuid, num1, num2, num3) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $data['uuid'], $telephone[0], $telephone[1], $telephone[2]);
             $stmt->execute();
         }
 
