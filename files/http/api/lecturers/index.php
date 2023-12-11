@@ -2,8 +2,6 @@
 
 //Head of the document ----------------------------------------------
 
-header('Content-Type: application/json');
-
 $servername = "resurrectiongc.live";
 $username = "api";
 $password = "Ahoj-Jaksemas5";
@@ -196,16 +194,16 @@ $conn->close();
 <?php
 function convertToUtf8AndPrint($data) {
     // Convert all strings in $data to UTF-8
-array_walk_recursive($data, function (&$item, $key) {
-    if (is_string($item)) {
-        $item = utf8_encode($item);
-    }
-});
+    array_walk_recursive($data, function (&$item, $key) {
+        if (is_string($item)) {
+            $item = mb_convert_encoding($item, 'UTF-8', 'auto');
+        }
+    });
 
-// Set the Content-Type header to application/json
-header('Content-Type: application/json');
+    // Set the Content-Type header to application/json
+    header('Content-Type: application/json');
 
-// Encode $data to JSON and print it
-echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    // Encode $data to JSON and print it
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 ?>
