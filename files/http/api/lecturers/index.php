@@ -87,7 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(200);
     }
 
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    $response = [
+        "data" => $data,
+    ];
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
