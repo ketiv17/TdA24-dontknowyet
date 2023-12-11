@@ -56,9 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     while($row = $result->fetch_assoc()) {
         $user = [
+            "uuid" => $row["uuid"],
             "first_name" => $row["first_name"],
             "last_name" => $row["last_name"],
-            "uuid" => $row["uuid"],
             "title_before" => $row["title_before"],
             "middle_name" => $row["middle_name"],
             "title_after" => $row["title_after"],
