@@ -112,20 +112,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
-// Prepare a SELECT statement to check if the UUID already exists
-$stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
-$stmt->bind_param("s", $data["uuid"]);
-$stmt->execute();
+    // Prepare a SELECT statement to check if the UUID already exists
+    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
+    $stmt->bind_param("s", $data["uuid"]);
+    $stmt->execute();
 
-// Get the result
-$result = $stmt->get_result();
+    // Get the result
+    $result = $stmt->get_result();
 
-// Check if any rows were returned
-if ($result->num_rows > 0) {
-    http_response_code(400);
-    echo json_encode(['error' => 'User with this UUID already exists']);
-    exit;
-}
+    // Check if any rows were returned
+    if ($result->num_rows > 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'User with this UUID already exists']);
+        exit;
+    }
     if ($data) {
         $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, uuid, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssssssi", $data['first_name'], $data['last_name'], $data['uuid'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour']);
@@ -150,7 +150,7 @@ if ($result->num_rows > 0) {
         }
 
         http_response_code(200);
-        echo json_encode(['message' => 'User created successfully']);
+        echo json_encode($data); // Return the newly created lecturer
     } else {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid request']);
