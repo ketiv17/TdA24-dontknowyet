@@ -69,9 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             "claim" => $row["claim"],
             "bio" => $row["bio"],
             "price_per_hour" => $row["price_per_hour"],
+            "tags" => [],
             "contact" => [
-                "telephone_numbers" => isset($row["telephone"]) ? [$row["telephone"]] : [],
-                "emails" => isset($row["email"]) ? [$row["email"]] : [],
+                "telephone_numbers" => [],
+                "emails" => [],
             ],
         ];
         $tagsSql = "SELECT * FROM tags WHERE uuid = " . $row["uuid"];
@@ -81,6 +82,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 "uuid" => $tagRow["uuid"],
                 "name" => $tagRow["name"],
             ];
+        }
+
+        $telephoneNumbersSql = "SELECT * FROM telephone_numbers WHERE uuid = " . $row["uuid"];
+        $telephoneNumbersResult = mysqli_query($conn, $telephoneNumbersSql);
+        while($telephoneNumberRow = $telephoneNumbersResult->fetch_assoc()) {
+            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["num1"];
+            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["num2"];
+            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["num3"];
+        }
+
+        $emailsSql = "SELECT * FROM emails WHERE uuid = " . $row["uuid"];
+        $emailsResult = mysqli_query($conn, $emailsSql);
+        while($emailRow = $emailsResult->fetch_assoc()) {
+            $user["contact"]["emails"][] = $emailRow["email1"];
+            $user["contact"]["emails"][] = $emailRow["email2"];
+            $user["contact"]["emails"][] = $emailRow["email3"];
         }
 
         $data[] = $user;
