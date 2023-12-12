@@ -7,7 +7,7 @@ RUN pacman -Sy --noconfirm nginx php-fpm
 COPY ./files /srv/
 RUN mv /srv/nginx.conf /etc/nginx/nginx.conf
 
-# Take the DB_PASSWORD action secret and make it enviromental variable something with it
+# Take the DB_PASSWORD action secret and make it enviromental variable
 ARG DB_PASSWORD
 ENV DB_PASSWORD=$DB_PASSWORD
 
