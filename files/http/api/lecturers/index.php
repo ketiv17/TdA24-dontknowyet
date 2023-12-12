@@ -14,7 +14,9 @@ error_reporting(E_ALL);
 
 
 // Validate and sanitize input
-$uuid = isset($_GET['uuid']) ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
+$uuid = isset($_GET['uuid']) && !empty(filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_FULL_SPECIAL_CHARS))
+  ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+  : null;
 
 //Setting request method when not set
 if (!isset($_SERVER['REQUEST_METHOD'])) {
