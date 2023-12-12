@@ -11,5 +11,5 @@ echo "php-fpm started!"
 
 echo "done!"
 # so the container doesn't quit (replace with bash for debugging)
-tail -f /dev/null
-#bash
+#tail -f /dev/null
+bash

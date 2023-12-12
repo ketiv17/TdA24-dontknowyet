@@ -1,7 +1,7 @@
 /* fonts and colors from brandmanual */
 
 /* fonts */
-.lalezar
+.topmenu a, .lalezar
 {
   font-family: Lalezar, Arial, sans-serif;
 }
@@ -16,15 +16,15 @@
   font-weight: 700;
 }
 
-/* colors */
-.white  {color: #FFFFFF;}
-.jet    {color: #333333;}
-.skyblue{color: #74C7D3;}
-.sunglow{color: #FECB2E;}
-.prublue{color: #00384D;}
-/* background colors */
-.backwhite  {background-color: #FFFFFF;}
-.backjet    {background-color: #333333;}
-.backskyblue{background-color: #74C7D3;}
-.backsunglow{background-color: #FECB2E;}
-.backprublue{background-color: #00384D;}
+                    /* colors */
+                    .white  {color: #FFFFFF;}
+                    .jet    {color: #333333;}
+                    .skyblue{color: #74C7D3;}
+.topmenu a:hover,   .sunglow{color: #FECB2E;}
+.topmenu a,         .prublue{color: #00384D;}
+                    /* background colors */
+body,               .backwhite  {background-color: #FFFFFF;}
+                    .backjet    {background-color: #333333;}
+                    .backskyblue{background-color: #74C7D3;}
+                    .backsunglow{background-color: #FECB2E;}
+                    .backprublue{background-color: #00384D;}
