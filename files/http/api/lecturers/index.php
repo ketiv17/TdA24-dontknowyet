@@ -101,9 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $response = [
-        "data" => $data,
+        $data
     ];
-    convertToUtf8AndPrint($user);
+    convertToUtf8AndPrint($response);
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
