@@ -123,8 +123,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     if ($data) {
-        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, uuid, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssi", $data['first_name'], $data['last_name'], $data['uuid'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour']);
+        $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssi", $data['uuid'], $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour']);
         $stmt->execute();
 
         foreach ($data['contact']['telephone_numbers'] as $telephone) {
