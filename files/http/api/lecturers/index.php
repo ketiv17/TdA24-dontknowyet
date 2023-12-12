@@ -141,7 +141,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($data['tags'] as $tag) {
             $stmt = $conn->prepare("INSERT INTO tags (uuid, name) VALUES (?, ?)");
-            $stmt->bind_param("ss", $tag['uuid'], $tag['name']);
+            $stmt->bind_param("ss", $data['uuid'], $tag['name']);
             $stmt->execute();
         }
 
