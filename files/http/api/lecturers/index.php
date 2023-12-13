@@ -43,16 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Prepare a SELECT statement to check if the UUID already exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
-    $stmt->bind_param("s", $data["uuid"]);
-    $stmt->execute();
+    // Generate UUID if not provided
+    if (!isset($data["uuid"])) {
+        $data["uuid"] = generateUuidV4();
+    }
 
-    // Get the result
-    $result = $stmt->get_result();
-
-    // Check if any rows were returned
-    if ($result->num_rows > 0) {
+    // Check for already existing UUID
+    if (UUIDCheck($data["uuid"])) {
         http_response_code(400);
         echo json_encode(['error' => 'User with this UUID already exists']);
         exit;
@@ -75,8 +72,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         foreach ($data['tags'] as $tag) {
-            $stmt = $conn->prepare("INSERT INTO tags (uuid, name) VALUES (?, ?)");
-            $stmt->bind_param("ss", $data['uuid'], $tag['name']);
+            $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $data["uuid"], $tag["name"], $tag["taguuid"]);
             $stmt->execute();
         }
         
@@ -224,5 +221,31 @@ if (count($data) === 1) {
     // If there's more than one user, return them as an array
     return $data;
     }
+}
+
+function UUIDCheck($uuid) {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT 1 FROM users WHERE uuid = ?");
+    $stmt->bind_param("s", $uuid);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->num_rows > 0;
+}
+
+function generateUuidV4() {
+    do {
+        $uuid = sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), // 32 bits for "time_low"
+            mt_rand(0, 0xffff), // 16 bits for "time_mid"
+            mt_rand(0, 0x0fff) | 0x4000, // 16 bits for "time_hi_and_version", four most significant bits holds version number 4
+            mt_rand(0, 0x3fff) | 0x8000, // 16 bits, 8 bits for "clk_seq_hi_res", 8 bits for "clk_seq_low", two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff) // 48 bits for "node"
+        );
+    } while (UUIDCheck($uuid));
+
+    return $uuid;
 }
 ?>
