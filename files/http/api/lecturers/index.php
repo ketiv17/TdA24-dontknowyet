@@ -223,5 +223,6 @@ if (count($data) === 1) {
 } else {
     // If there's more than one user, return them as an array
     return $data;
+    }
 }
 ?>
