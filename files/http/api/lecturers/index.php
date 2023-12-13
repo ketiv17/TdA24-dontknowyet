@@ -72,8 +72,25 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         foreach ($data['tags'] as $tag) {
+            // Check for tag UUID
+            $stmt = $conn->prepare("SELECT * FROM tag_list WHERE tag_name = ?");
+            $stmt->bind_param("s", $tag["name"]);
+            $stmt->execute();
+            $taguuid = $stmt->get_result();
+
+            // If tag doesn't exist, create it
+            if (mysqli_num_rows($taguuid) === 0) {
+                $taguuid = generateUuidV4();
+                $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid) VALUES (?, ?)");
+                $stmt->bind_param("ss", $tag["name"], $taguuid);
+                $stmt->execute();
+            } else {
+                $taguuid = $taguuid->fetch_assoc()["tag_uuid"];
+            }
+            
+            // Inserting into tags table
             $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $data["uuid"], $tag["name"], $tag["uuid"]);
+            $stmt->bind_param("sss", $data["uuid"], $tag["name"], $taguuid);
             $stmt->execute();
         }
         
