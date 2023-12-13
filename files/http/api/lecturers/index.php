@@ -136,8 +136,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 }
 
 $conn->close();
-?>
-<?php
+
 function convertToUtf8AndPrint($data) {
     // Convert all strings in $data to UTF-8
     array_walk_recursive($data, function (&$item, $key) {
@@ -153,7 +152,8 @@ function convertToUtf8AndPrint($data) {
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 
-function returnUUIDdata($uuid)
+function returnUUIDdata($uuid) {
+    global $conn;
 
 if ($uuid !== null) {
     $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = $uuid");
