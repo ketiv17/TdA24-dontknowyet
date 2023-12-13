@@ -1,21 +1,15 @@
 <?php
-// /api
 
-// Set the path to the file you want to serve
-$file_path = 'secret.json';
+// Create a JSON object
+$data = array(
+  "secret" => "The cake is a lie"
+);
 
-// Check if the file exists
-if (file_exists($file_path)) {
-    // Set the appropriate headers for file download
-    header('Content-Type: application/json');
-    header('Content-Disposition: attachment; filename="' . basename($file_path) . '"');
-    header('Content-Length: ' . filesize($file_path));
+// Encode the JSON object
+$json = json_encode($data);
 
-    // Read the file and output it to the browser
-    readfile($file_path);
-} else {
-    // File not found
-    http_response_code(404);
-    echo 'File not found.';
-}
-?>
+// Set the HTTP headers
+header('Content-Type: application/json');
+
+// Send the JSON data
+echo $json;
