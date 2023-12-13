@@ -14,8 +14,8 @@ error_reporting(E_ALL);
 
 
 // Validate and sanitize input
-$uuid = isset($_GET['uuid']) && !empty(filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_FULL_SPECIAL_CHARS))
-  ? filter_input(INPUT_GET, 'uuid', FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+$uuid = isset($_GET['uuid']) && preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $_GET['uuid'])
+  ? $_GET['uuid']
   : null;
 
 //Setting request method when not set
@@ -155,18 +155,20 @@ function convertToUtf8AndPrint($data) {
 function returnUUIDdata($uuid) {
     global $conn;
 
-if ($uuid !== null) {
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = $uuid");
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($uuid !== null) {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = $uuid");
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if (mysqli_num_rows($result) === 0) {
-        http_response_code(404);
-        echo json_encode(['error' => 'No user found with this UUID']);
-        exit;
+        if (mysqli_num_rows($result) === 0) {
+            http_response_code(404);
+            echo json_encode(['error' => 'No user found with this UUID']);
+            exit;
+        }
+
+    } else { 
+        $result = mysqli_query($conn, "SELECT * FROM users"); 
     }
-
-    } else { $result = mysqli_query($conn, "SELECT * FROM users"); }
 
 $data = [];
 
