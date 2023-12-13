@@ -156,7 +156,8 @@ function returnUUIDdata($uuid) {
     global $conn;
 
     if ($uuid !== null) {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = $uuid");
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
+        $stmt->bind_param("s", $uuid);
         $stmt->execute();
         $result = $stmt->get_result();
 
