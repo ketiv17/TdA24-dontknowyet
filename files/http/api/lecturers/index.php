@@ -142,6 +142,11 @@ function convertToUtf8AndPrint($data) {
         }
     });
 
+    // If $data is an array with a single element, convert it to an object
+    if (is_array($data) && count($data) === 1) {
+        $data = $data[0];
+    }
+
     // Set the Content-Type header to application/json
     header('Content-Type: application/json');
 
