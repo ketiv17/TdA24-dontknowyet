@@ -4,7 +4,7 @@
 
 $servername = "resurrectiongc.live";
 $username = "api";
-$password = "Ahoj-Jaksemas5";
+$password = getenv('DB_PASSWORD');
 $dbname = "api";
 
 // Error reporting ---
