@@ -174,11 +174,19 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     // Prepare a DELETE statement
     $stmt = $conn->prepare("DELETE FROM users WHERE uuid = ?");
-
-    // Bind the uuid to the statement
     $stmt->bind_param("s", $uuid);
+    $stmt->execute();
 
-    // Execute the statement
+    $stmt = $conn->prepare("DELETE FROM tags WHERE uuid = ?");
+    $stmt->bind_param("s", $uuid);
+    $stmt->execute();
+
+    $stmt = $conn->prepare("DELETE FROM telephone_numbers WHERE uuid = ?");
+    $stmt->bind_param("s", $uuid);
+    $stmt->execute();
+
+    $stmt = $conn->prepare("DELETE FROM emails WHERE uuid = ?");
+    $stmt->bind_param("s", $uuid);
     $stmt->execute();
 
     // Check if any rows were deleted
