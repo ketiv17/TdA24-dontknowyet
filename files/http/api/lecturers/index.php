@@ -38,72 +38,7 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
-    if ($uuid !== null) {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
-        $stmt->bind_param("s", $uuid);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if (mysqli_num_rows($result) === 0) {
-            http_response_code(404);
-            echo json_encode(['error' => 'No user found with this UUID']);
-            exit;
-        }
-    } else {
-        $result = mysqli_query($conn, "SELECT * FROM users");
-    }
-
-    $data = [];
-
-    while($row = $result->fetch_assoc()) {
-        $user = [
-            "uuid" => $row["uuid"],
-            "first_name" => $row["first_name"],
-            "last_name" => $row["last_name"],
-            "title_before" => $row["title_before"],
-            "middle_name" => $row["middle_name"],
-            "title_after" => $row["title_after"],
-            "picture_url" => $row["picture_url"],
-            "location" => $row["location"],
-            "claim" => $row["claim"],
-            "bio" => $row["bio"],
-            "price_per_hour" => $row["price_per_hour"],
-            "tags" => [],
-            "contact" => [
-                "telephone_numbers" => [],
-                "emails" => [],
-            ],
-        ];
-        $tagsSql = "SELECT * FROM tags WHERE uuid = '" . $row["uuid"] . "'";
-        $tagsResult = mysqli_query($conn, $tagsSql);
-        while($tagRow = $tagsResult->fetch_assoc()) {
-            $user["tags"][] = [
-                "uuid" => $tagRow["uuid"],
-                "name" => $tagRow["name"],
-            ];
-        }
-
-        $telephoneNumbersSql = "SELECT * FROM telephone_numbers WHERE uuid = '" . $row["uuid"] . "'";
-        $telephoneNumbersResult = mysqli_query($conn, $telephoneNumbersSql);
-        while($telephoneNumberRow = $telephoneNumbersResult->fetch_assoc()) {
-            $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["number"];
-        }
-
-        $emailsSql = "SELECT * FROM emails WHERE uuid = '" . $row["uuid"] . "'";
-        $emailsResult = mysqli_query($conn, $emailsSql);
-        while($emailRow = $emailsResult->fetch_assoc()) {
-            $user["contact"]["emails"][] = $emailRow["email"];
-        }
-
-        $data[] = $user;
-        http_response_code(200);
-    }
-
-    $response = [
-        $data
-    ];
-    convertToUtf8AndPrint($response);
+    convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -144,9 +79,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("ss", $data['uuid'], $tag['name']);
             $stmt->execute();
         }
-
+        
+        convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
         http_response_code(200);
-        convertToUtf8AndPrint($data); // Return the newly created lecturer
+
     } else {
         http_response_code(400);
         $response = ['error' => 'Invalid request'];
@@ -215,5 +151,73 @@ function convertToUtf8AndPrint($data) {
 
     // Encode $data to JSON and print it
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
+}
+
+function returnUUIDdata($uuid)
+
+if ($uuid !== null) {
+    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = $uuid");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (mysqli_num_rows($result) === 0) {
+        http_response_code(404);
+        echo json_encode(['error' => 'No user found with this UUID']);
+        exit;
+    }
+
+    } else { $result = mysqli_query($conn, "SELECT * FROM users"); }
+
+$data = [];
+
+while($row = $result->fetch_assoc()) {
+    $user = [
+        "uuid" => $row["uuid"],
+        "first_name" => $row["first_name"],
+        "last_name" => $row["last_name"],
+        "title_before" => $row["title_before"],
+        "middle_name" => $row["middle_name"],
+        "title_after" => $row["title_after"],
+        "picture_url" => $row["picture_url"],
+        "location" => $row["location"],
+        "claim" => $row["claim"],
+        "bio" => $row["bio"],
+        "price_per_hour" => $row["price_per_hour"],
+        "tags" => [],
+        "contact" => [
+            "telephone_numbers" => [],
+            "emails" => [],
+        ],
+    ];
+    $tagsSql = "SELECT * FROM tags WHERE uuid = '" . $row["uuid"] . "'";
+    $tagsResult = mysqli_query($conn, $tagsSql);
+    while($tagRow = $tagsResult->fetch_assoc()) {
+        $user["tags"][] = [
+            "uuid" => $tagRow["uuid"],
+            "name" => $tagRow["name"],
+        ];
+    }
+
+    $telephoneNumbersSql = "SELECT * FROM telephone_numbers WHERE uuid = '" . $row["uuid"] . "'";
+    $telephoneNumbersResult = mysqli_query($conn, $telephoneNumbersSql);
+    while($telephoneNumberRow = $telephoneNumbersResult->fetch_assoc()) {
+        $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["number"];
+    }
+
+    $emailsSql = "SELECT * FROM emails WHERE uuid = '" . $row["uuid"] . "'";
+    $emailsResult = mysqli_query($conn, $emailsSql);
+    while($emailRow = $emailsResult->fetch_assoc()) {
+        $user["contact"]["emails"][] = $emailRow["email"];
+    }
+
+    $data[] = $user;
+    http_response_code(200);
+}
+
+$response = [
+    $data
+];
+
+return $response;
 }
 ?>
