@@ -189,11 +189,11 @@ while($row = $result->fetch_assoc()) {
             "emails" => [],
         ],
     ];
-    $tagsSql = "SELECT * FROM tags WHERE uuid = '" . $row["uuid"] . "'";
+    $tagsSql = "SELECT * FROM tags WHERE user_uuid = '" . $row["uuid"] . "'";
     $tagsResult = mysqli_query($conn, $tagsSql);
     while($tagRow = $tagsResult->fetch_assoc()) {
         $user["tags"][] = [
-            "uuid" => $tagRow["uuid"],
+            "uuid" => $tagRow["tag_uuid"],
             "name" => $tagRow["name"],
         ];
     }
