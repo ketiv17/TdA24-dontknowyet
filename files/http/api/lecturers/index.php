@@ -73,7 +73,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($data['tags'] as $tag) {
             $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $data["uuid"], $tag["name"], $tag["taguuid"]);
+            $stmt->bind_param("sss", $data["uuid"], $tag["name"], $tag["uuid"]);
             $stmt->execute();
         }
         
@@ -194,7 +194,7 @@ while($row = $result->fetch_assoc()) {
     while($tagRow = $tagsResult->fetch_assoc()) {
         $user["tags"][] = [
             "uuid" => $tagRow["tag_uuid"],
-            "name" => $tagRow["name"],
+            "name" => $tagRow["tag_name"],
         ];
     }
 
