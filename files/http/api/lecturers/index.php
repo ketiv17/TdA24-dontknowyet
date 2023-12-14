@@ -38,6 +38,8 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+    //echo "Právě jsi použil metodu GET";
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -94,7 +96,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
         
-        convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
+        echo "http://7cad0da12da55785.app.tourdeapp.cz/api/lecturers/index.php?uuid=".$data["uuid"];
+        //convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
         http_response_code(200);
 
     } else {
@@ -161,7 +164,11 @@ function convertToUtf8AndPrint($data) {
 
     // If $data is an array with a single element, convert it to an object
     if (is_array($data) && count($data) === 1) {
-        $data = $data[0];
+        $data = (object)$data[0];
+    } else if (is_array($data)) {
+        $data = array_map(function($item) {
+            return (object)$item;
+        }, $data);
     }
 
     // Set the Content-Type header to application/json
