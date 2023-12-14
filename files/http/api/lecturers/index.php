@@ -39,8 +39,8 @@ if ($conn->connect_error) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-    echo "Právě jsi použil metodu GET"
-    //convertToUtf8AndPrint(returnUUIDdata($uuid));
+    //echo "Právě jsi použil metodu GET";
+    convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -96,7 +96,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
         
-        convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
+        echo "http://7cad0da12da55785.app.tourdeapp.cz/api/lecturers/index.php?uuid=".$data["uuid"]
+        //convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
         http_response_code(200);
 
     } else {
