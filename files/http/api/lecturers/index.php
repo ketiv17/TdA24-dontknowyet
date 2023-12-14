@@ -96,7 +96,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
         
-        echo "http://7cad0da12da55785.app.tourdeapp.cz/api/lecturers/index.php?uuid=".$data["uuid"]
+        echo "http://7cad0da12da55785.app.tourdeapp.cz/api/lecturers/index.php?uuid=".$data["uuid"];
         //convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
         http_response_code(200);
 
