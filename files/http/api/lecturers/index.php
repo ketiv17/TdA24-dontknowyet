@@ -161,7 +161,11 @@ function convertToUtf8AndPrint($data) {
 
     // If $data is an array with a single element, convert it to an object
     if (is_array($data) && count($data) === 1) {
-        $data = $data[0];
+        $data = (object)$data[0];
+    } else if (is_array($data)) {
+        $data = array_map(function($item) {
+            return (object)$item;
+        }, $data);
     }
 
     // Set the Content-Type header to application/json
