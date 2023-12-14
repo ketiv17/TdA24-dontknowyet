@@ -23,10 +23,10 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
     $_SERVER['REQUEST_METHOD'] = 'GET';
 }
 
+header('Content-Type: application/json; charset=utf-8');
 //Shows current REQUEST_METHOD at the top of the document
 if (isset($_SERVER['REQUEST_METHOD'])) {
-    $text[0] = 'Request method: ' . $_SERVER['REQUEST_METHOD'];
-    echo convertToUtf8AndPrint(json_encode(text[0]));
+    echo 'Request method: ' . $_SERVER['REQUEST_METHOD'];
 } else {
     echo 'No request method set';
 }
@@ -172,7 +172,7 @@ function convertToUtf8AndPrint($data) {
     }
 
     // Set the Content-Type header to application/json
-    header('Content-Type: application/json');
+    //header('Content-Type: application/json');
 
     // Encode $data to JSON and print it
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
