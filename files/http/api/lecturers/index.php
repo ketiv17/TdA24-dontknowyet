@@ -24,11 +24,11 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 }
 
 //Shows current REQUEST_METHOD at the top of the document
-/*if (isset($_SERVER['REQUEST_METHOD'])) {
+if (isset($_SERVER['REQUEST_METHOD'])) {
     echo 'Request method: ' . $_SERVER['REQUEST_METHOD'];
 } else {
     echo 'No request method set';
-} */
+}
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -168,7 +168,7 @@ function convertToUtf8AndPrint($data) {
     header('Content-Type: application/json');
 
     // Encode $data to JSON and print it
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    //echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 
 function returnUUIDdata($uuid) {
