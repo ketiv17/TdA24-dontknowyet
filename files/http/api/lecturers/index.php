@@ -25,7 +25,8 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 
 //Shows current REQUEST_METHOD at the top of the document
 if (isset($_SERVER['REQUEST_METHOD'])) {
-    echo convertToUtf8AndPrint(json_encode('Request method: ' . $_SERVER['REQUEST_METHOD']));
+    $text[0] = 'Request method: ' . $_SERVER['REQUEST_METHOD'];
+    echo convertToUtf8AndPrint(json_encode(text[0]));
 } else {
     echo 'No request method set';
 }
