@@ -38,7 +38,9 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    convertToUtf8AndPrint(returnUUIDdata($uuid));
+
+    echo "Právě jsi použil metodu GET"
+    //convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
