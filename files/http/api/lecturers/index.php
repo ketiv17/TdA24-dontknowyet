@@ -25,7 +25,7 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 
 //Shows current REQUEST_METHOD at the top of the document
 if (isset($_SERVER['REQUEST_METHOD'])) {
-    echo 'Request method: ' . $_SERVER['REQUEST_METHOD'];
+    echo convertToUtf8AndPrint(json_encode('Request method: ' . $_SERVER['REQUEST_METHOD']));
 } else {
     echo 'No request method set';
 }
@@ -96,8 +96,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
         
-        echo "http://7cad0da12da55785.app.tourdeapp.cz/api/lecturers/index.php?uuid=".$data["uuid"];
-        //convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
+        convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return the newly created lecturer
         http_response_code(200);
 
     } else {
@@ -175,7 +174,7 @@ function convertToUtf8AndPrint($data) {
     header('Content-Type: application/json');
 
     // Encode $data to JSON and print it
-    //echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 
 function returnUUIDdata($uuid) {
