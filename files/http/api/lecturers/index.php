@@ -19,9 +19,10 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
   : null;
 
 //Setting request method when not set
+/*
 if (!isset($_SERVER['REQUEST_METHOD'])) {
     $_SERVER['REQUEST_METHOD'] = 'GET';
-}
+} */
 
 header('Content-Type: application/json; charset=utf-8');
 //Shows current REQUEST_METHOD at the top of the document
