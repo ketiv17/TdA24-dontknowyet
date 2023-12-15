@@ -103,8 +103,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
         http_response_code(400);
-        $response = ['error' => 'Invalid request'];
-        convertToUtf8AndPrint($response);
+        echo json_encode(['code' => "400", 'message' => 'No data provided']);
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
@@ -117,13 +116,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
         if (mysqli_num_rows($result) === 0) {
             http_response_code(404);
-            echo json_encode(['error' => 'No user found with this UUID']);
+            echo json_encode(["code" => 404, "message" => "User not found"]);
             exit;
         }
     }
     else {
         http_response_code(400);
-        echo json_encode(["error" => "No UUID provied to delete"]);
+        echo json_encode(["code" => 404, "message" => "No UUID provided"]);
     }
 
     // Prepare a DELETE statement
@@ -145,11 +144,11 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     // Check if any rows were deleted
     if ($stmt->affected_rows > 0) {
-        echo "Row deleted successfully";
         http_response_code(200);
+        echo json_encode(["code" => 200, "message" => "User deleted"]);
     } else {
-        echo "No row with specified UUID found";
         http_response_code(404);
+        echo json_encode(["code" => 404, "message" => "User not found"]);
     }
 }
 
@@ -190,7 +189,7 @@ function returnUUIDdata($uuid) {
 
         if (mysqli_num_rows($result) === 0) {
             http_response_code(404);
-            echo json_encode(['error' => 'No user found with this UUID']);
+            echo json_encode(["code" => 404, "message" => "User not found"]);
             exit;
         }
 
