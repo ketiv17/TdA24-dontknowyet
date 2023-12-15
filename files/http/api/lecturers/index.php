@@ -165,15 +165,11 @@ function convertToUtf8AndPrint($data) {
 
     // If $data is an array with a single element, convert it to an object
     if (is_array($data) && count($data) === 1) {
-        $data = (object)$data[0];
-    } else if (is_array($data)) {
-        $data = array_map(function($item) {
-            return (object)$item;
-        }, $data);
+        $data = $data[0];
     }
 
     // Set the Content-Type header to application/json
-    //header('Content-Type: application/json');
+    header('Content-Type: application/json');
 
     // Encode $data to JSON and print it
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
