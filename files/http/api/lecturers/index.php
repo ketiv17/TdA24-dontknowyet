@@ -165,58 +165,74 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     }
 
     if ($data) {
-        $stmt = $conn->prepare("UPDATE users SET first_name = ?, last_name = ?, title_before = ?, middle_name = ?, title_after = ?, picture_url = ?, location = ?, claim = ?, bio = ?, price_per_hour = ? WHERE uuid = ?");
-        $stmt->bind_param("sssssssssis", $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour'], $uuid);
-        $stmt->execute();
+        $query = "UPDATE users SET ";
+        $params = [];
 
-        $stmt = $conn->prepare("DELETE FROM tags WHERE user_uuid = ?");
-        $stmt->bind_param("s", $uuid);
-        $stmt->execute();
-
-        $stmt = $conn->prepare("DELETE FROM telephone_numbers WHERE uuid = ?");
-        $stmt->bind_param("s", $uuid);
-        $stmt->execute();
-
-        $stmt = $conn->prepare("DELETE FROM emails WHERE uuid = ?");
-        $stmt->bind_param("s", $uuid);
-        $stmt->execute();
-
-        foreach ($data['contact']['telephone_numbers'] as $telephone) {
-            $stmt = $conn->prepare("INSERT INTO telephone_numbers (uuid, number) VALUES (?, ?)");
-            $stmt->bind_param("ss", $uuid, $telephone);
-            $stmt->execute();
+        foreach ($data as $key => $value) {
+            if ($value !== null && $key != 'contact' && $key != 'tags') {
+                $query .= "$key = ?, ";
+                $params[] = $value;
+            }
         }
 
-        foreach ($data['contact']['emails'] as $email) {
-            $stmt = $conn->prepare("INSERT INTO emails (uuid, email) VALUES (?, ?)");
-            $stmt->bind_param("ss", $uuid, $email);
-            $stmt->execute();
-        }
+        $query = rtrim($query, ", ");
+        $query .= " WHERE uuid = ?";
+        $params[] = $uuid;
 
-        foreach ($data['tags'] as $tag) {
-            // Check for tag UUID
-            $stmt = $conn->prepare("SELECT * FROM tag_list WHERE tag_name = ?");
-            $stmt->bind_param("s", $tag["name"]);
-            $stmt->execute();
-            $taguuid = $stmt->get_result();
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param(str_repeat('s', count($params)), ...$params);
+        $stmt->execute();
 
-            // If tag doesn't exist, create it
-            if (mysqli_num_rows($taguuid) === 0) {
-                $taguuid = generateUuidV4();
-                $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid) VALUES (?, ?)");
-                $stmt->bind_param("ss", $tag["name"], $taguuid);
+        if (isset($data['contact']['telephone_numbers'])) {
+            $stmt = $conn->prepare("DELETE FROM telephone_numbers WHERE uuid = ?");
+            $stmt->bind_param("s", $uuid);
+            $stmt->execute();
+
+            foreach ($data['contact']['telephone_numbers'] as $telephone) {
+                $stmt = $conn->prepare("INSERT INTO telephone_numbers (uuid, number) VALUES (?, ?)");
+                $stmt->bind_param("ss", $uuid, $telephone);
                 $stmt->execute();
-            } else {
-                $taguuid = $taguuid->fetch_assoc()["tag_uuid"];
-            }
-            
-            // Inserting into tags table
-            $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $uuid, $tag["name"], $taguuid);
-            $stmt->execute();
             }
         }
-    else {
+
+        if (isset($data['contact']['emails'])) {
+            $stmt = $conn->prepare("DELETE FROM emails WHERE uuid = ?");
+            $stmt->bind_param("s", $uuid);
+            $stmt->execute();
+
+            foreach ($data['contact']['emails'] as $email) {
+                $stmt = $conn->prepare("INSERT INTO emails (uuid, email) VALUES (?, ?)");
+                $stmt->bind_param("ss", $uuid, $email);
+                $stmt->execute();
+            }
+        }
+
+        if (isset($data['tags'])) {
+            $stmt = $conn->prepare("DELETE FROM tags WHERE user_uuid = ?");
+            $stmt->bind_param("s", $uuid);
+            $stmt->execute();
+
+            foreach ($data['tags'] as $tag) {
+                $stmt = $conn->prepare("SELECT * FROM tag_list WHERE tag_name = ?");
+                $stmt->bind_param("s", $tag["name"]);
+                $stmt->execute();
+                $taguuid = $stmt->get_result();
+
+                if (mysqli_num_rows($taguuid) === 0) {
+                    $taguuid = generateUuidV4();
+                    $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid) VALUES (?, ?)");
+                    $stmt->bind_param("ss", $tag["name"], $taguuid);
+                    $stmt->execute();
+                } else {
+                    $taguuid = $taguuid->fetch_assoc()["tag_uuid"];
+                }
+
+                $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $uuid, $tag["name"], $taguuid);
+                $stmt->execute();
+            }
+        }
+    } else {
         http_response_code(400);
         echo json_encode(['code' => "400", 'message' => 'No data provided']);
     }
