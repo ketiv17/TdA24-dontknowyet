@@ -161,7 +161,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         $stmt->bind_param("sssssssssis", $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour'], $uuid);
         $stmt->execute();
 
-        $stmt = $conn->prepare("DELETE FROM tags WHERE uuid = ?");
+        $stmt = $conn->prepare("DELETE FROM tags WHERE user_uuid = ?");
         $stmt->bind_param("s", $uuid);
         $stmt->execute();
 
