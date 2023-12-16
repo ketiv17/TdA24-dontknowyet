@@ -114,21 +114,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
-    if ($uuid !== null) {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
-        $stmt->bind_param("s", $uuid);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if (mysqli_num_rows($result) === 0) {
-            http_response_code(404);
-            echo json_encode(["code" => 404, "message" => "User not found"]);
-            exit;
-        }
-    }
-    else {
-        http_response_code(400);
-        echo json_encode(["code" => 404, "message" => "No UUID provided"]);
+    if (!UUIDCheck($uuid)) {
+        http_response_code(404);
+        echo json_encode(["code" => 404, "message" => "No UUID found"]);
+        exit;
     }
 
     // Prepare a DELETE statement
