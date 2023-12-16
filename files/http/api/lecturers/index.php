@@ -212,7 +212,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         http_response_code(400);
         echo json_encode(['code' => "400", 'message' => 'No data provided']);
     }
-    convertToUtf8AndPrint(returnUUIDdata($data['uuid'])); // Return edited lecturer
+    convertToUtf8AndPrint(returnUUIDdata($uuid)); // Return edited lecturer
 }
 
 $conn->close();
