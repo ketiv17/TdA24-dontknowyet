@@ -64,6 +64,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['error' => 'User with this UUID already exists']);
         exit;
     }
+
+    // Check if fields are empty and if so, set them to null
+    foreach ($data as $key => $value) {
+        if (empty($value)) {
+            $data[$key] = null;
+        }
+    }
+    
     if ($data) {
         $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssssssi", $data['uuid'], $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour']);
