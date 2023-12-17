@@ -65,10 +65,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Check if fields are empty and if so, set them to null
-    foreach ($data as $key => $value) {
-        if (empty($value)) {
-            $data[$key] = null;
+    // Define all possible fields
+    $fields = ['first_name', 'last_name', 'title_before', 'middle_name', 'title_after', 'picture_url', 'location', 'claim', 'bio', 'price_per_hour'];
+
+    // Check if fields are missing or empty and if so, set them to null
+    foreach ($fields as $field) {
+        if (!isset($data[$field])) {
+            $data[$field] = null;
         }
     }
     
