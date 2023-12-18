@@ -64,7 +64,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check for already existing UUID
     if (UUIDCheck($data["uuid"])) {
         http_response_code(400);
-        echo json_encode(['error' => 'User with this UUID already exists']);
+        convertToUtf8AndPrint(['error' => 'User with this UUID already exists']);
         exit;
     }
 
@@ -123,14 +123,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
         http_response_code(400);
-        echo json_encode(['code' => "400", 'message' => 'No data provided']);
+        convertToUtf8AndPrint(['code' => "400", 'message' => 'No data provided']);
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     if (!UUIDCheck($uuid)) {
         http_response_code(404);
-        echo json_encode(["code" => 404, "message" => "No UUID found"]);
+        convertToUtf8AndPrint(["code" => 404, "message" => "No UUID found"]);
         exit;
     }
 
@@ -154,10 +154,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Check if any rows were deleted
     if ($stmt->affected_rows > 0) {
         http_response_code(200);
-        echo json_encode(["code" => 200, "message" => "User deleted"]);
+        convertToUtf8AndPrint(["code" => 200, "message" => "User deleted"]);
     } else {
         http_response_code(404);
-        echo json_encode(["code" => 404, "message" => "User not found"]);
+        convertToUtf8AndPrint(["code" => 404, "message" => "User not found"]);
     }
 }
 
@@ -169,7 +169,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
     if (!UUIDCheck($uuid)) {
         http_response_code(404);
-        echo json_encode(["code" => 404, "message" => "No UUID found"]);
+        convertToUtf8AndPrint(["code" => 404, "message" => "No UUID found"]);
         exit;
     }
 
@@ -243,7 +243,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         }
     } else {
         http_response_code(400);
-        echo json_encode(['code' => "400", 'message' => 'No data provided']);
+        convertToUtf8AndPrint(['code' => "400", 'message' => 'No data provided']);
     }
     convertToUtf8AndPrint(returnUUIDdata($uuid)); // Return edited lecturer
 }
@@ -281,7 +281,7 @@ function returnUUIDdata($uuid) {
 
         if (mysqli_num_rows($result) === 0) {
             http_response_code(404);
-            echo json_encode(["code" => 404, "message" => "User not found"]);
+            convertToUtf8AndPrint(["code" => 404, "message" => "User not found"]);
             exit;
         }
 
@@ -378,7 +378,7 @@ function RequiedFieldsCheck($data) {
     foreach ($requiredFields as $field) {
         if (!isset($data[$field])) {
             http_response_code(400);
-            echo json_encode(['code' => "400", 'message' => 'Required field ' . $field . 'does not exist']);
+            convertToUtf8AndPrint(['code' => "400", 'message' => 'Required field ' . $field . 'does not exist']);
             exit;
         }
     }
