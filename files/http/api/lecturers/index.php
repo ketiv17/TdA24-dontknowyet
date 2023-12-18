@@ -53,6 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
+    // Check for required fields (first_name, last_name)
+    RequiedFieldsCheck($data);
+
     // Generate UUID if not provided
     if (!isset($data["uuid"])) {
         $data["uuid"] = generateUuidV4();
@@ -160,6 +163,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
+
+    // Check for required fields (first_name, last_name)
+    RequiedFieldsCheck($data);
 
     if (!UUIDCheck($uuid)) {
         http_response_code(404);
@@ -364,5 +370,19 @@ function generateUuidV4() {
     } while (UUIDCheck($uuid));
 
     return $uuid;
+}
+
+function RequiedFieldsCheck($data) {
+    $requiredFields = ['first_name', 'last_name'];
+
+    foreach ($requiredFields as $field) {
+        if (!isset($data[$field])) {
+            http_response_code(400);
+            echo json_encode(['code' => "400", 'message' => 'Required field ' . $field . 'does not exist']);
+            exit;
+        }
+    }
+
+    return true;
 }
 ?>
