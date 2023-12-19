@@ -19,41 +19,31 @@ error_reporting(E_ALL);
 file_put_contents('./requests.log', date('Y-m-d H:i:s') . ' ' . $_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
 
 
-// Validate and sanitize input
+// Validating and setting a uuid from /lecturers/:uuid to a variable
 $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $_GET['uuid'])
   ? $_GET['uuid']
   : null;
 
-//Setting request method when not set
-/*
-if (!isset($_SERVER['REQUEST_METHOD'])) {
-    $_SERVER['REQUEST_METHOD'] = 'GET';
-} */
-/*
-header('Content-Type: application/json; charset=utf-8');
-//Shows current REQUEST_METHOD at the top of the document
-if (isset($_SERVER['REQUEST_METHOD'])) {
-    echo 'Request method: ' . $_SERVER['REQUEST_METHOD'];
-} else {
-    echo 'No request method set';
-}*/
-
+//Check if MYSQL database is online and connects to it
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-//Check if MYSQL database is online
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+// END OF THE HEAD -------
 
-    //echo "Právě jsi použil metodu GET";
+
+// ---------------- Handling HTTP API requests ------------------
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
+
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Check for required fields (first_name, last_name)
+    // Returns 400 if missing
     RequiedFieldsCheck($data);
 
     // Generate UUID if not provided
@@ -68,16 +58,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Define all possible fields
+    // Check if fields are missing and if so, set them to null
     $fields = ['first_name', 'last_name', 'title_before', 'middle_name', 'title_after', 'picture_url', 'location', 'claim', 'bio', 'price_per_hour'];
-
-    // Check if fields are missing or empty and if so, set them to null
     foreach ($fields as $field) {
         if (!isset($data[$field])) {
             $data[$field] = null;
         }
     }
     
+    //Inserting all the data to database
     if ($data) {
         $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssssssi", $data['uuid'], $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour']);
@@ -95,14 +84,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
 
+        //Handling tags
         foreach ($data['tags'] as $tag) {
-            // Check for tag UUID
+            //Checks if given tag already exists
             $stmt = $conn->prepare("SELECT * FROM tag_list WHERE tag_name = ?");
             $stmt->bind_param("s", $tag["name"]);
             $stmt->execute();
             $taguuid = $stmt->get_result();
 
-            // If tag doesn't exist, create it
+            // If tag doesn't exist, create it and generate UUID
             if (mysqli_num_rows($taguuid) === 0) {
                 $taguuid = generateUuidV4();
                 $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid) VALUES (?, ?)");
@@ -192,6 +182,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         $stmt->bind_param(str_repeat('s', count($params)), ...$params);
         $stmt->execute();
 
+
+        //Only deleting only the fields that are present in $data body
         if (isset($data['contact']['telephone_numbers'])) {
             $stmt = $conn->prepare("DELETE FROM telephone_numbers WHERE uuid = ?");
             $stmt->bind_param("s", $uuid);
@@ -250,8 +242,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
 $conn->close();
 
+
+
+
+
+// -------------- FUNCTIONS --------------
+
+// Converts all strings in $data to UTF-8
 function convertToUtf8AndPrint($data) {
-    // Convert all strings in $data to UTF-8
     array_walk_recursive($data, function (&$item, $key) {
         if (is_string($item)) {
             $item = mb_convert_encoding($item, 'UTF-8', 'auto');
@@ -270,6 +268,7 @@ function convertToUtf8AndPrint($data) {
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 
+//Function that is returning the data of a given UUID, if no uuid porvided it returns all users data
 function returnUUIDdata($uuid) {
     global $conn;
 
@@ -303,13 +302,15 @@ while($row = $result->fetch_assoc()) {
         "location" => $row["location"],
         "claim" => $row["claim"],
         "bio" => $row["bio"],
-        "price_per_hour" => intval($row["price_per_hour"]), // Converts price_per_hour to integer 
+        "price_per_hour" => intval($row["price_per_hour"]), // Converts price_per_hour to integer because database req. returns a string
         "tags" => [],
         "contact" => [
             "telephone_numbers" => [],
             "emails" => [],
         ],
     ];
+
+    //Handling tags
     $tagsSql = "SELECT * FROM tags WHERE user_uuid = '" . $row["uuid"] . "'";
     $tagsResult = mysqli_query($conn, $tagsSql);
     while($tagRow = $tagsResult->fetch_assoc()) {
@@ -319,12 +320,14 @@ while($row = $result->fetch_assoc()) {
         ];
     }
 
+    //Handling numbers
     $telephoneNumbersSql = "SELECT * FROM telephone_numbers WHERE uuid = '" . $row["uuid"] . "'";
     $telephoneNumbersResult = mysqli_query($conn, $telephoneNumbersSql);
     while($telephoneNumberRow = $telephoneNumbersResult->fetch_assoc()) {
         $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["number"];
     }
 
+    //Handling emails
     $emailsSql = "SELECT * FROM emails WHERE uuid = '" . $row["uuid"] . "'";
     $emailsResult = mysqli_query($conn, $emailsSql);
     while($emailRow = $emailsResult->fetch_assoc()) {
@@ -343,6 +346,7 @@ while($row = $result->fetch_assoc()) {
         }
 }
 
+//Checks if given uuid exsits in database
 function UUIDCheck($uuid = null) {
     if ($uuid === null) {
         return false;
@@ -357,14 +361,15 @@ function UUIDCheck($uuid = null) {
     return $result->num_rows > 0;
 }
 
+//Generates new UUID with no external libraries
 function generateUuidV4() {
     do {
         $uuid = sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             mt_rand(0, 0xffff), mt_rand(0, 0xffff), // 32 bits for "time_low"
-            mt_rand(0, 0xffff), // 16 bits for "time_mid"
-            mt_rand(0, 0x0fff) | 0x4000, // 16 bits for "time_hi_and_version", four most significant bits holds version number 4
-            mt_rand(0, 0x3fff) | 0x8000, // 16 bits, 8 bits for "clk_seq_hi_res", 8 bits for "clk_seq_low", two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0xffff),                     // 16 bits for "time_mid"
+            mt_rand(0, 0x0fff) | 0x4000,            // 16 bits for "time_hi_and_version", four most significant bits holds version number 4
+            mt_rand(0, 0x3fff) | 0x8000,            // 16 bits, 8 bits for "clk_seq_hi_res", 8 bits for "clk_seq_low", two most significant bits holds zero and one for variant DCE1.1
             mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff) // 48 bits for "node"
         );
     } while (UUIDCheck($uuid));
@@ -372,13 +377,14 @@ function generateUuidV4() {
     return $uuid;
 }
 
+//Checks if first and last names are present in $data body
 function RequiedFieldsCheck($data) {
     $requiredFields = ['first_name', 'last_name'];
 
     foreach ($requiredFields as $field) {
         if (!isset($data[$field])) {
             http_response_code(400);
-            convertToUtf8AndPrint(['code' => "400", 'message' => 'Required field ' . $field . 'does not exist']);
+            convertToUtf8AndPrint(['code' => "400", 'message' => 'Required field ' . $field . ' does not exist']);
             exit;
         }
     }
