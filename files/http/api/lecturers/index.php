@@ -1,8 +1,6 @@
 <?php
 
 
-//@fretka I MODIFIED LINE 247, check afterwards and revert it - ketiv17
-
 //Head of the document ----------------------------------------------
 
 $servername = "resurrectiongc.live";
@@ -14,9 +12,6 @@ $dbname = "api";
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-//logs the time source ip and request method to requests.log
-file_put_contents('./requests.log', date('Y-m-d H:i:s') . ' ' . $_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
 
 
 // Validating and setting a uuid from /lecturers/:uuid to a variable

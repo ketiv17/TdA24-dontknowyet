@@ -3,12 +3,9 @@ FROM archlinux
 EXPOSE 80
 
 WORKDIR /srv
-RUN pacman -Sy --noconfirm nginx php-fpm nodejs npm
+RUN pacman -Sy --noconfirm nginx php-fpm
 COPY ./files /srv/
 RUN mv /srv/nginx.conf /etc/nginx/nginx.conf
-
-# maybe this will fix it?
-RUN chmod 777 /srv/http/api/lecturers/requests.log
 
 # Take the DB_PASSWORD action secret and make it enviromental variable
 ARG DB_PASSWORD
