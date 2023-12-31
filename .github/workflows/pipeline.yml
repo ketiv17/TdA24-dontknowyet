@@ -19,6 +19,7 @@ jobs:
           context: ./
           tags: tda-generic:latest
           outputs: type=docker,dest=/tmp/tda-generic.tar
+          build-args: DB_PASSWORD=${{ secrets.DB_PASSWORD }}
 
       - name: Upload to TdA
         uses: Tour-de-App/upload-app@tda-24
