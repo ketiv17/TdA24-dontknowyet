@@ -26,29 +26,31 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data['uuid'] = generateUuidV4();
     }
 
-        // Inserting the user into the database
-        $tags = implode(", ", $data['tags']); // Convert the tags array into a string
-        $emails = implode(", ", $data['emails']); // Convert the emails array into a string
-        $numbers = implode(", ", $data['numbers']); // Convert the numbers array into a string
+    // Check if each field is set in the $data array, if not, set it to null
+    $tags = isset($data['tags']) ? implode(", ", $data['tags']) : null;
+    $emails = isset($data['emails']) ? implode(", ", $data['emails']) : null;
+    $numbers = isset($data['numbers']) ? implode(", ", $data['numbers']) : null;
 
-        $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssssss", $uuid, $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour'], $tags, $emails, $numbers);
-        $stmt->execute();
+    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssssssssss", $data['uuid'], $data['first_name'] ?? null, $data['last_name'] ?? null, $data['title_before'] ?? null, $data['middle_name'] ?? null, $data['title_after'] ?? null, $data['picture_url'] ?? null, $data['location'] ?? null, $data['claim'] ?? null, $data['bio'] ?? null, $data['price_per_hour'] ?? null, $tags, $emails, $numbers);
+    $stmt->execute();
 
-        // Insert tags into the database
+    // Insert tags into the database
+    if (is_array($data['tags'])) {
         foreach ($data['tags'] as $tag) {
             // Check if the tag already exists in the database
             $stmt = $conn->prepare("SELECT 1 FROM tags WHERE tag_uuid = ?");
             $stmt->bind_param("s", $tag['uuid']);
             $stmt->execute();
             $result = $stmt->get_result();
-        // If the tag doesn't exist, insert it into the tag_list database
-        if ($result->num_rows === 0) {
-            $stmt = $conn->prepare("INSERT INTO tag_list (tag_uuid, tag_name, tag_color) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", generateUuidV4(), $tag['name'], generateHexColor());
-            $stmt->execute();
+            // If the tag doesn't exist, insert it into the tag_list database
+            if ($result->num_rows === 0) {
+                $stmt = $conn->prepare("INSERT INTO tag_list (tag_uuid, tag_name, tag_color) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", generateUuidV4(), $tag['name'], generateHexColor());
+                $stmt->execute();
             }
         }
+    }
 
     // Insert telephone numbers into the database
     foreach ($data['contact']['telephone_numbers'] as $number) {
