@@ -203,11 +203,15 @@ if (isset($row["tags"]) && $row["tags"] !== null) {
 // Handling emails
 if (isset($row["emails"]) && $row["emails"] !== null) {
     $user["contact"]["emails"] = explode(", ", $row["emails"]);
+} else {
+    $user["contact"]["emails"] = null;
 }
 
 // Handling numbers
 if (isset($row["numbers"]) && $row["numbers"] !== null) {
     $user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
+} else {
+    $user["contact"]["telephone_numbers"] = null;
 }
 
 $data[] = $user;
