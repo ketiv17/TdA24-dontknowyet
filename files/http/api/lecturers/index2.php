@@ -59,7 +59,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // If the tag doesn't exist, insert it into the tag_list database
             if ($result->num_rows === 0) {
                 $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
-                $stmt->bind_param("sss", generateUuidV4(), $tag['name'], generateHexColor());
+                $uuidV4 = generateUuidV4();
+                $hexColor = generateHexColor();
+                $stmt->bind_param("sss", $uuidV4, $tag['name'], $hexColor);
                 $stmt->execute();
             }
         }
