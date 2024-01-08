@@ -176,18 +176,26 @@ while($row = $result->fetch_assoc()) {
 
 // Handling tags
 if (isset($row["tags"]) && $row["tags"] !== null) {
-    $user["tags"] = explode(", ", $row["tags"]);
-    foreach ($user["tags"] as $tag) {
+    $tags = explode(", ", $row["tags"]);
+    foreach ($tags as $tag) {
         $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
         $tagResult = mysqli_query($conn, $tagQuery);
-        $tagRow = mysqli_fetch_assoc($tagResult);
-
-        $user["tags"][] = [
-            "uuid" => $tagRow["uuid"],
-            "name" => $tagRow["name"],
-            "color" => $tagRow["color"],
-        ];
+        if ($tagResult !== false) {
+            $tagRow = mysqli_fetch_assoc($tagResult);
+            if ($tagRow !== null) {
+                $user["tags"][] = [
+                    "uuid" => $tagRow["uuid"],
+                    "name" => $tagRow["name"],
+                    "color" => $tagRow["color"],
+                ];
+            }
+        } else {
+            // Handle error - query failed
+            echo "Error: " . mysqli_error($conn);
+        }
     }
+} else {
+    $user["tags"] = null;
 }
 
 // Handling emails
