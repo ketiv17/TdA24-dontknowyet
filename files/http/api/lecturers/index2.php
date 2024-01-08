@@ -218,14 +218,8 @@ $data[] = $user;
 
     $data[] = $user;
     http_response_code(200);
-}
-        if (count($data) === 1) {
-            // If there's only one user, return it as an object, not an array
-            return $data[0];
-        } else {
-            // If there's more than one user, return them as an array
-            return $data;
-        }
+} 
+    return $data;
 }
 
 //Checks if given uuid exsits in database
