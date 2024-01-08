@@ -24,7 +24,7 @@ if (mysqli_num_rows($result) > 0) {
     // Loop through the result set and add each tag to the array
     while ($row = mysqli_fetch_assoc($result)) {
         $tags[] = array(
-            'uuid' => $row['uuid']
+            'uuid' => $row['uuid'],
             'name' => $row['name'],
             'color' => $row['color'],
         );
