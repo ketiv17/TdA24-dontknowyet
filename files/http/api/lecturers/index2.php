@@ -28,11 +28,11 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if each field is set in the $data array, if not, set it to null
     $tags = isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])  ? implode(", ", $data['tags']) : null;
-    $emails = isset($data['emails']) && !is_null($data['emails']) && is_array($data['emails']) ? implode(", ", $data['emails']) : null;
-    $numbers = isset($data['numbers']) && !is_null($data['numbers']) && is_array($data['numbers']) ? implode(", ", $data['numbers']) : null;
+    $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? implode(", ", $data['contact']['emails']) : null;
+    $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? implode(", ", $data['contact']['telephone_numbers']) : null;
 
     // Assign the values to variables
-    $uuid = $data['uuid'];
+    $uuid = $data['uuid'] ?? null;
     $first_name = $data['first_name'] ?? null;
     $last_name = $data['last_name'] ?? null;
     $title_before = $data['title_before'] ?? null;
