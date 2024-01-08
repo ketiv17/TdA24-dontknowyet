@@ -87,7 +87,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $taguuid = $stmt->get_result();
 
-            // If tag doesn't exist, create it and generate UUID
+            // If tag doesn't exist, create it and generate UUID and color
             if (mysqli_num_rows($taguuid) === 0) {
                 $taguuid = generateUuidV4();
                 $tagcolor = generateHexColor();
