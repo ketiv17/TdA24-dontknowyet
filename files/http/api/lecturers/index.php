@@ -100,7 +100,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Inserting into tags table
             $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $data["uuid"], $tag["name"], $taguuid);
+            $stmt->bind_param("sss", $data["uuid"], $tag["tag_name"], $taguuid);
             $stmt->execute();
         }
         
