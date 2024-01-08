@@ -90,7 +90,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // If tag doesn't exist, create it and generate UUID
             if (mysqli_num_rows($taguuid) === 0) {
                 $taguuid = generateUuidV4();
-                $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid) VALUES (?, ?)");
+                $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid, tag_color) VALUES (?, ?, ?)");
                 $stmt->bind_param("ss", $tag["name"], $taguuid);
                 $stmt->execute();
             } else {
@@ -332,13 +332,9 @@ while($row = $result->fetch_assoc()) {
     $data[] = $user;
     http_response_code(200);
 }
-        if (count($data) === 1) {
-            // If there's only one user, return it as an object, not an array
-            return $data[0];
-        } else {
-            // If there's more than one user, return them as an array
-            return $data;
-        }
+
+//Returns the data
+return $data;
 }
 
 //Checks if given uuid exsits in database
