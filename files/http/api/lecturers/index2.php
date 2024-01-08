@@ -27,9 +27,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if each field is set in the $data array, if not, set it to null
-    $tags = isset($data['tags']) && is_array($data['tags']) ? implode(", ", $data['tags']) : null;
-    $emails = isset($data['emails']) && is_array($data['emails']) ? implode(", ", $data['emails']) : null;
-    $numbers = isset($data['numbers']) && is_array($data['numbers']) ? implode(", ", $data['numbers']) : null;
+    $tags = isset($data['tags']) && is_array($data['tags']) && !is_null($data['tags']) ? implode(", ", $data['tags']) : null;
+    $emails = isset($data['emails']) && is_array($data['emails']) && !is_null($data['emails']) ? implode(", ", $data['emails']) : null;
+    $numbers = isset($data['numbers']) && is_array($data['numbers']) && !is_null($data['numbers']) ? implode(", ", $data['numbers']) : null;
 
     // Assign the values to variables
     $uuid = $data['uuid'];
@@ -52,13 +52,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_array($data['tags'])) {
         foreach ($data['tags'] as $tag) {
             // Check if the tag already exists in the database
-            $stmt = $conn->prepare("SELECT 1 FROM tags WHERE tag_uuid = ?");
+            $stmt = $conn->prepare("SELECT 1 FROM tag_list WHERE uuid = ?");
             $stmt->bind_param("s", $tag['uuid']);
             $stmt->execute();
             $result = $stmt->get_result();
             // If the tag doesn't exist, insert it into the tag_list database
             if ($result->num_rows === 0) {
-                $stmt = $conn->prepare("INSERT INTO tag_list (tag_uuid, tag_name, tag_color) VALUES (?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
                 $stmt->bind_param("sss", generateUuidV4(), $tag['name'], generateHexColor());
                 $stmt->execute();
             }
