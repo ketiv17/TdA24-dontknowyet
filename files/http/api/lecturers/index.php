@@ -90,8 +90,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // If tag doesn't exist, create it and generate UUID
             if (mysqli_num_rows($taguuid) === 0) {
                 $taguuid = generateUuidV4();
+                $tagcolor = generateHexColor();
                 $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid, tag_color) VALUES (?, ?, ?)");
-                $stmt->bind_param("ss", $tag["name"], $taguuid);
+                $stmt->bind_param("ss", $tag["name"], $taguuid, $tagcolor);
                 $stmt->execute();
             } else {
                 $taguuid = $taguuid->fetch_assoc()["tag_uuid"];
@@ -312,6 +313,7 @@ while($row = $result->fetch_assoc()) {
         $user["tags"][] = [
             "uuid" => $tagRow["tag_uuid"],
             "name" => $tagRow["tag_name"],
+            "color" => $tagRow["tag_color"]
         ];
     }
 
@@ -381,5 +383,14 @@ function RequiedFieldsCheck($data) {
     }
 
     return true;
+}
+
+//Generates hex color code
+function generateHexColor() {
+    $color = '#';
+    for ($i = 0; $i < 6; $i++) {
+        $color .= dechex(rand(0, 15));
+    }
+    return $color;
 }
 ?>
