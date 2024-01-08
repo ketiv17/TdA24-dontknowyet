@@ -92,7 +92,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $taguuid = generateUuidV4();
                 $tagcolor = generateHexColor();
                 $stmt = $conn->prepare("INSERT INTO tag_list (name, uuid, color) VALUES (?, ?, ?)");
-                $stmt->bind_param("ss", $tag["name"], $taguuid, $tagcolor);
+                $stmt->bind_param("sss", $tag["name"], $taguuid, $tagcolor);
                 $stmt->execute();
             } else {
                 $taguuid = $taguuid->fetch_assoc()["uuid"];
