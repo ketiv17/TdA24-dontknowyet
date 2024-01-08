@@ -67,20 +67,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Insert telephone numbers into the database
-    foreach ($data['contact']['telephone_numbers'] as $number) {
-        $stmt = $conn->prepare("INSERT INTO telephone_numbers (uuid, number) VALUES (?, ?)");
-        $stmt->bind_param("ss", $uuid, $number);
-        $stmt->execute();
-    }
-
-    // Insert emails into the database
-    foreach ($data['contact']['emails'] as $email) {
-        $stmt = $conn->prepare("INSERT INTO emails (uuid, email) VALUES (?, ?)");
-        $stmt->bind_param("ss", $uuid, $email);
-        $stmt->execute();
-    }
-
     // Return the new user's data
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
@@ -154,71 +140,79 @@ function returnUUIDdata($uuid) {
         $result = mysqli_query($conn, "SELECT * FROM users"); 
     }
 
-$data = [];
+    $data = [];
 
-while($row = $result->fetch_assoc()) {
-    $user = [
-        "uuid" => $row["uuid"],
-        "first_name" => $row["first_name"],
-        "last_name" => $row["last_name"],
-        "title_before" => $row["title_before"],
-        "middle_name" => $row["middle_name"],
-        "title_after" => $row["title_after"],
-        "picture_url" => $row["picture_url"],
-        "location" => $row["location"],
-        "claim" => $row["claim"],
-        "bio" => $row["bio"],
-        "price_per_hour" => intval($row["price_per_hour"]), // Converts price_per_hour to integer because database req. returns a string
-        "tags" => [],
-        "contact" => [
-            "telephone_numbers" => [],
-            "emails" => [],
-        ],
-    ];
+    while($row = $result->fetch_assoc()) {
+        $user = [
+            "uuid" => $row["uuid"],
+            "first_name" => $row["first_name"],
+            "last_name" => $row["last_name"],
+            "title_before" => $row["title_before"],
+            "middle_name" => $row["middle_name"],
+            "title_after" => $row["title_after"],
+            "picture_url" => $row["picture_url"],
+            "location" => $row["location"],
+            "claim" => $row["claim"],
+            "bio" => $row["bio"],
+            "price_per_hour" => intval($row["price_per_hour"]), // Converts price_per_hour to integer because database req. returns a string
+            "tags" => [],
+            "contact" => [
+                "telephone_numbers" => [],
+                "emails" => [],
+            ],
+        ];
 
-// Handling tags
-if (isset($row["tags"]) && $row["tags"] !== null) {
-    $tags = explode(", ", $row["tags"]);
-    foreach ($tags as $tag) {
-        $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
-        $tagResult = mysqli_query($conn, $tagQuery);
-        if ($tagResult !== false) {
-            $tagRow = mysqli_fetch_assoc($tagResult);
-            if ($tagRow !== null) {
-                $user["tags"][] = [
-                    "uuid" => $tagRow["uuid"],
-                    "name" => $tagRow["name"],
-                    "color" => $tagRow["color"],
-                ];
+        // Handling tags
+        if (isset($row["tags"]) && $row["tags"] !== null) {
+            $tags = explode(", ", $row["tags"]);
+            foreach ($tags as $tag) {
+                $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
+                $tagResult = mysqli_query($conn, $tagQuery);
+                if ($tagResult !== false) {
+                    $tagRow = mysqli_fetch_assoc($tagResult);
+                    if ($tagRow !== null) {
+                        $user["tags"][] = [
+                            "uuid" => $tagRow["uuid"],
+                            "name" => $tagRow["name"],
+                            "color" => $tagRow["color"],
+                        ];
+                    }
+                } else {
+                    // Handle error - query failed
+                    echo "Error: " . mysqli_error($conn);
+                }
             }
-        } else {
-            // Handle error - query failed
-            echo "Error: " . mysqli_error($conn);
         }
+        else
+            {
+                $user["tags"] = null;
+            }
+
+        // Handling emails
+        if (isset($row["emails"]) && $row["emails"] !== null) {
+                $user["contact"]["emails"] = explode(", ", $row["emails"]);
+            }
+        else {
+            $user["contact"]["emails"] = null;
+        }
+
+        // Handling numbers
+        if (isset($row["numbers"]) && $row["numbers"] !== null) {
+                $user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
+            }
+        else {
+                $user["contact"]["telephone_numbers"] = null;
+            }
+
+            
+        $data[] = $user;
+        http_response_code(200);
+        } 
+
+        // If $data is an array with a single element, convert it to an object
+        if (is_array($data) && count($data) === 1) {
+            $data = $data[0];
     }
-} else {
-    $user["tags"] = null;
-}
-
-// Handling emails
-if (isset($row["emails"]) && $row["emails"] !== null) {
-    $user["contact"]["emails"] = explode(", ", $row["emails"]);
-} else {
-    $user["contact"]["emails"] = null;
-}
-
-// Handling numbers
-if (isset($row["numbers"]) && $row["numbers"] !== null) {
-    $user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
-} else {
-    $user["contact"]["telephone_numbers"] = null;
-}
-
-$data[] = $user;
-
-    $data[] = $user;
-    http_response_code(200);
-} 
     return $data;
 }
 
