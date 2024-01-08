@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 
 // Fetch all tags from the database
-$query = "SELECT * FROM tags";
+$query = "SELECT * FROM tags_list";
 $result = mysqli_query($connection, $query);
 
 // Check if any tags were found
@@ -23,7 +23,11 @@ if (mysqli_num_rows($result) > 0) {
 
     // Loop through the result set and add each tag to the array
     while ($row = mysqli_fetch_assoc($result)) {
-        $tags[] = $row['tag_name'];
+        $tags[] = array(
+            'uuid' => $row['uuid']
+            'name' => $row['name'],
+            'color' => $row['color'],
+        );
     }
 
     // Return the tags as JSON

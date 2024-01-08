@@ -82,7 +82,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //Handling tags
         foreach ($data['tags'] as $tag) {
             //Checks if given tag already exists
-            $stmt = $conn->prepare("SELECT * FROM tag_list WHERE tag_name = ?");
+            $stmt = $conn->prepare("SELECT * FROM tag_list WHERE name = ?");
             $stmt->bind_param("s", $tag["name"]);
             $stmt->execute();
             $taguuid = $stmt->get_result();
@@ -91,15 +91,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (mysqli_num_rows($taguuid) === 0) {
                 $taguuid = generateUuidV4();
                 $tagcolor = generateHexColor();
-                $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid, tag_color) VALUES (?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO tag_list (name, uuid, color) VALUES (?, ?, ?)");
                 $stmt->bind_param("ss", $tag["name"], $taguuid, $tagcolor);
                 $stmt->execute();
             } else {
-                $taguuid = $taguuid->fetch_assoc()["tag_uuid"];
+                $taguuid = $taguuid->fetch_assoc()["uuid"];
             }
             
             // Inserting into tags table
-            $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO tags (user_uuid, name, uuid) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $data["uuid"], $tag["name"], $taguuid);
             $stmt->execute();
         }
@@ -210,21 +210,21 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $stmt->execute();
 
             foreach ($data['tags'] as $tag) {
-                $stmt = $conn->prepare("SELECT * FROM tag_list WHERE tag_name = ?");
+                $stmt = $conn->prepare("SELECT * FROM tag_list WHERE name = ?");
                 $stmt->bind_param("s", $tag["name"]);
                 $stmt->execute();
                 $taguuid = $stmt->get_result();
 
                 if (mysqli_num_rows($taguuid) === 0) {
                     $taguuid = generateUuidV4();
-                    $stmt = $conn->prepare("INSERT INTO tag_list (tag_name, tag_uuid) VALUES (?, ?)");
+                    $stmt = $conn->prepare("INSERT INTO tag_list (name, uuid) VALUES (?, ?)");
                     $stmt->bind_param("ss", $tag["name"], $taguuid);
                     $stmt->execute();
                 } else {
-                    $taguuid = $taguuid->fetch_assoc()["tag_uuid"];
+                    $taguuid = $taguuid->fetch_assoc()["uuid"];
                 }
 
-                $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO tags (uuid, name, uuid) VALUES (?, ?, ?)");
                 $stmt->bind_param("sss", $uuid, $tag["name"], $taguuid);
                 $stmt->execute();
             }
@@ -311,9 +311,9 @@ while($row = $result->fetch_assoc()) {
     $tagsResult = mysqli_query($conn, $tagsSql);
     while($tagRow = $tagsResult->fetch_assoc()) {
         $user["tags"][] = [
-            "uuid" => $tagRow["tag_uuid"],
-            "name" => $tagRow["tag_name"],
-            "color" => $tagRow["tag_color"]
+            "uuid" => $tagRow["uuid"],
+            "name" => $tagRow["name"],
+            "color" => $tagRow["color"]
         ];
     }
 
