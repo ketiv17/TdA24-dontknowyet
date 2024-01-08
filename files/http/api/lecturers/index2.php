@@ -160,25 +160,30 @@ while($row = $result->fetch_assoc()) {
     ];
 
 // Handling tags
-$user["tags"] = explode(", ", $row["tags"]);
-foreach ($user["tags"] as $tag) {
-    $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
-    $tagResult = mysqli_query($conn, $tagQuery);
-    $tagRow = mysqli_fetch_assoc($tagResult);
+if (isset($row["tags"]) && $row["tags"] !== null) {
+    $user["tags"] = explode(", ", $row["tags"]);
+    foreach ($user["tags"] as $tag) {
+        $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
+        $tagResult = mysqli_query($conn, $tagQuery);
+        $tagRow = mysqli_fetch_assoc($tagResult);
 
-    $user["tags"][] = [
-        "uuid" => $tagRow["uuid"],
-        "name" => $tagRow["name"],
-        "color" => $tagRow["color"],
-    ];
+        $user["tags"][] = [
+            "uuid" => $tagRow["uuid"],
+            "name" => $tagRow["name"],
+            "color" => $tagRow["color"],
+        ];
+    }
 }
 
 // Handling emails
-$user["contact"]["emails"] = explode(", ", $row["emails"]);
+if (isset($row["emails"]) && $row["emails"] !== null) {
+    $user["contact"]["emails"] = explode(", ", $row["emails"]);
+}
 
 // Handling numbers
-$user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
-
+if (isset($row["numbers"]) && $row["numbers"] !== null) {
+    $user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
+}
 
 $data[] = $user;
 
