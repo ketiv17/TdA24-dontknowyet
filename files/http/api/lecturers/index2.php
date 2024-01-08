@@ -27,12 +27,25 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if each field is set in the $data array, if not, set it to null
-    $tags = isset($data['tags']) ? implode(", ", $data['tags']) : null;
-    $emails = isset($data['emails']) ? implode(", ", $data['emails']) : null;
-    $numbers = isset($data['numbers']) ? implode(", ", $data['numbers']) : null;
+    $tags = isset($data['tags']) && is_array($data['tags']) ? implode(", ", $data['tags']) : null;
+    $emails = isset($data['emails']) && is_array($data['emails']) ? implode(", ", $data['emails']) : null;
+    $numbers = isset($data['numbers']) && is_array($data['numbers']) ? implode(", ", $data['numbers']) : null;
+
+    // Assign the values to variables
+    $uuid = $data['uuid'];
+    $first_name = $data['first_name'] ?? null;
+    $last_name = $data['last_name'] ?? null;
+    $title_before = $data['title_before'] ?? null;
+    $middle_name = $data['middle_name'] ?? null;
+    $title_after = $data['title_after'] ?? null;
+    $picture_url = $data['picture_url'] ?? null;
+    $location = $data['location'] ?? null;
+    $claim = $data['claim'] ?? null;
+    $bio = $data['bio'] ?? null;
+    $price_per_hour = $data['price_per_hour'] ?? null;
 
     $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssssssss", $data['uuid'], $data['first_name'] ?? null, $data['last_name'] ?? null, $data['title_before'] ?? null, $data['middle_name'] ?? null, $data['title_after'] ?? null, $data['picture_url'] ?? null, $data['location'] ?? null, $data['claim'] ?? null, $data['bio'] ?? null, $data['price_per_hour'] ?? null, $tags, $emails, $numbers);
+    $stmt->bind_param("ssssssssssssss", $uuid, $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $tags, $emails, $numbers);
     $stmt->execute();
 
     // Insert tags into the database
