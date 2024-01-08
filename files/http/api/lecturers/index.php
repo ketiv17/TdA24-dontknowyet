@@ -99,7 +99,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             // Inserting into tags table
-            $stmt = $conn->prepare("INSERT INTO tags (user_uuid, name, uuid) VALUES (?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $data["uuid"], $tag["name"], $taguuid);
             $stmt->execute();
         }
@@ -224,7 +224,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                     $taguuid = $taguuid->fetch_assoc()["uuid"];
                 }
 
-                $stmt = $conn->prepare("INSERT INTO tags (uuid, name, uuid) VALUES (?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_name, tag_uuid) VALUES (?, ?, ?)");
                 $stmt->bind_param("sss", $uuid, $tag["name"], $taguuid);
                 $stmt->execute();
             }
@@ -251,11 +251,6 @@ function convertToUtf8AndPrint($data) {
             $item = mb_convert_encoding($item, 'UTF-8', 'auto');
         }
     });
-
-    // If $data is an array with a single element, convert it to an object
-    if (is_array($data) && count($data) === 1) {
-        $data = $data[0];
-    }
 
     // Set the Content-Type header to application/json
     header('Content-Type: application/json');
@@ -307,7 +302,7 @@ while($row = $result->fetch_assoc()) {
     ];
 
     //Handling tags
-    $tagsSql = "SELECT * FROM tags WHERE user_uuid = '" . $row["uuid"] . "'";
+    $tagsSql = "SELECT * FROM tag_list WHERE user_uuid = '" . $row["uuid"] . "'";
     $tagsResult = mysqli_query($conn, $tagsSql);
     while($tagRow = $tagsResult->fetch_assoc()) {
         $user["tags"][] = [
