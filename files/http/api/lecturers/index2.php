@@ -3,11 +3,17 @@
 // Include the functions and the database connection file
 include 'functions.php';
 
+// Validating and setting a uuid from /lecturers/:uuid to a variable
+$uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $_GET['uuid'])
+  ? $_GET['uuid']
+  : null;
+
+
 // Handling request methods ---
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     returnUUIDdata($uuid);
-}
+    }   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -58,6 +64,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Return the new user's data
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
+
+
 
 
 
