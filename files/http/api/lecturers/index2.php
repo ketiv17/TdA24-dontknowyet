@@ -26,10 +26,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data['uuid'] = generateUuidV4();
     }
 
-        // Insert the new user into the database
+        // Inserting the user into the database
         $tags = implode(", ", $data['tags']); // Convert the tags array into a string
-        $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssss", $uuid, $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour'], $tags);
+        $emails = implode(", ", $data['emails']); // Convert the emails array into a string
+        $numbers = implode(", ", $data['numbers']); // Convert the numbers array into a string
+
+        $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssssss", $uuid, $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour'], $tags, $emails, $numbers);
         $stmt->execute();
 
         // Insert tags into the database
@@ -156,32 +159,28 @@ while($row = $result->fetch_assoc()) {
         ],
     ];
 
-    //Handling tags
-    $stmt = $conn->prepare("SELECT * FROM tag_list WHERE user_uuid = ?");
-    $stmt->bind_param("s", $row["uuid"]);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    while($tagRow = $result->fetch_assoc()) {
-        $user["tags"][] = [
-            "uuid" => $tagRow["tag_uuid"],
-            "name" => $tagRow["tag_name"],
-            "color" => $tagRow["tag_color"],
-        ];
-    }
+// Handling tags
+$user["tags"] = explode(", ", $row["tags"]);
+foreach ($user["tags"] as $tag) {
+    $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
+    $tagResult = mysqli_query($conn, $tagQuery);
+    $tagRow = mysqli_fetch_assoc($tagResult);
 
-    //Handling numbers
-    $telephoneNumbersSql = "SELECT * FROM telephone_numbers WHERE uuid = '" . $row["uuid"] . "'";
-    $telephoneNumbersResult = mysqli_query($conn, $telephoneNumbersSql);
-    while($telephoneNumberRow = $telephoneNumbersResult->fetch_assoc()) {
-        $user["contact"]["telephone_numbers"][] = $telephoneNumberRow["number"];
-    }
+    $user["tags"][] = [
+        "uuid" => $tagRow["uuid"],
+        "name" => $tagRow["name"],
+        "color" => $tagRow["color"],
+    ];
+}
 
-    //Handling emails
-    $emailsSql = "SELECT * FROM emails WHERE uuid = '" . $row["uuid"] . "'";
-    $emailsResult = mysqli_query($conn, $emailsSql);
-    while($emailRow = $emailsResult->fetch_assoc()) {
-        $user["contact"]["emails"][] = $emailRow["email"];
-    }
+// Handling emails
+$user["contact"]["emails"] = explode(", ", $row["emails"]);
+
+// Handling numbers
+$user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
+
+
+$data[] = $user;
 
     $data[] = $user;
     http_response_code(200);
