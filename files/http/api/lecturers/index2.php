@@ -12,7 +12,7 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 // Handling request methods ---
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    returnUUIDdata($uuid);
+    convertToUtf8AndPrint(returnUUIDdata($uuid));
     }   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
