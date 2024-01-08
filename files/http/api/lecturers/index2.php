@@ -236,4 +236,3 @@ function ReturnUserTags($data, $connection) {
 
     return $decodedTags;
 }
-}
