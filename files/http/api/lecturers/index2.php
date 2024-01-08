@@ -157,12 +157,15 @@ while($row = $result->fetch_assoc()) {
     ];
 
     //Handling tags
-    $tagsSql = "SELECT * FROM tags WHERE user_uuid = '" . $row["uuid"] . "'";
-    $tagsResult = mysqli_query($conn, $tagsSql);
-    while($tagRow = $tagsResult->fetch_assoc()) {
+    $stmt = $conn->prepare("SELECT * FROM tag_list WHERE user_uuid = ?");
+    $stmt->bind_param("s", $row["uuid"]);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while($tagRow = $result->fetch_assoc()) {
         $user["tags"][] = [
             "uuid" => $tagRow["tag_uuid"],
             "name" => $tagRow["tag_name"],
+            "color" => $tagRow["tag_color"],
         ];
     }
 
