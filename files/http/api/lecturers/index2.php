@@ -16,19 +16,30 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     RequiedFieldsCheck($data);
 
     // Generate a new UUID
-    $uuid = generateUuidV4();
-
-    // Insert the new user into the database
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssssss", $uuid, $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour']);
-    $stmt->execute();
-
-    // Insert tags into the database
-    foreach ($data['tags'] as $tag) {
-        $stmt = $conn->prepare("INSERT INTO tags (user_uuid, tag_uuid, tag_name) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $uuid, $tag['uuid'], $tag['name']);
-        $stmt->execute();
+    if (!isset($data['uuid']) || !UUIDCheck($data['uuid'])) {
+        $data['uuid'] = generateUuidV4();
     }
+
+        // Insert the new user into the database
+        $tags = implode(", ", $data['tags']); // Convert the tags array into a string
+        $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssss", $uuid, $data['first_name'], $data['last_name'], $data['title_before'], $data['middle_name'], $data['title_after'], $data['picture_url'], $data['location'], $data['claim'], $data['bio'], $data['price_per_hour'], $tags);
+        $stmt->execute();
+
+        // Insert tags into the database
+        foreach ($data['tags'] as $tag) {
+            // Check if the tag already exists in the database
+            $stmt = $conn->prepare("SELECT 1 FROM tags WHERE tag_uuid = ?");
+            $stmt->bind_param("s", $tag['uuid']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        // If the tag doesn't exist, insert it into the tag_list database
+        if ($result->num_rows === 0) {
+            $stmt = $conn->prepare("INSERT INTO tag_list (tag_uuid, tag_name, tag_color) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", generateUuidV4(), $tag['name'], generateHexColor());
+            $stmt->execute();
+            }
+        }
 
     // Insert telephone numbers into the database
     foreach ($data['contact']['telephone_numbers'] as $number) {
@@ -217,6 +228,14 @@ function RequiedFieldsCheck($data) {
     }
 
     return true;
+}
+
+function generateHexColor() {
+    $color = '#';
+    for ($i = 0; $i < 6; $i++) {
+        $color .= dechex(rand(0, 15));
+    }
+    return $color;
 }
 
 function ReturnUserTags($data, $connection) {
