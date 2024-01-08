@@ -27,9 +27,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if each field is set in the $data array, if not, set it to null
-    $tags = isset($data['tags']) && is_array($data['tags']) && !is_null($data['tags']) ? implode(", ", $data['tags']) : null;
-    $emails = isset($data['emails']) && is_array($data['emails']) && !is_null($data['emails']) ? implode(", ", $data['emails']) : null;
-    $numbers = isset($data['numbers']) && is_array($data['numbers']) && !is_null($data['numbers']) ? implode(", ", $data['numbers']) : null;
+    $tags = isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])  ? implode(", ", $data['tags']) : null;
+    $emails = isset($data['emails']) && !is_null($data['emails']) && is_array($data['emails']) ? implode(", ", $data['emails']) : null;
+    $numbers = isset($data['numbers']) && !is_null($data['numbers']) && is_array($data['numbers']) ? implode(", ", $data['numbers']) : null;
 
     // Assign the values to variables
     $uuid = $data['uuid'];
