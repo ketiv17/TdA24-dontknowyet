@@ -1,7 +1,7 @@
 <?php
 
 // Include the functions and the database connection file
-include 'functions.php';
+include '..functions.php';
 
 // Validating and setting a uuid from /lecturers/:uuid to a variable
 $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $_GET['uuid'])
@@ -357,22 +357,4 @@ function generateHexColor() {
         $color .= dechex(rand(0, 15));
     }
     return $color;
-}
-
-function ReturnUserTags($data, $connection) {
-    $tags = explode(', ', $data['tags']);
-    $decodedTags = [];
-
-    foreach ($tags as $tag) {
-        // Query the table with tags to get the tag name based on the UUID
-        $query = "SELECT name FROM tags WHERE uuid = '$tag'";
-        $result = mysqli_query($connection, $query);
-
-        if ($result && mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $decodedTags[] = $row['name'];
-        }
-    }
-
-    return $decodedTags;
 }
