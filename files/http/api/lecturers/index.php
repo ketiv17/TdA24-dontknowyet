@@ -64,8 +64,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_array($data['tags'])) {
         foreach ($data['tags'] as $tag) {
             // Check if the tag already exists in the database
-            $stmt = $conn->prepare("SELECT 1 FROM tag_list WHERE uuid = ?");
-            $stmt->bind_param("s", $tag['uuid']);
+            $stmt = $conn->prepare("SELECT 1 FROM tag_list WHERE uuid = ? OR name = ?");
+            $stmt->bind_param("ss", $tag['uuid'], $tag['name']);
             $stmt->execute();
             $result = $stmt->get_result();
             // If the tag doesn't exist, insert it into the tag_list database
