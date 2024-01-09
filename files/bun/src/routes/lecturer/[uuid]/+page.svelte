@@ -12,7 +12,7 @@
   $: uuid = $page.params.uuid;
 
   async function fetchData() {
-    const response = await fetch('/api/lecturers/'+uuid);
+    const response = await fetch('/api/lecturers/index2.php?uuid='+uuid);
     data = await response.json();
   }
 

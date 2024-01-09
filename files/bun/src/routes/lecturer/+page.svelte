@@ -5,7 +5,7 @@
     let data;
 
     async function fetchData() {
-        const response = await fetch('/api/lecturers/');
+        const response = await fetch('/api/lecturers/index2.php');
         data = await response.json();
     }
 
