@@ -1,7 +1,7 @@
 <?php
 
 // Include the functions and the database connection file
-include '..functions.php';
+include '../functions.php';
 
 // Validating and setting a uuid from /lecturers/:uuid to a variable
 $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $_GET['uuid'])
