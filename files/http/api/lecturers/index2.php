@@ -25,6 +25,18 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($data['uuid']) || !UUIDCheck($data['uuid'])) {
         $data['uuid'] = generateUuidV4();
     }
+    else {
+        //Check if user already exists
+        $stmt = $conn->prepare("SELECT 1 FROM users WHERE uuid = ?");
+        $stmt->bind_param("s", $data['uuid']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            http_response_code(409);
+            convertToUtf8AndPrint(["code" => 409, "message" => "User with this UUID already exists"]);
+            exit;
+        }
+    }
 
     // Check if each field is set in the $data array, if not, set it to null
     $tags = isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])  ? implode(", ", array_column($data['tags'], 'name')) : null;
@@ -123,6 +135,29 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
     // Return the new user's data
     convertToUtf8AndPrint(returnUUIDdata($uuid));
+}
+
+elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    // Check if the user exists
+    if (!UUIDCheck($uuid)) {
+        http_response_code(404);
+        convertToUtf8AndPrint(["code" => 404, "message" => "User not found"]);
+        exit;
+    }
+
+    $stmt = $conn->prepare("DELETE FROM users WHERE uuid = ?");
+    $stmt->bind_param("s", $uuid);
+    $stmt->execute();
+
+    http_response_code(204);
+    convertToUtf8AndPrint(null);
+}
+
+
+else {
+    http_response_code(405);
+    convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
+    exit;
 }
 
 
