@@ -24,5 +24,6 @@ while($row = $result->fetch_assoc()) {
     if (is_array($data) && count($data) === 1) {
         $data = $data[0];
 }
+convertToUtf8AndPrint($data);
 
 ?>
