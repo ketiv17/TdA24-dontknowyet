@@ -12,7 +12,7 @@
   $: uuid = $page.params.uuid;
 
   async function fetchData() {
-    const response = await fetch('/api/lecturers/index2.php?uuid='+uuid);
+    const response = await fetch('/api/lecturers/'+uuid);
     data = await response.json();
   }
 
@@ -47,16 +47,18 @@
       <h4 class="h4 text-center">{data.location}</h4>
       <h3 class="h3 text-center">{data.claim}</h3>
       <div class="w-full text-center m-2">
-        {#each data.tags as tag}
-          <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {contrast(tag.color)};">{tag.name}</span>
-        {/each}
+        {#if data.tags !== null && data.tags.length !== 0}
+          {#each data.tags as tag}
+            <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {contrast(tag.color)};">{tag.name}</span>
+          {/each}
+        {/if}
       </div>
-      <article class="blockquote m-2">{@html data.bio}</article>
+      <article class="blockquote not-italic m-2">{@html data.bio}</article>
       <div class="grid sm:grid-cols-2 mx-4">
         <div>Kontakty:
           <ul class="list-disc ml-4">
             {#each ["telephone_numbers", "emails"] as contact_type}
-              {#if data.contact[contact_type].length !== 0}
+              {#if data.contact[contact_type] !== null && data.contact[contact_type].lenght !== 0}
                 <li>{czechFor[contact_type]+":"}
                   {#each data.contact[contact_type] as contact_value}
                     <button use:clipboard={contact_value} class="badge card-hover rounded-full variant-ghost-secondary m-1">{contact_value}</button>

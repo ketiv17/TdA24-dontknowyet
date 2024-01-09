@@ -5,7 +5,7 @@
     let data;
 
     async function fetchData() {
-        const response = await fetch('/api/lecturers/index2.php');
+        const response = await fetch('/api/lecturers/');
         data = await response.json();
     }
 
@@ -37,9 +37,11 @@
                         </div>
                     </div>
                     <p class="text-lg m-1">{lecturer.claim}</p>
-                    {#each lecturer.tags as tag}
-                        <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {contrast(tag.color)};">{tag.name}</span>
-                    {/each}
+                    {#if lecturer.tags !== null && lecturer.tags.length !== 0}
+                      {#each lecturer.tags as tag}
+                          <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {contrast(tag.color)};">{tag.name}</span>
+                      {/each}
+                    {/if}
                 </a>
             {/each}
         {:else}
