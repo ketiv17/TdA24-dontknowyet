@@ -2,7 +2,7 @@
 
 // Create a JSON object
 $data = array(
-  "secret" => "The cake is a lie"
+  "greeting" => "Welcome to the API! :)",
 );
 
 // Encode the JSON object
