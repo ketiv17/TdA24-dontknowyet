@@ -88,9 +88,10 @@ function returnUUIDdata($uuid) {
             ],
         ];
 
-        //Handling tags
-        if (isset($row["tags"]) && $row["tags"] !== null) {
-            $tags = explode(", ", $row["tags"]);
+    // Handling tags
+    if (isset($row["tags"]) && $row["tags"] !== null) {
+        $tags = json_decode($row["tags"], true);
+        if ($tags !== null) {
             foreach ($tags as $tag) {
                 $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
                 $tagResult = mysqli_query($conn, $tagQuery);
@@ -108,32 +109,33 @@ function returnUUIDdata($uuid) {
                     echo "Error: " . mysqli_error($conn);
                 }
             }
-            if (empty($user["tags"])) {
-                $user["tags"] = null;
-            }
-        } else {
+        }
+        if (empty($user["tags"])) {
             $user["tags"] = null;
         }
-        
-        // Handling emails
-        if (isset($row["emails"]) && $row["emails"] !== null) {
-            $user["contact"]["emails"] = explode(", ", $row["emails"]);
-            if (empty($user["contact"]["emails"])) {
-                $user["contact"]["emails"] = null;
-            }
-        } else {
+    } else {
+        $user["tags"] = null;
+    }
+
+    // Handling emails
+    if (isset($row["emails"]) && $row["emails"] !== null) {
+        $user["contact"]["emails"] = json_decode($row["emails"], true);
+        if (empty($user["contact"]["emails"])) {
             $user["contact"]["emails"] = null;
         }
-        
-        // Handling numbers
-        if (isset($row["numbers"]) && $row["numbers"] !== null) {
-            $user["contact"]["telephone_numbers"] = explode(", ", $row["numbers"]);
-            if (empty($user["contact"]["telephone_numbers"])) {
-                $user["contact"]["telephone_numbers"] = null;
-            }
-        } else {
+    } else {
+        $user["contact"]["emails"] = null;
+    }
+
+    // Handling numbers
+    if (isset($row["numbers"]) && $row["numbers"] !== null) {
+        $user["contact"]["telephone_numbers"] = json_decode($row["numbers"], true);
+        if (empty($user["contact"]["telephone_numbers"])) {
             $user["contact"]["telephone_numbers"] = null;
         }
+    } else {
+        $user["contact"]["telephone_numbers"] = null;
+    }
 
             
         $data[] = $user;
