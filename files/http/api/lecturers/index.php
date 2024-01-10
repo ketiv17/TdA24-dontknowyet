@@ -72,7 +72,18 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result->num_rows === 0) {
                 $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
                 $uuidV4 = generateUuidV4();
+                if (isset($tag['color']) && !empty($tag['color'])) {
+                    //Validate the color
+                    if (!preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color'])) {
+                        http_response_code(400);
+                        convertToUtf8AndPrint(["code" => 400, "message" => "Invalid color code"]);
+                        exit;
+                    }
+                    $hexColor = $tag['color'];
+                }
+                else {
                 $hexColor = generateHexColor();
+                }
                 $stmt->bind_param("sss", $uuidV4, $tag['name'], $hexColor);
                 $stmt->execute();
             }
