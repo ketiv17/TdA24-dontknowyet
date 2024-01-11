@@ -93,6 +93,9 @@ function returnUUIDdata($uuid) {
         $tags = json_decode($row["tags"], true);
         if ($tags !== null) {
             foreach ($tags as $tag) {
+                if (is_array($tag)) {
+                    $tag = implode(", ", $tag); // Convert array to string
+                }
                 $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
                 $tagResult = mysqli_query($conn, $tagQuery);
                 if ($tagResult !== false) {
