@@ -39,7 +39,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if each field is set in the $data array, if not, set it to null
-    $tags = isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])  ? json_encode($data['tags']) : null;
+    if (isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])) {
+        $tagNames = array_map(function($tag) {
+            return $tag['name'];
+        }, $data['tags']);
+        $tags = json_encode($tagNames);
+    } else {
+        $tags = null;
+    }
+    
     $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
     $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
 
