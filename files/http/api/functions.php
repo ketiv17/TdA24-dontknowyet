@@ -205,3 +205,55 @@ function generateHexColor() {
     }
     return $color;
 }
+
+// Updating user tags, inserting newly created tags into tag_list
+function UpdateTags($data, $useruuid) {
+    global $conn;
+
+    // Null check
+    if (!isset($data["tags"]) || empty($data["tags"] || is_null($data["tags"]))) {
+        return;
+    }
+    // Check if the tags are in the correct format
+    if (!is_array($data["tags"])) {
+        http_response_code(400);
+        convertToUtf8AndPrint(["code" => 400, "message" => "Invalid tag format"]);
+        exit;
+    }
+
+    foreach ($data["tags"] as $tag) {
+        // Check if the tag already exists in the database
+        $stmt = $conn->prepare("SELECT 1 FROM tag_list WHERE uuid = ? OR name = ?");
+        $stmt->bind_param("ss", $tag['uuid'], $tag['name']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        // If the tag doesn't exist, insert it into the tag_list database
+        if ($result->num_rows === 0) {
+            $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
+            $uuidV4 = generateUuidV4();
+            if (isset($tag['color']) && !empty($tag['color'])) {
+                //Validate the color
+                if (!preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color'])) {
+                    http_response_code(400);
+                    convertToUtf8AndPrint(["code" => 400, "message" => "Invalid color code"]);
+                    exit;
+                }
+                $hexColor = $tag['color'];
+            }
+            else {
+            $hexColor = generateHexColor();
+            }
+            $stmt->bind_param("sss", $uuidV4, $tag['name'], $hexColor);
+            $stmt->execute();
+        }
+
+        // Updating the user's tags
+        // Encoding tags to json
+        $tagUuids = array_map(function($tag) { return $tag['uuid']; }, $data['tags']);
+        $jsontags = json_encode($tagUuids);
+
+        $stmt = $conn->prepare("UPDATE users SET tags = ? WHERE uuid = ?");
+        $stmt->bind_param("ss", $jsontags, $useruuid);
+        $stmt->execute();
+    }
+}

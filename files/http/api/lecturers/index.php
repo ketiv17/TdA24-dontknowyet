@@ -37,16 +37,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     }
-
-    // Check if each field is set in the $data array, if not, set it to null
-    if (isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])) {
-        $tagNames = array_map(function($tag) {
-            return $tag['name'];
-        }, $data['tags']);
-        $tags = json_encode($tagNames);
-    } else {
-        $tags = null;
-    }
     
     $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
     $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
@@ -64,47 +54,18 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bio = $data['bio'] ?? null;
     $price_per_hour = $data['price_per_hour'] ?? null;
 
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, tags, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssssssss", $uuid, $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $tags, $emails, $numbers);
+    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssssssss", $uuid, $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $emails, $numbers);
     $stmt->execute();
 
-    // Insert tags into the database
-    if (is_array($data['tags'])) {
-        foreach ($data['tags'] as $tag) {
-            // Check if the tag already exists in the database
-            $stmt = $conn->prepare("SELECT 1 FROM tag_list WHERE uuid = ? OR name = ?");
-            $stmt->bind_param("ss", $tag['uuid'], $tag['name']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            // If the tag doesn't exist, insert it into the tag_list database
-            if ($result->num_rows === 0) {
-                $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
-                $uuidV4 = generateUuidV4();
-                if (isset($tag['color']) && !empty($tag['color'])) {
-                    //Validate the color
-                    if (!preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color'])) {
-                        http_response_code(400);
-                        convertToUtf8AndPrint(["code" => 400, "message" => "Invalid color code"]);
-                        exit;
-                    }
-                    $hexColor = $tag['color'];
-                }
-                else {
-                $hexColor = generateHexColor();
-                }
-                $stmt->bind_param("sss", $uuidV4, $tag['name'], $hexColor);
-                $stmt->execute();
-            }
-        }
-    }
+    // Insert tags into the database and register new ones
+    UpdateTags($data, $uuid);
 
     // Return the new user's data
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 
-elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    $data = json_decode(file_get_contents('php://input'), true);
-
+elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     // Check if the user exists
     if (!UUIDCheck($uuid)) {
         http_response_code(404);
@@ -112,10 +73,11 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         exit;
     }
 
+    $data = json_decode(file_get_contents('php://input'), true);
+
     // Check if each field is set in the $data array, if not, set it to null
-    $tags = isset($data['tags']) && !is_null($data['tags']) && is_array($data['tags'])  ? implode(", ", array_column($data['tags'], 'name')) : null;
-    $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? implode(", ", $data['contact']['emails']) : null;
-    $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? implode(", ", $data['contact']['telephone_numbers']) : null;
+    $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
+    $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
 
     // Assign the values to variables
     $first_name = $data['first_name'] ?? null;
@@ -129,28 +91,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $bio = $data['bio'] ?? null;
     $price_per_hour = $data['price_per_hour'] ?? null;
 
-    $stmt = $conn->prepare("UPDATE users SET first_name = ?, last_name = ?, title_before = ?, middle_name = ?, title_after = ?, picture_url = ?, location = ?, claim = ?, bio = ?, price_per_hour = ?, tags = ?, emails = ?, numbers = ? WHERE uuid = ?");
-    $stmt->bind_param("ssssssssssssss", $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $tags, $emails, $numbers, $uuid);
+    $stmt = $conn->prepare("UPDATE users SET first_name = ?, last_name = ?, title_before = ?, middle_name = ?, title_after = ?, picture_url = ?, location = ?, claim = ?, bio = ?, price_per_hour = ?, emails = ?, numbers = ? WHERE uuid = ?");
+    $stmt->bind_param("sssssssssssss", $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $emails, $numbers, $uuid);
     $stmt->execute();
 
-    // Insert tags into the database
-    if (is_array($data['tags'])) {
-        foreach ($data['tags'] as $tag) {
-            // Check if the tag already exists in the database
-            $stmt = $conn->prepare("SELECT 1 FROM tag_list WHERE uuid = ?");
-            $stmt->bind_param("s", $tag['uuid']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            // If the tag doesn't exist, insert it into the tag_list database
-            if ($result->num_rows === 0) {
-                $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
-                $uuidV4 = generateUuidV4();
-                $hexColor = generateHexColor();
-                $stmt->bind_param("sss", $uuidV4, $tag['name'], $hexColor);
-                $stmt->execute();
-            }
-        }
-    }
+    // Insert tags into the database and register new ones
+    UpdateTags($data, $uuid);
 
     // Return the new user's data
     convertToUtf8AndPrint(returnUUIDdata($uuid));
