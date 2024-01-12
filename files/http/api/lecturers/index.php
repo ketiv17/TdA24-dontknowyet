@@ -118,6 +118,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     convertToUtf8AndPrint(null);
 }
 
+// Return the allowed methods and other endpoints
+elseif ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Max-Age: 86400");
+    convertToUtf8AndPrint(null);
+}
+
 
 else {
     http_response_code(405);
