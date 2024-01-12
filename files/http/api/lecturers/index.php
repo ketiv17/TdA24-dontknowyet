@@ -13,6 +13,7 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     convertToUtf8AndPrint(returnUUIDdata($uuid));
+    httú_response_code(200);
     }   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -54,7 +55,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bio = $data['bio'] ?? null;
     $price_per_hour = $data['price_per_hour'] ?? null;
 
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssssssssssss", $uuid, $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $emails, $numbers);
     $stmt->execute();
 
@@ -62,6 +63,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     UpdateTags($data, $uuid);
 
     // Return the new user's data
+    http_response_code(201);
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 
@@ -99,6 +101,7 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     UpdateTags($data, $uuid);
 
     // Return the new user's data
+    http_response_code(200);
     convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 
@@ -125,6 +128,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Max-Age: 86400");
     convertToUtf8AndPrint(null);
+    http_response_code(200);
 }
 
 
