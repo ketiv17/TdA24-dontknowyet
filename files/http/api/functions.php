@@ -226,7 +226,7 @@ function UpdateTags($data, $useruuid) {
     foreach ($data["tags"] as $tag) {
         // Check if the tag already exists in the database
         $stmt = $conn->prepare("SELECT uuid FROM tag_list WHERE name = ? OR uuid = ?");
-        $stmt->bind_param("s", $tag['name'], $tag['uuid']);
+        $stmt->bind_param("ss", $tag['name'], $tag['uuid']);
         $stmt->execute();
         $result = $stmt->get_result();
         // If the tag doesn't exist, insert it into the tag_list database
