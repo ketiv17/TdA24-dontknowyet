@@ -1,8 +1,8 @@
 <script>
     import "../app.css";
-    import {AppShell} from '@skeletonlabs/skeleton';
-    import { Toast, getToastStore } from '@skeletonlabs/skeleton';
-    import { initializeStores } from '@skeletonlabs/skeleton';
+    import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom'; // import popup
+    storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow }); // set stores for popup
+    import {AppShell, Toast, getToastStore, initializeStores, storePopup} from '@skeletonlabs/skeleton';
     initializeStores();
     import Nav from './Nav.svelte'
     import Footer from './Footer.svelte'

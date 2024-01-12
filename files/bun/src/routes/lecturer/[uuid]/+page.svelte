@@ -30,7 +30,7 @@
     var g = parseInt(colorhex.substr(2,2),16);
     var b = parseInt(colorhex.substr(4,2),16);
     var yiq = ((r*299)+(g*587)+(b*114))/1000;
-    return (yiq >= 128) ? 'black' : 'white';
+    return (yiq >= 128) ? '#333333' : 'white';
   };
 
   const czechFor = {
@@ -40,7 +40,7 @@
 </script>
 
 <main class="flex justify-center">
-  <div class="flex flex-col gap-y-5 lg:w-8/12 md:w-10/12 w-full mt-12">
+  <div class="flex flex-col gap-y-5 xl:w-1/2 lg:w-8/12 md:w-10/12 w-full mt-12">
     {#if data}
       <Avatar src="{data.picture_url}" class="w-48 self-center m-8" shadow="shadow-2xl" />
       <h1 class="h1 text-center">{data.title_before+' '+data.first_name+' '+data.middle_name+' '+data.last_name+' '+data.title_after}</h1>
@@ -61,7 +61,7 @@
               {#if data.contact[contact_type] !== null && data.contact[contact_type].lenght !== 0}
                 <li>{czechFor[contact_type]+":"}
                   {#each data.contact[contact_type] as contact_value}
-                    <button use:clipboard={contact_value} class="badge card-hover rounded-full variant-ghost-secondary m-1">{contact_value}</button>
+                    <p class="badge card-hover rounded-full variant-ghost-secondary m-1">{contact_value}</p>
                   {/each}
                 </li>
               {/if}
