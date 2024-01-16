@@ -15,12 +15,12 @@
   let allTags = [];
 
   async function fetchData() {
-    const response = await fetch('/api/lecturers/');
+    const response = await fetch('/testingapi/data.json');
     data = await response.json();
   }
-
+  
   async function fetchTags() {
-    const response = await fetch('/api/tags/');
+    const response = await fetch('/testingapi/tags.json');
     allTags = await response.json();
     allTags.forEach(tag => {
       tag.selected = false;
@@ -28,7 +28,7 @@
   }
 
   // FILTER FUNCTIONS
-  $: data && tagFilter && (locationFilter || locationFilter === '') && priceFilter && filterData();
+  $: { data, tagFilter, locationFilter, priceFilter, filterData() };
   let filtered = [];
 
   function filterData() {
@@ -134,7 +134,7 @@
     <!-- price -->
     <div class="m-3 mx-6 w-72">
       <h5 class="h5">Cenou:{'  '+priceFilter.toSorted((a,b) => a-b)[0]+'Kč/hod - '+priceFilter.toSorted((a,b) => a-b)[1]+'Kč/hod'}</h5>
-      <RangeSlider {formatter} bind:values={priceFilter} min={0} max={maxPrice} float/>
+      <RangeSlider {formatter} bind:values={priceFilter} min={0} max={maxPrice} float ariaLabels={["min price","max price"]}/>
     </div>
   </div>
 
