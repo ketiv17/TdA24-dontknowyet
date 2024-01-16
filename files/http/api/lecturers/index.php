@@ -71,31 +71,40 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param(
-        "sssssssssssss", 
-        $data['uuid'] ?? null,
-        $data['first_name'] ?? null,
-        $data['last_name'] ?? null,
-        $data['title_before'] ?? null,
-        $data['middle_name'] ?? null,
-        $data['title_after'] ?? null,
-        $data['picture_url'] ?? null,
-        $data['location'] ?? null,
-        $data['claim'] ?? null,
-        $data['bio'] ?? null,
-        $data['price_per_hour'] ?? null,
-        isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null,
-        isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null
-    );
-    $stmt->execute();
-
+    $updateFields = [];
+    $updateValues = [];
+    
+    foreach ($data as $key => $value) {
+        if ($key === 'contact') {
+            if (isset($value['emails'])) {
+                $updateFields[] = 'emails = ?';
+                $updateValues[] = json_encode($value['emails']);
+            }
+            if (isset($value['telephone_numbers'])) {
+                $updateFields[] = 'numbers = ?';
+                $updateValues[] = json_encode($value['telephone_numbers']);
+            }
+        } else if ($key !== 'tags') {
+            $updateFields[] = $key . ' = ?';
+            $updateValues[] = $value;
+        }
+    }
+    
+    if (!empty($updateFields)) {
+        $stmt = $conn->prepare("UPDATE users SET " . implode(', ', $updateFields) . " WHERE uuid = ?");
+        $updateValues[] = $data['uuid'];
+        $stmt->bind_param(str_repeat('s', count($updateValues)), ...$updateValues);
+        $stmt->execute();
+    }
+    
     // Insert tags into the database and register new ones
-    UpdateTags($data, $uuid);
+    if (isset($data['tags'])) {
+        UpdateTags($data, $data['uuid']);
+    }
 
     // Return the new user's data
-    http_response_code(200);
     convertToUtf8AndPrint(returnUUIDdata($uuid));
+    http_response_code(200);
 }
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
