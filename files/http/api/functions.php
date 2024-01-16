@@ -110,6 +110,9 @@ function returnUUIDdata($uuid) {
                 } else {
                     // Handle error - query failed
                     echo "Error: " . mysqli_error($conn);
+                    http_response_code(500);
+                    convertToUtf8AndPrint(["code" => 500, "message" => "Database server error"]);
+                    exit;
                 }
             }
         }

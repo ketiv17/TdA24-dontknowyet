@@ -14,20 +14,20 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     convertToUtf8AndPrint(returnUUIDdata($uuid));
     http_response_code(200);
-    }   
+}   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Check if required fields are present
+    // Check if required fields are present (first_name and last_name)
     RequiedFieldsCheck($data);
 
-    // Generate a new UUID
+    // Generate a new UUID if not present
     if (!isset($data['uuid']) || !UUIDCheck($data['uuid'])) {
         $data['uuid'] = generateUuidV4();
     }
     else {
-        //Check if user already exists
+        // Check if user already exists
         if (UUIDCheck($data['uuid'])) {
             convertToUtf8AndPrint(["code" => 409, "message" => "User with this UUID already exists"]);
             http_response_code(409);
@@ -35,6 +35,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Insert the user into the database
     $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param(
         "sssssssssssss", 
@@ -74,7 +75,9 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
 
     $updateFields = [];
     $updateValues = [];
-    
+
+    // Update the user in the database
+    // Updating only the fields that are present in the request
     foreach ($data as $key => $value) {
         if ($key === 'contact') {
             if (isset($value['emails'])) {
@@ -98,12 +101,12 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
         $stmt->execute();
     }
     
-    // Insert tags into the database and register new ones
+    // Insert tags into the database and register new ones (if present)
     if (isset($data['tags'])) {
         UpdateTags($data, $data['uuid']);
     }
 
-    // Return the new user's data
+    // Return the updated user's data
     convertToUtf8AndPrint(returnUUIDdata($uuid));
     http_response_code(200);
 }
@@ -116,10 +119,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         exit;
     }
 
+    // Delete the user from the database
     $stmt = $conn->prepare("DELETE FROM users WHERE uuid = ?");
     $stmt->bind_param("s", $uuid);
     $stmt->execute();
 
+    // Return a message
     convertToUtf8AndPrint("code" => 204, "message" => "User deleted");
     http_response_code(204);
 }
@@ -134,7 +139,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
 }
 
-
+// Return an error if the method is not allowed
 else {
     convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
     http_response_code(405);
