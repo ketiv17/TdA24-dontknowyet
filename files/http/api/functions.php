@@ -142,13 +142,7 @@ function returnUUIDdata($uuid) {
 
             
         $data[] = $user;
-        http_response_code(200);
         } 
-
-        // If $data is an array with a single element, convert it to an object
-        if (is_array($data) && count($data) === 1) {
-            $data = $data[0];
-    }
     return $data;
 }
 

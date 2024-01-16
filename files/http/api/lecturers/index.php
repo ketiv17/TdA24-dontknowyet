@@ -13,6 +13,7 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     convertToUtf8AndPrint(returnUUIDdata($uuid));
+    http_response_code(200);
     }   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,8 +29,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else {
         //Check if user already exists
         if (UUIDCheck($data['uuid'])) {
-            http_response_code(409);
             convertToUtf8AndPrint(["code" => 409, "message" => "User with this UUID already exists"]);
+            http_response_code(409);
             exit;
         }
     }
@@ -57,8 +58,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     UpdateTags($data, $uuid);
 
     // Return the new user's data
-    http_response_code(201);
     convertToUtf8AndPrint(returnUUIDdata($uuid));
+    http_response_code(201);
 }
 
 elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
@@ -110,8 +111,8 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Check if the user exists
     if (!UUIDCheck($uuid)) {
-        http_response_code(404);
         convertToUtf8AndPrint(["code" => 404, "message" => "User not found"]);
+        http_response_code(404);
         exit;
     }
 
@@ -119,8 +120,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $stmt->bind_param("s", $uuid);
     $stmt->execute();
 
+    convertToUtf8AndPrint("code" => 204, "message" => "User deleted");
     http_response_code(204);
-    convertToUtf8AndPrint(null);
 }
 
 // Return the allowed methods and other endpoints
@@ -135,7 +136,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 
 else {
-    http_response_code(405);
     convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
+    http_response_code(405);
     exit;
 }
