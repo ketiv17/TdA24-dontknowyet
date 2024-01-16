@@ -27,35 +27,30 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else {
         //Check if user already exists
-        $stmt = $conn->prepare("SELECT 1 FROM users WHERE uuid = ?");
-        $stmt->bind_param("s", $data['uuid']);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
+        if (UUIDCheck($data['uuid'])) {
             http_response_code(409);
             convertToUtf8AndPrint(["code" => 409, "message" => "User with this UUID already exists"]);
             exit;
         }
     }
     
-    $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
-    $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
-
-    // Assign the values to variables
-    $uuid = $data['uuid'] ?? null;
-    $first_name = $data['first_name'] ?? null;
-    $last_name = $data['last_name'] ?? null;
-    $title_before = $data['title_before'] ?? null;
-    $middle_name = $data['middle_name'] ?? null;
-    $title_after = $data['title_after'] ?? null;
-    $picture_url = $data['picture_url'] ?? null;
-    $location = $data['location'] ?? null;
-    $claim = $data['claim'] ?? null;
-    $bio = $data['bio'] ?? null;
-    $price_per_hour = $data['price_per_hour'] ?? null;
-
     $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssssssss", $uuid, $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $emails, $numbers);
+    $stmt->bind_param(
+        "sssssssssssss", 
+        $data['uuid'] ?? null,
+        $data['first_name'] ?? null,
+        $data['last_name'] ?? null,
+        $data['title_before'] ?? null,
+        $data['middle_name'] ?? null,
+        $data['title_after'] ?? null,
+        $data['picture_url'] ?? null,
+        $data['location'] ?? null,
+        $data['claim'] ?? null,
+        $data['bio'] ?? null,
+        $data['price_per_hour'] ?? null,
+        isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null,
+        isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null
+    );
     $stmt->execute();
 
     // Insert tags into the database and register new ones
@@ -76,24 +71,23 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Check if each field is set in the $data array, if not, set it to null
-    $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
-    $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
-
-    // Assign the values to variables
-    $first_name = $data['first_name'] ?? null;
-    $last_name = $data['last_name'] ?? null;
-    $title_before = $data['title_before'] ?? null;
-    $middle_name = $data['middle_name'] ?? null;
-    $title_after = $data['title_after'] ?? null;
-    $picture_url = $data['picture_url'] ?? null;
-    $location = $data['location'] ?? null;
-    $claim = $data['claim'] ?? null;
-    $bio = $data['bio'] ?? null;
-    $price_per_hour = $data['price_per_hour'] ?? null;
-
-    $stmt = $conn->prepare("UPDATE users SET first_name = ?, last_name = ?, title_before = ?, middle_name = ?, title_after = ?, picture_url = ?, location = ?, claim = ?, bio = ?, price_per_hour = ?, emails = ?, numbers = ? WHERE uuid = ?");
-    $stmt->bind_param("sssssssssssss", $first_name, $last_name, $title_before, $middle_name, $title_after, $picture_url, $location, $claim, $bio, $price_per_hour, $emails, $numbers, $uuid);
+    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param(
+        "sssssssssssss", 
+        $data['uuid'] ?? null,
+        $data['first_name'] ?? null,
+        $data['last_name'] ?? null,
+        $data['title_before'] ?? null,
+        $data['middle_name'] ?? null,
+        $data['title_after'] ?? null,
+        $data['picture_url'] ?? null,
+        $data['location'] ?? null,
+        $data['claim'] ?? null,
+        $data['bio'] ?? null,
+        $data['price_per_hour'] ?? null,
+        isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null,
+        isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null
+    );
     $stmt->execute();
 
     // Insert tags into the database and register new ones
