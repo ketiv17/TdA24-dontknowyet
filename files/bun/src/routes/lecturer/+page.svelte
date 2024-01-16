@@ -6,21 +6,22 @@
   import {textContrast} from '$lib/index.js';
 
   // FETCH DATA
-  onMount(() => {
-    fetchData();
-    fetchTags();
+  onMount(async () =>{
+    await fetchData();
+    await fetchTags();
+    filterData();
     });
 
   let data = [];
   let allTags = [];
 
   async function fetchData() {
-    const response = await fetch('/testingapi/data.json');
+    const response = await fetch('/api/lecturers');
     data = await response.json();
   }
   
   async function fetchTags() {
-    const response = await fetch('/testingapi/tags.json');
+    const response = await fetch('/api/tags');
     allTags = await response.json();
     allTags.forEach(tag => {
       tag.selected = false;
