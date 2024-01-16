@@ -12,8 +12,8 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 // Handling request methods ---
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    convertToUtf8AndPrint(returnUUIDdata($uuid));
     http_response_code(200);
+    convertToUtf8AndPrint(returnUUIDdata($uuid));
 }   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,8 +29,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else {
         // Check if user already exists
         if (UUIDCheck($data['uuid'])) {
-            convertToUtf8AndPrint(["code" => 409, "message" => "User with this UUID already exists"]);
             http_response_code(409);
+            convertToUtf8AndPrint(["code" => 409, "message" => "User with this UUID already exists"]);
             exit;
         }
     }
@@ -59,8 +59,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     UpdateTags($data, $uuid);
 
     // Return the new user's data
-    convertToUtf8AndPrint(returnUUIDdata($uuid));
     http_response_code(201);
+    convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 
 elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
@@ -107,15 +107,15 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     }
 
     // Return the updated user's data
-    convertToUtf8AndPrint(returnUUIDdata($uuid));
     http_response_code(200);
+    convertToUtf8AndPrint(returnUUIDdata($uuid));
 }
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Check if the user exists
     if (!UUIDCheck($uuid)) {
-        convertToUtf8AndPrint(["code" => 404, "message" => "User not found"]);
         http_response_code(404);
+        convertToUtf8AndPrint(["code" => 404, "message" => "User not found"]);
         exit;
     }
 
@@ -124,10 +124,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $stmt->bind_param("s", $uuid);
     $stmt->execute();
 
-    // Return a message
-    $message = 
-    convertToUtf8AndPrint(["code" => 204, "message" => "User deleted"]);
+    // Return a success message
     http_response_code(204);
+    convertToUtf8AndPrint(["code" => 204, "message" => "User deleted"]);
 }
 
 // Return the allowed methods and other endpoints
@@ -136,13 +135,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Max-Age: 86400");
-    convertToUtf8AndPrint(null);
     http_response_code(200);
+    convertToUtf8AndPrint(["code" => 200, "message" => "Allowed methods: GET, POST, PUT, DELETE, OPTIONS"]);
 }
 
 // Return an error if the method is not allowed
 else {
-    convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
     http_response_code(405);
+    convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
     exit;
 }
