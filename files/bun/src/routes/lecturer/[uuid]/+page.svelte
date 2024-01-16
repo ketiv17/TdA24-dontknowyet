@@ -6,6 +6,7 @@
   import {getToastStore} from '@skeletonlabs/skeleton';
   const toastStore = getToastStore();
   import {page} from '$app/stores';
+  import {textContrast} from '$lib/index.js'
 
   let data;
   let uuid;
@@ -24,15 +25,6 @@
     message: 'Hello',
   };
 
-  function contrast(colorhex) {
-    colorhex = colorhex.replace("#", "");
-    var r = parseInt(colorhex.substr(0,2),16);
-    var g = parseInt(colorhex.substr(2,2),16);
-    var b = parseInt(colorhex.substr(4,2),16);
-    var yiq = ((r*299)+(g*587)+(b*114))/1000;
-    return (yiq >= 128) ? '#333333' : 'white';
-  };
-
   const czechFor = {
     "emails": "e-mail",
     "telephone_numbers": "telefon"
@@ -49,7 +41,7 @@
       <div class="w-full text-center m-2">
         {#if data.tags !== null && data.tags.length !== 0}
           {#each data.tags as tag}
-            <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {contrast(tag.color)};">{tag.name}</span>
+            <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {textContrast(tag.color)};">{tag.name}</span>
           {/each}
         {/if}
       </div>
