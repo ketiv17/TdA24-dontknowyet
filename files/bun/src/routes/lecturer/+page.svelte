@@ -10,7 +10,7 @@
     await fetchData();
     await fetchTags();
     filterData();
-    });
+  });
 
   let data = [];
   let allTags = [];
@@ -41,7 +41,7 @@
       return toFilter;
     }
     return toFilter.filter(lecturer => {
-      if (lecturer.tags.length === 0) {
+      if (lecturer.tags === null ||lecturer.tags.length === 0) {
         return false;
       }
       return tagFilter.every(tag => lecturer.tags.map(t => t.uuid).includes(tag));
