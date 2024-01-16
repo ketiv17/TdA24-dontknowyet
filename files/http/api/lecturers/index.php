@@ -12,8 +12,15 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 // Handling request methods ---
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    http_response_code(200);
-    convertToUtf8AndPrint(returnUUIDdata($uuid));
+    if ($uuid !== null) {
+        // If a UUID is provided, return the lecturer as an object
+        http_response_code(200);
+        convertToUtf8AndPrint(returnUUIDdata($uuid));
+    } else {
+        // If no UUID is provided, return all lecturers as an array
+        http_response_code(200);
+        convertToUtf8AndPrint(returnUUIDdata(null));
+    }
 }   
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -42,7 +42,7 @@ function convertToUtf8AndPrint($data) {
 }
 
 //Function that is returning the data of a given UUID, if no uuid porvided it returns all users data
-function returnUUIDdata($uuid) {
+function returnUUIDdata($uuid = null) {
     global $conn;
 
     if ($uuid !== null) {
@@ -138,9 +138,13 @@ function returnUUIDdata($uuid) {
         $user["contact"]["telephone_numbers"] = null;
     }
 
-            
         $data[] = $user;
         } 
+
+        // Converting to object if request is for one user only
+        if ($uuid !== null) {
+            $data = $data[0];
+    }
     return $data;
 }
 
