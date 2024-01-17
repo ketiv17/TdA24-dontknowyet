@@ -1,6 +1,6 @@
 <script>
   import {onMount} from 'svelte';
-  import {ProgressRadial, Avatar, getToastStore} from '@skeletonlabs/skeleton';
+  import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
   import {textContrast} from '$lib/index.js'
 
@@ -25,7 +25,7 @@
 
 <main class="flex justify-center">
   <div class="flex flex-col gap-y-5 xl:w-1/2 lg:w-8/12 md:w-10/12 w-full mt-12">
-    <ol class="breadcrumb text-xs">
+    <ol class="breadcrumb text-xs p-2">
       <li class="crumb"><a href="/" class="anchor">Domů</a></li>
       <li class="crumb" aria-hidden>›</li>
       <li class="crumb">{uuid}</li>
