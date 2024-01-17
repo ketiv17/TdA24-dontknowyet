@@ -1,6 +1,9 @@
 <script>
   import "../app.css";
-  import {AppShell, Toast} from '@skeletonlabs/skeleton';
+  import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom'; // import popup
+  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow }); // set stores for popup
+  import {AppShell, Toast, initializeStores, storePopup} from '@skeletonlabs/skeleton';
+  initializeStores();
   import Nav from './Nav.svelte'
 </script>
 <Toast />

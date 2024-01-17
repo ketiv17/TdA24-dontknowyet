@@ -50,7 +50,7 @@
               {#if data.contact[contact_type] !== null && data.contact[contact_type].lenght !== 0}
                 <li>{czechFor[contact_type]+":"}
                   {#each data.contact[contact_type] as contact_value}
-                    <p class="badge card-hover rounded-full variant-ghost-secondary m-1">{contact_value}</p>
+                    <p class="badge rounded-full variant-ghost-secondary m-1">{contact_value}</p>
                   {/each}
                 </li>
               {/if}

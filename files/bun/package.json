@@ -1,15 +1,6 @@
 {
   "name": "bun",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "lint": "prettier --check .",
-    "format": "prettier --write ."
-  },
   "devDependencies": {
     "@catdadcode/svelte-adapter-bun": "^0.5.7",
     "@skeletonlabs/skeleton": "^2.7.0",
@@ -26,6 +17,15 @@
     "tailwindcss": "^3.4.1",
     "vite": "^5.0.3",
     "vitest": "^1.0.0"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "type": "module",
   "dependencies": {
