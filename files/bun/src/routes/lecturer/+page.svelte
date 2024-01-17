@@ -18,6 +18,12 @@
   async function fetchData() {
     const response = await fetch('/api/lecturers');
     data = await response.json();
+    data.forEach(lecturer => lecturer.tags.forEach(tag => {
+      if (tag.name.length > 35) {
+        tag.name = tag.name.slice(0, 33).concat("...")
+      }
+    }));
+    console.log(data);
   }
   
   async function fetchTags() {
