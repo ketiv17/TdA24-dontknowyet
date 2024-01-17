@@ -74,7 +74,7 @@
   const formatter = (price) => price+' Kč';
   function getMaxPrice() {
     data.forEach(lecturer => {
-      if (lecturer.price_per_hour > maxPrice){
+      if (lecturer.price_per_hour > maxPrice) {
         maxPrice = lecturer.price_per_hour;
       }
     });
@@ -114,11 +114,10 @@
 
 </script>
 
-<p class="h1 text-center m-5 mt-20">Katalog Lektorů</p>
 <main class="flex justify-center items-center flex-col">
   <h2 class="h2">Filtrování:</h2>
   <!-- location and price filter -->
-  <div class="grid grid-cols-2 gap-10 justify-items-center">
+  <div class="grid grid-cols-2 gap-10 justify-items-center max-sm:w-full p-1">
     <!-- location -->
     <div class="m-3 mx-6">
       {#if locations.length !== 0}
@@ -133,8 +132,9 @@
       {/if}
     </div>
     <!-- price -->
-    <div class="m-3 mx-6 w-72">
-      <h5 class="h5">Cenou:{'  '+priceFilter.toSorted((a,b) => a-b)[0]+'Kč/hod - '+priceFilter.toSorted((a,b) => a-b)[1]+'Kč/hod'}</h5>
+    <div class="m-3 mx-6 lg:w-72 md:w-56 w-full">
+      <h5 class="h5">Cenou:</h5>
+      <h6 class="h6">{priceFilter.toSorted((a,b) => a-b)[0]+' Kč/hod - '+priceFilter.toSorted((a,b) => a-b)[1]+' Kč/hod'}</h6>
       <RangeSlider {formatter} bind:values={priceFilter} min={0} max={maxPrice} float ariaLabels={["min price","max price"]}/>
     </div>
   </div>

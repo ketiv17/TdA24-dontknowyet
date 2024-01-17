@@ -14,4 +14,5 @@
         </article>
     </div>
 </div>
+<p class="h1 text-center m-5 mt-20">Katalog Lektorů</p>
 <Katalog />

@@ -1,10 +1,6 @@
 <script>
   import {onMount} from 'svelte';
-  import {ProgressRadial} from '@skeletonlabs/skeleton';
-  import {Avatar} from '@skeletonlabs/skeleton';
-  import {clipboard} from '@skeletonlabs/skeleton';
-  import {getToastStore} from '@skeletonlabs/skeleton';
-  const toastStore = getToastStore();
+  import {ProgressRadial, Avatar, getToastStore} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
   import {textContrast} from '$lib/index.js'
 
@@ -20,10 +16,6 @@
   onMount(() => {
     fetchData();
   });
-
-  const t = {
-    message: 'Hello',
-  };
 
   const czechFor = {
     "emails": "e-mail",
