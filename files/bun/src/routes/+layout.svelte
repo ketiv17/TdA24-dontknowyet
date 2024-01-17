@@ -5,10 +5,13 @@
   import {AppShell, Toast, getToastStore, initializeStores, storePopup} from '@skeletonlabs/skeleton';
   initializeStores();
   import Nav from './Nav.svelte'
+  import Katalog from './lecturer/+page.svelte'
 </script>
 <Toast />
 <AppShell>
   <svelte:fragment slot="header"><Nav /></svelte:fragment>
+  <svelte:fragment slot="sidebarLeft">
+  </svelte:fragment>
   <slot />
   <svelte:fragment slot="pageFooter">
     <nav class="variant-filled-primary h-56 mt-28 flex justify-center items-center">

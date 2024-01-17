@@ -25,6 +25,11 @@
 
 <main class="flex justify-center">
   <div class="flex flex-col gap-y-5 xl:w-1/2 lg:w-8/12 md:w-10/12 w-full mt-12">
+    <ol class="breadcrumb text-xs">
+      <li class="crumb"><a href="/" class="anchor">Domů</a></li>
+      <li class="crumb" aria-hidden>›</li>
+      <li class="crumb">{uuid}</li>
+    </ol>
     {#if data}
       <Avatar src="{data.picture_url}" class="w-48 self-center m-8" shadow="shadow-2xl" />
       <h1 class="h1 text-center">{data.title_before+' '+data.first_name+' '+data.middle_name+' '+data.last_name+' '+data.title_after}</h1>
