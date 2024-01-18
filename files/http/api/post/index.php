@@ -1,7 +1,7 @@
 <?php
 
 // Set the URL for the POST request
-$url = 'http://example.com/api/lecturers';
+$url = 'http://7cad0da12da55785.app.tourdeapp.cz/api/lecturers';
 
 // Set the POST data
 $data = '{
