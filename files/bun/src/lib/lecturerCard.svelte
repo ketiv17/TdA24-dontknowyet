@@ -17,7 +17,7 @@
   }
 
   function shortenString (string) {
-    let lenght = (width - 6) / 8;
+    let lenght = ((width - 6) / 8.5) ^ 0; // ^0 rouds the number down
     if (string.length > lenght) {
       return string.slice(0,lenght - 2).concat("...");
     }
