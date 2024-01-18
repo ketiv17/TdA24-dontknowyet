@@ -48,6 +48,8 @@ curl_close($curl);
 // Handle the response
 if ($response === false) {
     echo 'Error: ' . curl_error($curl);
+    http_response_code(500);
 } else {
     echo 'Response: ' . $response;
+    http_response_code(201);
 }
