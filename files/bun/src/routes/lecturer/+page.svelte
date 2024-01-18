@@ -18,12 +18,6 @@
   async function fetchData() {
     const response = await fetch('/api/lecturers');
     data = await response.json();
-    data.forEach(lecturer => lecturer.tags.forEach(tag => {
-      if (tag.name.length > 35) {
-        tag.name = tag.name.slice(0, 33).concat("...")
-      }
-    }));
-    console.log(data);
   }
   
   async function fetchTags() {
@@ -169,7 +163,9 @@
     {:else if data.length !== 0}
       <h3 class="h3 text-center col-span-full">Nenašli jsme nikoho kdo by odpovídal vašim filtrům</h3>
     {:else}
-      <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20"/>
+      <div class="col-span-full flex justify-center">
+        <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20"/>
+      </div>
     {/if}
   </div>
 </main>
