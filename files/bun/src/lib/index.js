@@ -11,9 +11,14 @@ export function textContrast (colorhex) {
 export function fullName (lecturer = {}) {
   let rtn = "";
   ["title_before", "first_name", "middle_name", "last_name", "title_after"].forEach((word) => {
-    if (lecturer[word] !== null) {
-      rtn += " "+lecturer[word];
-    }
+    rtn += " "+null2string(lecturer[word]);
   });
   return rtn.trimStart();
+}
+
+export function null2string (string) {
+  if (string === null) {
+    return "";
+  }
+  return string;
 }

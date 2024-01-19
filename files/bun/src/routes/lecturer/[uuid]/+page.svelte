@@ -2,7 +2,7 @@
   import {onMount} from 'svelte';
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
-  import {textContrast, fullName} from '$lib/index.js'
+  import {textContrast, fullName, null2string} from '$lib/index.js'
 
   let data;
   let uuid;
@@ -31,10 +31,12 @@
       <li class="crumb">{uuid}</li>
     </ol>
     {#if data}
-      <Avatar src="{data.picture_url}" class="w-48 self-center m-8" shadow="shadow-2xl" />
+      {#if data.picture_url !== null}
+        <Avatar src="{data.picture_url}" class="w-48 self-center m-8" shadow="shadow-2xl" />
+      {/if}
       <h1 class="h1 text-center">{fullName(data)}</h1>
-      <h4 class="h4 text-center">{data.location}</h4>
-      <h3 class="h3 text-center">{data.claim}</h3>
+      <h4 class="h4 text-center">{null2string(data.location)}</h4>
+      <h3 class="h3 text-center">{null2string(data.claim)}</h3>
       <div class="w-full text-center m-2">
         {#if data.tags !== null && data.tags.length !== 0}
           {#each data.tags as tag}
@@ -42,7 +44,7 @@
           {/each}
         {/if}
       </div>
-      <article class="blockquote not-italic m-2">{@html data.bio}</article>
+      <article class="blockquote not-italic m-2">{@html null2string(data.bio)}</article>
       <div class="grid sm:grid-cols-2 mx-4">
         <div>Kontakty:
           <ul class="list-disc ml-4">
@@ -57,7 +59,7 @@
             {/each}
           </ul>
         </div>
-        <p>Cena za hodinu: {data.price_per_hour}</p>
+        <p>Cena za hodinu: {null2string(data.price_per_hour)}</p>
       </div>
     {:else}
       <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>
