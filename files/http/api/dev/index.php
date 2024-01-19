@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<h2>Manage Users and Tags</h2>
+<h2>TDA API Administrator interface</h2>
 
 <form action="" method="post">
   <input type="submit" name="post_user" value="POST User">
@@ -55,12 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         $response = curl_exec($curl);
         curl_close($curl);
+        echo "User posted successfully.<br>";
     } elseif (isset($_POST['delete_users'])) {
         // Delete all users code
         $conn->query("DELETE FROM users");
+        echo "All users deleted successfully.<br>";
     } elseif (isset($_POST['delete_tags'])) {
         // Delete all tags code
         $conn->query("DELETE FROM tag_list");
+        echo "All tags deleted successfully.<br>";
     }
 
     $conn->close();
