@@ -249,3 +249,9 @@ function UpdateTags($data, $useruuid) {
     $stmt->bind_param("ss", $jsontags, $useruuid);
     $stmt->execute();
 }
+
+// Function that removes dangerous tags from bio
+function removeDangerousTags($bio) {
+    $bio = strip_tags($bio, '<p><br><b><strong><i><em><u><ul><ol><li><a><h1><h2><h3><h4><h5><h6><img><blockquote><code><pre><table><thead><tbody><tr><th><td>');
+    return $bio;
+}
