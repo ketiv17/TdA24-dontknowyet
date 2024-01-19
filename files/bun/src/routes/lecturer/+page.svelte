@@ -6,10 +6,9 @@
   import {textContrast} from '$lib/index.js';
 
   // FETCH DATA
-  onMount(async () =>{
-    await fetchData();
-    await fetchTags();
-    filterData();
+  onMount(() =>{
+    fetchData();
+    fetchTags();
   });
 
   let data = [];
