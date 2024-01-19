@@ -83,7 +83,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
 
     // Insert tags into the database and register new ones
-    UpdateTags($data, $uuid);
+    UpdateTags($data, $uuid, "POST");
 
     // Return the new user's data
     http_response_code(201);
@@ -135,7 +135,7 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     
     // Insert tags into the database and register new ones (if present)
     if (isset($data['tags'])) {
-        UpdateTags($data, $uuid);
+        UpdateTags($data, $uuid, "PUT");
     }
 
     // Return the updated user's data

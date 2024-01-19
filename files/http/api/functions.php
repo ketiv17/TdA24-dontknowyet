@@ -205,39 +205,38 @@ function generateHexColor() {
 
 
 // Updating user tags, inserting newly created tags into tag_list
-function UpdateTags($data, $useruuid) {
+function UpdateTags($data, $useruuid, $method) {
     global $conn;
 
-    // Null check
-    if (!isset($data["tags"]) || empty($data["tags"]) || is_null($data["tags"])) {
-        return;
-    }
     // Check if the tags are in the correct format
-    if (!is_array($data["tags"])) {
+    if (isset($data["tags"]) && !is_array($data["tags"])) {
         http_response_code(400);
         convertToUtf8AndPrint(["code" => 400, "message" => "Invalid tag format"]);
         exit;
+    }
+
+    // If tags are not set in a POST request, set them to null
+    if ($method == 'POST' && !isset($data["tags"])) {
+        $stmt = $conn->prepare("UPDATE users SET tags = NULL WHERE uuid = ?");
+        $stmt->bind_param("s", $useruuid);
+        $stmt->execute();
+        return;
+    }
+
+    // If tags are not set in a PUT request, do nothing
+    if ($method == 'PUT' && !isset($data["tags"])) {
+        return;
     }
 
     $tagUuids = [];
 
     foreach ($data["tags"] as $tag) {
         $uuid = isset($tag['uuid']) ? $tag['uuid'] : generateUuidV4();
-        // Check if the tag already exists in the database
-        $stmt = $conn->prepare("SELECT uuid FROM tag_list WHERE name = ? OR uuid = ?");
-        $stmt->bind_param("ss", $tag['name'], $uuid);
+        // Insert the new tag into the tag_list database
+        $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name), color = VALUES(color)");
+        $hexColor = isset($tag['color']) && !empty($tag['color']) && preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color']) ? $tag['color'] : generateHexColor();
+        $stmt->bind_param("sss", $uuid, $tag['name'], $hexColor);
         $stmt->execute();
-        $result = $stmt->get_result();
-        // If the tag doesn't exist, insert it into the tag_list database
-        if ($result->num_rows === 0) {
-            $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
-            $hexColor = isset($tag['color']) && !empty($tag['color']) && preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color']) ? $tag['color'] : generateHexColor();
-            $stmt->bind_param("sss", $uuid, $tag['name'], $hexColor);
-            $stmt->execute();
-        } else {
-            $row = $result->fetch_assoc();
-            $uuid = $row['uuid']; // Use the existing tag's UUID
-        }
         $tagUuids[] = $uuid;
     }
 
