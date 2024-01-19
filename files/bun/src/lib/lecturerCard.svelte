@@ -5,7 +5,7 @@
   export let lecturer = {};
   let width;
   let tags = [];
-  $: width && formatTags();
+  $: { lecturer, width, formatTags() };
 
   function formatTags () {
     tags = [];
