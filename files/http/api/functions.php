@@ -231,12 +231,25 @@ function UpdateTags($data, $useruuid, $method) {
     $tagUuids = [];
 
     foreach ($data["tags"] as $tag) {
-        $uuid = isset($tag['uuid']) ? $tag['uuid'] : generateUuidV4();
-        // Insert the new tag into the tag_list database
-        $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name), color = VALUES(color)");
-        $hexColor = isset($tag['color']) && !empty($tag['color']) && preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color']) ? $tag['color'] : generateHexColor();
-        $stmt->bind_param("sss", $uuid, $tag['name'], $hexColor);
+        // Check if the tag already exists in the database
+        $stmt = $conn->prepare("SELECT uuid FROM tag_list WHERE name = ?");
+        $stmt->bind_param("s", $tag['name']);
         $stmt->execute();
+        $result = $stmt->get_result();
+        $existingTag = $result->fetch_assoc();
+
+        if ($existingTag) {
+            // If the tag exists, use its UUID
+            $uuid = $existingTag['uuid'];
+        } else {
+            // If the tag doesn't exist, generate a new UUID and insert the new tag
+            $uuid = isset($tag['uuid']) ? $tag['uuid'] : generateUuidV4();
+            $stmt = $conn->prepare("INSERT INTO tag_list (uuid, name, color) VALUES (?, ?, ?)");
+            $hexColor = isset($tag['color']) && !empty($tag['color']) && preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color']) ? $tag['color'] : generateHexColor();
+            $stmt->bind_param("sss", $uuid, $tag['name'], $hexColor);
+            $stmt->execute();
+        }
+
         $tagUuids[] = $uuid;
     }
 
