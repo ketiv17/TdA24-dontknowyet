@@ -32,12 +32,12 @@
     {#if lecturer.picture_url !== null}
       <Avatar src={lecturer.picture_url} width="w-32" shadow="shadow-2xl" />
     {/if}
-    <div class="mx-3">
+    <div class="ml-5">
       <h3 class="h3">{fullName(lecturer)}</h3>
       <h5 class="h5">{null2string(lecturer.location)+"  |  "+null2string(lecturer.price_per_hour)+" Kč/hod"}</h5>
     </div>
   </div>
-  <p class="text-lg m-1">{null2string(lecturer.claim)}</p>
+  <p class="text-lg m-1 mt-3">{null2string(lecturer.claim)}</p>
   {#if tags.length !== 0}
     {#each tags as tag}
       <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {textContrast(tag.color)};">{tag.name}</span>
