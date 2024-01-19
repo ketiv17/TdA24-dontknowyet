@@ -147,7 +147,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $stmt->execute();
 
     // Return a success message
-    http_response_code(204);
+    http_response_code(200);
     convertToUtf8AndPrint(["code" => 200, "message" => "User deleted"]);
 }
 
