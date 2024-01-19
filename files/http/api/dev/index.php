@@ -15,11 +15,10 @@
 
 <?php
 
+// Include the functions and the database connection file
+include '../functions.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $conn = new mysqli('localhost', 'username', 'password', 'database');
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
 
     if (isset($_POST['post_user'])) {
         // POST user code
