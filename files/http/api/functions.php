@@ -91,7 +91,7 @@ function returnUUIDdata($uuid = null) {
                 if (is_array($tag)) {
                     $tag = implode(", ", $tag); // Convert array to string
                 }
-                $tagQuery = "SELECT * FROM tag_list WHERE name = '$tag'";
+                $tagQuery = "SELECT * FROM tag_list WHERE uuid = '$tag'";
                 $tagResult = mysqli_query($conn, $tagQuery);
                 if ($tagResult !== false) {
                     $tagRow = mysqli_fetch_assoc($tagResult);
