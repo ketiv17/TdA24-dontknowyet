@@ -1,6 +1,6 @@
 <script>
   import {Avatar} from '@skeletonlabs/skeleton';
-  import {textContrast} from '$lib/index.js';
+  import {textContrast, fullName} from '$lib/index.js';
 
   export let lecturer = {};
   let width;
@@ -17,20 +17,21 @@
   }
 
   function shortenString (string) {
-    let lenght = ((width - 6) / 8.5) ^ 0; // ^0 rouds the number down
+    let lenght = ((width - 6) / 9) ^ 0; // ^0 rounds the number down
     if (string.length > lenght) {
       return string.slice(0,lenght - 2).concat("...");
     }
     return string;
   }
+
 </script>
 
 
-<a href="/lecturer/{lecturer.uuid}" class="card card-hover max-w-96 m-2 p-1 min-h-32 variant-ghost-surface rounded-2xl border-2 border-primary-500">
+<a href="/lecturer/{lecturer.uuid}" class="card card-hover max-w-96 m-2 p-1 min-h-32 w-full variant-ghost-surface rounded-2xl border-2 border-primary-500">
   <div class="card-header flex" bind:clientWidth={width}>
     <Avatar src={lecturer.picture_url} width="w-32" shadow="shadow-2xl" />
     <div class="mx-3">
-      <h3 class="h3">{lecturer.title_before+' '+lecturer.first_name+' '+lecturer.middle_name+' '+lecturer.last_name+' '+lecturer.title_after}</h3>
+      <h3 class="h3">{fullName(lecturer)}</h3>
       <h5 class="h5">{lecturer.location+"  |  "+lecturer.price_per_hour+" Kč/hod"}</h5>
     </div>
   </div>

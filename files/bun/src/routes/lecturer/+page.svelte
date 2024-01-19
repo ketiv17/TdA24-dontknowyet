@@ -16,7 +16,7 @@
   let allTags = [];
 
   async function fetchData() {
-    const response = await fetch('/api/lecturers');
+    const response = await fetch('/testingapi/data.json');
     data = await response.json();
   }
   

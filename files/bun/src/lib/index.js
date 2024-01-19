@@ -7,3 +7,13 @@ export function textContrast (colorhex) {
   var yiq = ((r*299)+(g*587)+(b*114))/1000;
   return (yiq >= 128) ? '#333333' : 'white';
 }
+
+export function fullName (lecturer = {}) {
+  let rtn = "";
+  ["title_before", "first_name", "middle_name", "last_name", "title_after"].forEach((word) => {
+    if (lecturer[word] !== null) {
+      rtn += " "+lecturer[word];
+    }
+  });
+  return rtn.trimStart();
+}

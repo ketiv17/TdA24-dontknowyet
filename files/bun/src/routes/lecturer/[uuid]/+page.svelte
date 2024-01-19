@@ -2,7 +2,7 @@
   import {onMount} from 'svelte';
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
-  import {textContrast} from '$lib/index.js'
+  import {textContrast, fullName} from '$lib/index.js'
 
   let data;
   let uuid;
@@ -32,7 +32,7 @@
     </ol>
     {#if data}
       <Avatar src="{data.picture_url}" class="w-48 self-center m-8" shadow="shadow-2xl" />
-      <h1 class="h1 text-center">{data.title_before+' '+data.first_name+' '+data.middle_name+' '+data.last_name+' '+data.title_after}</h1>
+      <h1 class="h1 text-center">{fullName(data)}</h1>
       <h4 class="h4 text-center">{data.location}</h4>
       <h3 class="h3 text-center">{data.claim}</h3>
       <div class="w-full text-center m-2">
