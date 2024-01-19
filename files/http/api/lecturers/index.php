@@ -148,7 +148,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     // Return a success message
     http_response_code(204);
-    convertToUtf8AndPrint(["code" => 204, "message" => "User deleted"]);
+    convertToUtf8AndPrint(["code" => 200, "message" => "User deleted"]);
 }
 
 // Return the allowed methods and other endpoints
