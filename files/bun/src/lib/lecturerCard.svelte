@@ -27,7 +27,7 @@
 </script>
 
 
-<a href="/lecturer/{lecturer.uuid}" class="card card-hover max-w-96 m-2 p-1 min-h-32 w-full variant-ghost-surface rounded-2xl border-2 border-primary-500">
+<a href="/lecturer/{lecturer.uuid}" class="card card-hover max-w-96 w-full m-2 p-1 variant-ghost-surface rounded-2xl border-2 border-primary-500">
   <div class="card-header flex" bind:clientWidth={width}>
     {#if lecturer.picture_url !== null}
       <Avatar src={lecturer.picture_url} width="w-32" shadow="shadow-2xl" />

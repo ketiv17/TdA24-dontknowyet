@@ -23,6 +23,14 @@
   };
 </script>
 
+<svelte:head>
+  {#if data}  
+    <title>{fullName(data)} - Teacher digital Agency</title>
+  {:else}
+    <title>Teacher digital Agency</title>
+  {/if}
+</svelte:head>
+
 <main class="flex justify-center">
   <div class="flex flex-col gap-y-5 xl:w-1/2 lg:w-8/12 md:w-10/12 w-full mt-12">
     <ol class="breadcrumb text-xs p-2">

@@ -62,6 +62,7 @@
   // FOR SELECTING
   let maxPrice = 0;
   let locations = [];
+  let locationWidth;
 
   let tagFilter = [];
   let locationFilter = "";
@@ -118,14 +119,14 @@
   <!-- location and price filter -->
   <div class="grid grid-cols-2 gap-10 justify-items-center max-sm:w-full p-1">
     <!-- location -->
-    <div class="m-3 mx-6">
+    <div class="m-3 mx-6" bind:clientWidth={locationWidth}>
       {#if locations.length !== 0}
         <h5 class="h5">Lokací:</h5>
         <input
           class="input h-10 p-4 autocomplete variant-filled-secondary" type="search" name="autocomplete-search"
           bind:value={locationFilter} placeholder="Search..." use:popup={popupSettings}
         />
-        <div data-popup="popupAutocomplete" class="variant-filled-secondary rounded-xl">
+        <div data-popup="popupAutocomplete" class="variant-filled-secondary rounded-xl" style="width: {locationWidth}px;">
           <Autocomplete bind:input={locationFilter} options={locations} on:selection={onLocationSelect} />
         </div>
       {/if}
