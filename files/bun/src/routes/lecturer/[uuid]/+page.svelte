@@ -67,7 +67,7 @@
             {/each}
           </ul>
         </div>
-        <p>Cena za hodinu: {null2string(data.price_per_hour)}</p>
+        <p>Cena za hodinu: {null2string(data.price_per_hour)} Kč/hod</p>
       </div>
     {:else}
       <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>
