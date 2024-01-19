@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->query("DELETE FROM users");
     } elseif (isset($_POST['delete_tags'])) {
         // Delete all tags code
-        $conn->query("DELETE FROM tags");
+        $conn->query("DELETE FROM tag_list");
     }
 
     $conn->close();
