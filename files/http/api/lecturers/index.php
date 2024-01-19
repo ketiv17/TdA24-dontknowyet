@@ -128,14 +128,14 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     
     if (!empty($updateFields)) {
         $stmt = $conn->prepare("UPDATE users SET " . implode(', ', $updateFields) . " WHERE uuid = ?");
-        $updateValues[] = $data['uuid'];
+        $updateValues[] = $uuid;
         $stmt->bind_param(str_repeat('s', count($updateValues)), ...$updateValues);
         $stmt->execute();
     }
     
     // Insert tags into the database and register new ones (if present)
     if (isset($data['tags'])) {
-        UpdateTags($data, $data['uuid']);
+        UpdateTags($data, $uuid);
     }
 
     // Return the updated user's data
