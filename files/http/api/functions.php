@@ -234,6 +234,9 @@ function UpdateTags($data, $useruuid) {
             $hexColor = isset($tag['color']) && !empty($tag['color']) && preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $tag['color']) ? $tag['color'] : generateHexColor();
             $stmt->bind_param("sss", $uuid, $tag['name'], $hexColor);
             $stmt->execute();
+        } else {
+            $row = $result->fetch_assoc();
+            $uuid = $row['uuid']; // Use the existing tag's UUID
         }
         $tagUuids[] = $uuid;
     }
