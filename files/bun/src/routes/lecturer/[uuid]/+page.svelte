@@ -2,7 +2,7 @@
   import {onMount} from 'svelte';
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
-  import {textContrast, fullName, null2string} from '$lib/index.js'
+  import {fullName, null2string} from '$lib/index.js'
 
   let data;
   let uuid;
@@ -48,7 +48,7 @@
       <div class="w-full text-center m-2">
         {#if data.tags !== null && data.tags.length !== 0}
           {#each data.tags as tag}
-            <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {textContrast(tag.color)};">{tag.name}</span>
+            <span class="badge text-sm rounded-full m-1 variant-filled-secondary">{tag.name}</span>
           {/each}
         {/if}
       </div>

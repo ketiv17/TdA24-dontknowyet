@@ -1,6 +1,6 @@
 <script>
   import {Avatar} from '@skeletonlabs/skeleton';
-  import {textContrast, fullName, null2string} from '$lib/index.js';
+  import {fullName, null2string} from '$lib/index.js';
 
   export let lecturer = {};
   let width;
@@ -40,7 +40,7 @@
   <p class="text-lg m-1 mt-3">{null2string(lecturer.claim)}</p>
   {#if tags.length !== 0}
     {#each tags as tag}
-      <span class="badge text-sm rounded-full m-1" style="background-color: {tag.color}; color: {textContrast(tag.color)};">{tag.name}</span>
+      <span class="badge text-sm rounded-full m-1 variant-filled-tertiary">{tag.name}</span>
     {/each}
   {/if}
 </a>

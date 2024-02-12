@@ -3,7 +3,8 @@
   import {ProgressRadial, Autocomplete, popup} from '@skeletonlabs/skeleton';
   import RangeSlider from 'svelte-range-slider-pips';
   import LecturerCard from '$lib/lecturerCard.svelte';
-  import {textContrast} from '$lib/index.js';
+
+  let tagColor = "#FECB2E"; //color of thetags  in the filter, cards are updated based on theme
 
   // FETCH DATA
   onMount(() =>{
@@ -111,7 +112,6 @@
   	target: 'popupAutocomplete',
   	placement: 'bottom',
   };
-
 </script>
 
 <main class="flex justify-center items-center flex-col">
@@ -145,7 +145,7 @@
     <div class="col-span-full text-center">
       {#each allTags as tag}
         <button class="badge btnAnimation text-sm rounded-full m-1 border-2" on:click={() => {tag = toggle(tag)}}
-          style="border-color: {tag.color}; {tag.selected ? 'background-color:'+tag.color :''}; color: {tag.selected ? textContrast(tag.color) : '#333333'};"
+          style="border-color: {tagColor}; {tag.selected ? 'background-color:'+tagColor :''}; color: #333333;"
         >
           {tag.name}
         </button>
