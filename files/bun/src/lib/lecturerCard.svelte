@@ -3,6 +3,7 @@
   import {fullName, null2string} from '$lib/index.js';
 
   export let lecturer = {};
+  export let selectedTags = [];
   let width;
   let tags = [];
   $: { lecturer, width, formatTags() };
@@ -11,7 +12,7 @@
     tags = [];
     if (lecturer.tags !== null) {
       lecturer.tags.forEach(tag => {
-        tags = [...tags, {"color": tag.color, "name": shortenString(tag.name)}]
+        tags = [...tags, {"uuid": tag.uuid,"name": shortenString(tag.name)}]
       });
     }
   }
@@ -22,6 +23,10 @@
       return string.slice(0,lenght - 2).concat("...");
     }
     return string;
+  }
+
+  function isSelected (tag) {
+    return selectedTags.includes(tag.uuid);
   }
 
 </script>
@@ -40,7 +45,7 @@
   <p class="text-lg m-1 mt-3">{null2string(lecturer.claim)}</p>
   {#if tags.length !== 0}
     {#each tags as tag}
-      <span class="badge text-sm rounded-full m-1 variant-filled-tertiary">{tag.name}</span>
+      <span class="badge text-sm rounded-full m-1 variant-filled-{isSelected(tag) ? "tertiary" : "surface"} border-2 border-tertiary-500">{tag.name}</span>
     {/each}
   {/if}
 </a>

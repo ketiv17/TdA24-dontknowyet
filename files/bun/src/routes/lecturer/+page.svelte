@@ -158,7 +158,7 @@
     <hr class="col-span-full w-full" style="border-color: #333333;">
     {#if filtered.length !== 0}
       {#each filtered as lecturer}
-        <LecturerCard lecturer={lecturer} />
+        <LecturerCard lecturer={lecturer} selectedTags={allTags.filter((tag)=>tag.selected).map((tag)=>tag.uuid)} />
       {/each}
     {:else if data.length !== 0}
       <h3 class="h3 text-center col-span-full">Nenašli jsme nikoho kdo by odpovídal vašim filtrům</h3>
