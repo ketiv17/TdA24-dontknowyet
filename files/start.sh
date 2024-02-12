@@ -13,6 +13,7 @@ bun /srv/bun/build/index.js --port 3000 &
 echo "bun started!";
 
 echo "done!";
-# so the container doesn't quit (replace with bash for debugging)
 bash;
+echo "not running interactivly";
+# so the container doesn't quit
 tail -f /dev/null;
