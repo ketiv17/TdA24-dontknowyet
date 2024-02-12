@@ -1,7 +1,7 @@
 <?php
 // -------------- PREPARATION --------------
 
-$servername = "resurrectiongc.live";
+$servername = "tda-mysql-do-user-15726163-0.c.db.ondigitalocean.com";
 $username = "api";
 $password = getenv('DB_PASSWORD');
 $dbname = "api";
