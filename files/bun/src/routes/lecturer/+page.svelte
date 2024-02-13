@@ -9,24 +9,15 @@
   // FETCH DATA
   onMount(() =>{
     fetchData();
-    fetchTags();
   });
 
   let data = [];
-  let allTags = [];
 
   async function fetchData() {
     const response = await fetch('/api/lecturers');
     data = await response.json();
   }
-  
-  async function fetchTags() {
-    const response = await fetch('/api/tags');
-    allTags = await response.json();
-    allTags.forEach(tag => {
-      tag.selected = false;
-    });
-  }
+
 
   // FILTER FUNCTIONS
   $: { data, tagFilter, locationFilter, priceFilter, filterData() };
@@ -63,6 +54,7 @@
   // FOR SELECTING
   let maxPrice = 0;
   let locations = [];
+  let allTags = [];
   let locationWidth;
 
   let tagFilter = [];
@@ -71,6 +63,7 @@
 
   $: data && getLocations();
   $: data && getMaxPrice();
+  $: data && getTags()
 
   const formatter = (price) => price+' Kč';
   function getMaxPrice() {
@@ -81,6 +74,19 @@
     });
     priceFilter = [priceFilter[0], maxPrice];
     filterData();
+  }
+
+  function getTags() {
+    data.forEach(lecturer => {
+      if (lecturer.tags === null) {
+        return;
+      }
+      lecturer.tags.forEach(tag => {
+        if (!allTags.map(t => t.uuid).includes(tag.uuid)) {
+          allTags = [...allTags, tag];
+        }
+      });
+    });
   }
 
   function getLocations() {
