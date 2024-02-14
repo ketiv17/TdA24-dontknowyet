@@ -1,6 +1,6 @@
 <script>
   import {onMount} from 'svelte';
-  import {ProgressRadial, Autocomplete, popup} from '@skeletonlabs/skeleton';
+  import {ProgressRadial, Autocomplete, popup, Paginator} from '@skeletonlabs/skeleton';
   import RangeSlider from 'svelte-range-slider-pips';
   import LecturerCard from '$lib/lecturerCard.svelte';
 
@@ -118,6 +118,20 @@
   	target: 'popupAutocomplete',
   	placement: 'bottom',
   };
+
+  // PAGINATION
+  let filteredSliced;
+  let paginationSettings = {
+  	page: 0,
+  	limit: 9,
+  	size: data.length,
+  	amounts: [3,9,18,100],
+  }
+  $: paginationSettings.size = data.length;
+	$: filteredSliced = filtered.slice(
+		paginationSettings.page * paginationSettings.limit,
+		paginationSettings.page * paginationSettings.limit + paginationSettings.limit
+	);
 </script>
 
 <main class="flex justify-center items-center flex-col">
@@ -162,10 +176,13 @@
   <!-- lecturer cards -->
   <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 sm:w-10/12 m-5 justify-items-center">
     <hr class="col-span-full w-full" style="border-color: #333333;">
-    {#if filtered.length !== 0}
-      {#each filtered as lecturer}
+    {#if filteredSliced.length !== 0}
+      {#each filteredSliced as lecturer}
         <LecturerCard lecturer={lecturer} selectedTags={allTags.filter((tag)=>tag.selected).map((tag)=>tag.uuid)} />
       {/each}
+      <div class="col-span-full">
+        <Paginator bind:settings={paginationSettings} controlVariant="variant-filled-tertiary" select="variant-filled-tertiary rounded-full p-1 pl-3" />
+      </div>
     {:else if data.length !== 0}
       <h3 class="h3 text-center col-span-full">Nenašli jsme nikoho kdo by odpovídal vašim filtrům</h3>
     {:else}
