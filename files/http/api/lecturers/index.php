@@ -48,7 +48,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Insert the user into the database
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $uuid = $data['uuid'] ?? null;
     $first_name = $data['first_name'] ?? null;
@@ -64,8 +64,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
     $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
 
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+
     $stmt->bind_param(
-        "sssssssssssss", 
+        "ssssssssssssss", 
         $uuid,
         $first_name,
         $last_name,
@@ -79,6 +81,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price_per_hour,
         $emails,
         $numbers
+        $hash
     );
     $stmt->execute();
 
