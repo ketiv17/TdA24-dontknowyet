@@ -23,9 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Verify the password with the hashed password stored in the database
         if (password_verify($password, $user['password'])) {
             // Valid credentials, return success response
+            http_response_code(200);
             $response = array("success" => true, "message" => "Login successful");
         } else {
             // Invalid credentials, return error response
+            http_response_code(401);
             $response = array("success" => false, "message" => "Invalid credentials");
         }
     } else {
