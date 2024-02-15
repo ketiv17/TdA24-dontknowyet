@@ -64,7 +64,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emails = isset($data['contact']['emails']) && !is_null($data['contact']['emails']) && is_array($data['contact']['emails']) ? json_encode($data['contact']['emails']) : null;
     $numbers = isset($data['contact']['telephone_numbers']) && !is_null($data['contact']['telephone_numbers']) && is_array($data['contact']['telephone_numbers']) ? json_encode($data['contact']['telephone_numbers']) : null;
 
-    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
     $stmt->bind_param(
         "ssssssssssssss", 
@@ -80,7 +80,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bio,
         $price_per_hour,
         $emails,
-        $numbers
+        $numbers,
         $hash
     );
     $stmt->execute();
