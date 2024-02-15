@@ -127,7 +127,7 @@
   	size: data.length,
   	amounts: [3,9,18,100],
   }
-  $: paginationSettings.size = data.length;
+  $: paginationSettings.size = filtered.length;
 	$: filteredSliced = filtered.slice(
 		paginationSettings.page * paginationSettings.limit,
 		paginationSettings.page * paginationSettings.limit + paginationSettings.limit
