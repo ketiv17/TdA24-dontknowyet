@@ -2,15 +2,13 @@
   import "../app.css";
   import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom'; // import popup
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow }); // set stores for popup
-  import {AppShell, Toast, initializeStores, storePopup} from '@skeletonlabs/skeleton';
+  import {AppShell, initializeStores, storePopup} from '@skeletonlabs/skeleton';
   initializeStores();
   import Nav from './Nav.svelte'
 </script>
-<Toast />
 <AppShell>
   <svelte:fragment slot="header"><Nav /></svelte:fragment>
-  <svelte:fragment slot="sidebarLeft">
-  </svelte:fragment>
+  <!--<svelte:fragment slot="sidebarLeft"></svelte:fragment>-->
   <slot />
   <svelte:fragment slot="pageFooter">
     <nav class="variant-filled-primary h-56 mt-28 flex justify-center items-center">

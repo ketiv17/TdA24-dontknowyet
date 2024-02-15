@@ -113,7 +113,7 @@
     locationFilter = event.detail.label;
   }
 
-  let popupSettings = {
+  const popupSettings = {
   	event: 'focus-click',
   	target: 'popupAutocomplete',
   	placement: 'bottom',
