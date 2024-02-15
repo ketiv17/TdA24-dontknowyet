@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           "title_before": "Mgr.",
           "first_name": "Petra",
           "middle_name": "Swil",
+          "password": "FitusJeFíkus",
           "last_name": "Plachá",
           "title_after": "MBA",
           "picture_url": "https://picsum.photos/200",
