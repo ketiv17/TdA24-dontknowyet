@@ -182,7 +182,7 @@ function generateUuidV4() {
 
 //Checks if first and last names are present in $data body
 function RequiedFieldsCheck($data) {
-    $requiredFields = ['first_name', 'last_name'];
+    $requiredFields = ['first_name', 'last_name', 'password'];
 
     foreach ($requiredFields as $field) {
         if (!isset($data[$field])) {
