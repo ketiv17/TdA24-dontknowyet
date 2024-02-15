@@ -9,6 +9,21 @@
   <input type="submit" name="delete_users" value="Delete All Users">
   <input type="submit" name="delete_tags" value="Delete All Tags">
   <input type="button" name="change_password" value="Change Password">
+</form>
+
+<script>
+document.getElementById('change_password').addEventListener('click', function() {
+    var uuid = prompt("Please enter your UUID:");
+    var password = prompt("Please enter your new password:");
+
+    if (uuid && password) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "index.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send("uuid=" + uuid + "&password=" + password);
+    }
+});
+</script>
 
 </body>
 </html>
