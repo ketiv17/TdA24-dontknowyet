@@ -8,7 +8,7 @@
   <input type="submit" name="post_user" value="POST User">
   <input type="submit" name="delete_users" value="Delete All Users">
   <input type="submit" name="delete_tags" value="Delete All Tags">
-</form>
+  <input type="button" name="change_password" value="Change Password">
 
 </body>
 </html>
@@ -56,15 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = curl_exec($curl);
         curl_close($curl);
         echo "User posted successfully.<br>";
+
     } elseif (isset($_POST['delete_users'])) {
         // Delete all users code
         $conn->query("DELETE FROM users");
         echo "All users deleted successfully.<br>";
+
     } elseif (isset($_POST['delete_tags'])) {
         // Delete all tags code
         $conn->query("DELETE FROM tag_list");
         echo "All tags deleted successfully.<br>";
-    }
+
+    } elseif (isset($_POST['uuid']) && isset($_POST['password'])) {
+      $uuid = $_POST['uuid'];
+      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+      $stmt = $conn->prepare("UPDATE users SET hash = ? WHERE uuid = ?");
+      $stmt->bind_param("ss", $password, $uuid);
+      $stmt->execute();
+
+      echo "Password changed successfully.<br>";
+  }
 
     $conn->close();
 }
