@@ -8,7 +8,7 @@
   <input type="submit" name="post_user" value="POST User">
   <input type="submit" name="delete_users" value="Delete All Users">
   <input type="submit" name="delete_tags" value="Delete All Tags">
-  <input type="button" name="change_password" value="Change Password">
+  <input type="button" id="change_password" value="Change Password">
 </form>
 
 <script>
