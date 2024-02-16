@@ -11,6 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $data['uuid'];
     $password = $data['password'];
 
+    // Check if the name and password are not empty
+    if (empty($name) || empty($password)) {
+        // Invalid credentials, return error response
+        http_response_code(400);
+        $response = array("success" => false, "message" => "Password or name cant be empty");
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
     // Prepare the SQL statement to get the user with the given name
     $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
     $stmt->bind_param("s", $name);
@@ -21,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
         // Verify the password with the hashed password stored in the database
-        if (password_verify($password, $user['password'])) {
+        if (password_verify($password, $user['hash'])) {
             // Valid credentials, return success response
             http_response_code(200);
             $response = array("success" => true, "message" => "Login successful");
