@@ -8,11 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($requestBody, true);
 
     // Extract the name and password from the JSON data
-    $name = $data['name'];
+    $name = $data['uuid'];
     $password = $data['password'];
 
     // Prepare the SQL statement to get the user with the given name
-    $stmt = $conn->prepare("SELECT * FROM users WHERE name = ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
     $stmt->bind_param("s", $name);
     $stmt->execute();
     $result = $stmt->get_result();
