@@ -21,6 +21,10 @@
     "emails": "e-mail",
     "telephone_numbers": "telefon"
   };
+  const uriof = {
+    "emails": "mailto:",
+    "telephone_numbers": "tel:"
+  }
 </script>
 
 <svelte:head>
@@ -60,7 +64,7 @@
               {#if data.contact[contact_type] !== null && data.contact[contact_type].lenght !== 0}
                 <li>{czechFor[contact_type]+":"}
                   {#each data.contact[contact_type] as contact_value}
-                    <p class="badge rounded-full variant-ghost-secondary m-1">{contact_value}</p>
+                    <a href="{uriof[contact_type]+contact_value}" class="badge rounded-full variant-ghost-secondary m-1">{contact_value}</a>
                   {/each}
                 </li>
               {/if}
