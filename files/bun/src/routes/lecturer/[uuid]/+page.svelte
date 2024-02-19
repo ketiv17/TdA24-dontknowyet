@@ -52,7 +52,7 @@
       <div class="w-full text-center m-2">
         {#if data.tags !== null && data.tags.length !== 0}
           {#each data.tags as tag}
-            <span class="badge text-sm rounded-full m-1 variant-filled-secondary">{tag.name}</span>
+            <span class="badge text-sm rounded-full m-1 variant-filled-tertiary">{tag.name}</span>
           {/each}
         {/if}
       </div>
