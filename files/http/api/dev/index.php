@@ -13,7 +13,7 @@
 
 <script>
 document.getElementById('change_password').addEventListener('click', function() {
-    var uuid = prompt("Please enter your UUID:");
+    var uuid = prompt("Please enter your master email:");
     var password = prompt("Please enter your new password:");
 
     if (uuid && password) {

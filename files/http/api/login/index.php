@@ -7,23 +7,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $requestBody = file_get_contents('php://input');
     $data = json_decode($requestBody, true);
 
+        // Check if the name and password are not empty
+        if (empty($data['email']) || empty($data['password'])) {
+            // Invalid credentials, return error response
+            http_response_code(400);
+            $response = array("success" => false, "message" => "Password or email can't be empty");
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit();
+        }
+
     // Extract the name and password from the JSON data
-    $name = $data['uuid'];
+    $email = $data['email'];
     $password = $data['password'];
 
-    // Check if the name and password are not empty
-    if (empty($name) || empty($password)) {
-        // Invalid credentials, return error response
-        http_response_code(400);
-        $response = array("success" => false, "message" => "Password or name cant be empty");
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
-    }
-
     // Prepare the SQL statement to get the user with the given name
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
-    $stmt->bind_param("s", $name);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE master_email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
