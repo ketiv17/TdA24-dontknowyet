@@ -1,5 +1,6 @@
 <script>
   import {AppBar, popup} from '@skeletonlabs/skeleton'
+  import Login from './login.svelte'
 
   const popupSet = {
     event: 'click',
@@ -8,7 +9,7 @@
     middleware: {
       offset: {
         mainAxis: 10,
-        crossAxis: -75
+        crossAxis: -150
       }
     }
   };
@@ -22,10 +23,10 @@
   </svelte:fragment>
 	<svelte:fragment slot="trail">
     <button class="btn-icon btn-icon-lg mr-2 variant-filled-secondary" use:popup={popupSet}>
-      <img src="/icons/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg" alt="status" class="h-1/2">
+      <img src="/icons/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg" alt="account" class="h-1/2">
     </button>
-    <div class="card variant-filled-secondary m-5" data-popup="popupClick">
-      <a href="/login/" class="btn">login</a>
+    <div class="card variant-filled-secondary m-2 p-2 shadow-3xl w-80" data-popup="popupClick">
+      <Login />
     </div>
   </svelte:fragment>
 </AppBar>
