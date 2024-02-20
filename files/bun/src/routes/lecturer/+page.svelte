@@ -13,9 +13,20 @@
 
   let data = [];
 
+  import {lecturerCache} from '$lib/filterCache.js';
+
   async function fetchData() {
-    const response = await fetch('/api/lecturers');
-    data = await response.json();
+    let cache;
+    lecturerCache.subscribe(value => cache = value);
+
+    if (cache && cache.length !== 0) {
+      data = cache;
+      return;
+    } else {
+      const response = await fetch('/api/lecturers');
+      data = await response.json();
+      lecturerCache.set(data);
+    }
   }
 
 
@@ -63,7 +74,7 @@
 
   $: data && getLocations();
   $: data && getMaxPrice();
-  $: data && getTags()
+  $: data && getTags();
 
   const formatter = (price) => price+' Kč';
   function getMaxPrice() {
