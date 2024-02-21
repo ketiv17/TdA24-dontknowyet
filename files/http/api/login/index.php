@@ -7,8 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $requestBody = file_get_contents('php://input');
     $data = json_decode($requestBody, true);
 
-        // Check if the name and password are not empty
-        if (empty($data['username']) || emptpasswordy($data['password'])) {
+        // Check if the name and password keys are set and not filled with only whitespace
+        if (!isset($data['username']) || trim($data['username']) == '' || !isset($data['password']) || trim($data['password']) == '') {
             // Invalid credentials, return error response
             http_response_code(400);
             $response = array("success" => false, "message" => "Password or username can't be empty");
