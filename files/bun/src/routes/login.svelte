@@ -22,7 +22,6 @@
     {:else}
       <p class="p-2">You are logged in!</p>
     {/if}
-    <p class="p-2">You are already logged in!</p>
   {:else}
     <h2 class="h2 pt-2">Login:</h2>
     <div>
