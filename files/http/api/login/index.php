@@ -8,22 +8,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($requestBody, true);
 
         // Check if the name and password are not empty
-        if (empty($data['email']) || empty($data['password'])) {
+        if (empty($data['username']) || emptpasswordy($data['password'])) {
             // Invalid credentials, return error response
             http_response_code(400);
-            $response = array("success" => false, "message" => "Password or email can't be empty");
+            $response = array("success" => false, "message" => "Password or username can't be empty");
             header('Content-Type: application/json');
             echo json_encode($response);
             exit();
         }
 
     // Extract the name and password from the JSON data
-    $email = $data['email'];
+    $username = $data['uername'];
     $password = $data['password'];
 
     // Prepare the SQL statement to get the user with the given name
-    $stmt = $conn->prepare("SELECT * FROM users WHERE master_email = ?");
-    $stmt->bind_param("s", $email);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Invalid credentials, return error response
+        http_response_code(401);
         $response = array("success" => false, "message" => "Invalid credentials");
     }
 
@@ -58,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 else {
     // Invalid request method, return error response
+    http_response_code(405);
     $response = array("success" => false, "message" => "Invalid request method");
     header('Content-Type: application/json');
     echo json_encode($response);
