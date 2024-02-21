@@ -9,6 +9,7 @@ export async function checkLogin (response) {
     let resp = await response.json();
     uuid.set(resp.uuid);
     loggedIn.set(true);
+    getData(resp.uuid);
     return;
   }
   loggedIn.set(false);
