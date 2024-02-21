@@ -10,8 +10,9 @@
       },
       body: JSON.stringify({username, password})
     });
-    let tempUuid = await response.json();
-    uuid.set(tempUuid);
+    //get the uuid from the response json {uuid: "uuid"}
+    let resp = await response.json();
+    uuid.set(resp.uuid);
   }
 </script>
 

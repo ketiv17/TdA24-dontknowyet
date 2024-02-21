@@ -15,8 +15,8 @@
 
   async function fetchauth() {
     await fetch('/api/login/auth');
-    let tempUuid = await response.json();
-    uuid.set(tempUuid);
+    let resp = await response.json();
+    uuid.set(resp.uuid);
   }
 </script>
 <AppShell>
