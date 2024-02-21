@@ -67,6 +67,7 @@ function returnUUIDdata($uuid = null) {
     while($row = $result->fetch_assoc()) {
         $user = [
             "uuid" => $row["uuid"],
+            "username" => $row["username"],
             "first_name" => $row["first_name"],
             "last_name" => $row["last_name"],
             "title_before" => $row["title_before"],

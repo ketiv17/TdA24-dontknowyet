@@ -48,9 +48,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Insert the user into the database
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (uuid, username, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $uuid = $data['uuid'] ?? null;
+    $username = $data['username'] ?? null;
     $first_name = $data['first_name'] ?? null;
     $last_name = $data['last_name'] ?? null;
     $title_before = $data['title_before'] ?? null;
@@ -67,8 +68,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
     $stmt->bind_param(
-        "ssssssssssssss", 
+        "sssssssssssssss", 
         $uuid,
+        $username,
         $first_name,
         $last_name,
         $title_before,
