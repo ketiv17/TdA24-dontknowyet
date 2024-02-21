@@ -7,23 +7,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $requestBody = file_get_contents('php://input');
     $data = json_decode($requestBody, true);
 
+        // Check if the name and password keys are set and not filled with only whitespace
+        if (!isset($data['username']) || trim($data['username']) == '' || !isset($data['password']) || trim($data['password']) == '') {
+            // Invalid credentials, return error response
+            http_response_code(400);
+            $response = array("success" => false, "message" => "Password or username can't be empty");
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit();
+        }
+
     // Extract the name and password from the JSON data
-    $name = $data['uuid'];
+    $username = $data['username'];
     $password = $data['password'];
 
-    // Check if the name and password are not empty
-    if (empty($name) || empty($password)) {
-        // Invalid credentials, return error response
-        http_response_code(400);
-        $response = array("success" => false, "message" => "Password or name cant be empty");
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
-    }
-
     // Prepare the SQL statement to get the user with the given name
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uuid = ?");
-    $stmt->bind_param("s", $name);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -34,7 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (password_verify($password, $user['hash'])) {
             // Valid credentials, return success response
             http_response_code(200);
-            $response = array("success" => true, "message" => "Login successful");
+            session_start();
+            $response = array("success" => true, "message" => "Login successful", "uuid" => $user['uuid']);
+            $_SESSION['uuid'] = $user['uuid'];
         } else {
             // Invalid credentials, return error response
             http_response_code(401);
@@ -42,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Invalid credentials, return error response
+        http_response_code(401);
         $response = array("success" => false, "message" => "Invalid credentials");
     }
 
@@ -58,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 else {
     // Invalid request method, return error response
+    http_response_code(405);
     $response = array("success" => false, "message" => "Invalid request method");
     header('Content-Type: application/json');
     echo json_encode($response);

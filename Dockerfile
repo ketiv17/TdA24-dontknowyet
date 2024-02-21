@@ -1,14 +1,18 @@
 FROM archlinux
 
 EXPOSE 80
+
+# Installation
 RUN pacman -Sy --noconfirm nginx php-fpm unzip
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH=$PATH:/root/.bun/bin
+
+# Copy relevant files
 COPY ./files /srv/
 RUN mv /srv/nginx.conf /etc/nginx/nginx.conf
 
 ## frontend
 WORKDIR /srv/bun/
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH=$PATH:/root/.bun/bin
 RUN bun install
 RUN bun run build
 

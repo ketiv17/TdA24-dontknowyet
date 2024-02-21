@@ -1,6 +1,6 @@
 <script>
   import {Avatar} from '@skeletonlabs/skeleton';
-  import {fullName, null2string} from '$lib/index.js';
+  import {fullName, null2string} from '$lib/stringCheck.js';
 
   export let lecturer = {};
   export let selectedTags = [];

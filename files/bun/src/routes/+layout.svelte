@@ -6,17 +6,15 @@
   initializeStores();
   import Nav from './Nav.svelte'
   import {onMount} from 'svelte';
-  import {uuid} from '$lib/loginStore.js';
+  import {checkLogin} from '$lib/login.js';
 
   onMount(() => {
     fetchauth();
   });
 
-
   async function fetchauth() {
-    await fetch('/api/login/auth');
-    let tempUuid = await response.json();
-    uuid.set(tempUuid);
+    const response = await fetch('/api/login/auth');
+    checkLogin(response);
   }
 </script>
 <AppShell>

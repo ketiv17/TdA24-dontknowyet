@@ -48,9 +48,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Insert the user into the database
-    $stmt = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (uuid, username, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $uuid = $data['uuid'] ?? null;
+    $username = $data['username'] ?? null;
     $first_name = $data['first_name'] ?? null;
     $last_name = $data['last_name'] ?? null;
     $title_before = $data['title_before'] ?? null;
@@ -67,8 +68,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
     $stmt->bind_param(
-        "ssssssssssssss", 
+        "sssssssssssssss", 
         $uuid,
+        $username,
         $first_name,
         $last_name,
         $title_before,
@@ -106,6 +108,13 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     // Remove dangerous tags from bio
     if (isset($data['bio'])) {
         $data['bio'] = removeDangerousTags($data['bio']);
+    }
+
+    // deny changing the username and password
+    if (isset($data['username']) || isset($data['password'])) {
+        http_response_code(400);
+        convertToUtf8AndPrint(["code" => 400, "message" => "Username and password cannot be changed"]);
+        exit;
     }
 
     $updateFields = [];
