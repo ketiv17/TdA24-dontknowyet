@@ -16,6 +16,7 @@
   async function fetchauth() {
     await fetch('/api/login/auth');
     let resp = await response.json();
+    console.log(resp);
     uuid.set(resp.uuid);
   }
 </script>
