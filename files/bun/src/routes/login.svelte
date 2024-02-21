@@ -18,7 +18,7 @@
 
 <div class="flex flex-col w-full items-center">
   <h2 class="h2 pt-2">Login:</h2>
-  <p>{uuid}</p>
+  <p>{$uuid}</p>
   <div>
     <label class="label m-2">
       <span>username:</span>
