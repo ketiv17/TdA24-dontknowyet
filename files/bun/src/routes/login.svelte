@@ -1,5 +1,5 @@
 <script>
-  let email;
+  let username;
   let password;
   function login () {
     fetch('/api/login/', {
@@ -7,7 +7,7 @@
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({email, password})
+      body: JSON.stringify({username, password})
     });
   }
 </script>
@@ -16,8 +16,8 @@
   <h2 class="h2 pt-2">Login:</h2>
   <div>
     <label class="label m-2">
-      <span>e-mail:</span>
-      <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={email} title="email" type="email" placeholder="john@example.com" autocomplete="email" />
+      <span>username:</span>
+      <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={username} title="username" type="text" placeholder="jméno" />
     </label>
     <label class="label m-2">
       <span>password:</span>
