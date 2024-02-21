@@ -1,19 +1,23 @@
 <script>
+  import {uuid} from '$lib/loginStore.js';
   let username;
   let password;
-  function login () {
-    fetch('/api/login/', {
+  async function login () {
+    await fetch('/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({username, password})
     });
+    let tempUuid = await response.json();
+    uuid.set(tempUuid);
   }
 </script>
 
 <div class="flex flex-col w-full items-center">
   <h2 class="h2 pt-2">Login:</h2>
+  <p>{uuid}</p>
   <div>
     <label class="label m-2">
       <span>username:</span>
