@@ -34,7 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (password_verify($password, $user['hash'])) {
             // Valid credentials, return success response
             http_response_code(200);
-            $response = array("success" => true, "message" => "Login successful");
+            session_start();
+            $response = array("success" => true, "message" => "Login successful", "uuid" => $user['uuid']);
+            $_SESSION['uuid'] = $user['uuid'];
         } else {
             // Invalid credentials, return error response
             http_response_code(401);
