@@ -1,6 +1,7 @@
 <?php
 // Return appointments only for the current user
 include '../../../functions.php';
+session_start();
 
 // Get the current user
 if (!isset($_SESSION['uuid'])) {
