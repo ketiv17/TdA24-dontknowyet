@@ -3,7 +3,7 @@
   let username;
   let password;
   async function login () {
-    await fetch('/api/login/', {
+    const response = await fetch('/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -12,7 +12,6 @@
     });
     //get the uuid from the response json {uuid: "uuid"}
     let resp = await response.json();
-    console.log(resp);
     uuid.set(resp.uuid);
   }
 </script>
