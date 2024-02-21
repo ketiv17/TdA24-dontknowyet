@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     // Extract the name and password from the JSON data
-    $username = $data['uername'];
+    $username = $data['username'];
     $password = $data['password'];
 
     // Prepare the SQL statement to get the user with the given name
