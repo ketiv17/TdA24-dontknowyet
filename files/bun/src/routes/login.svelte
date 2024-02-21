@@ -1,5 +1,6 @@
 <script>
   import {loggedIn, user, checkLogin} from '$lib/login.js';
+  import {fullName} from '$lib/stringCheck.js'
   let username;
   let password;
 
@@ -18,7 +19,7 @@
 <div class="flex flex-col w-full items-center">
   {#if $loggedIn}
     {#if $user && Object.keys($user).length > 0}
-      <p class="p-2">You are logged in as {$user.name}!</p>
+      <p class="p-2">You are logged in as {fullName($user)}!</p>
     {:else}
       <p class="p-2">You are logged in!</p>
     {/if}
