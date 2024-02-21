@@ -1,5 +1,5 @@
 <script>
-  import {loggedIn, uuid, checkLogin} from '$lib/login.js';
+  import {loggedIn, user, checkLogin} from '$lib/login.js';
   let username;
   let password;
 
@@ -16,11 +16,15 @@
 </script>
 
 <div class="flex flex-col w-full items-center">
-  <h2 class="h2 pt-2">Login:</h2>
-  <p>{$uuid}</p>
   {#if $loggedIn}
+    {#if user.name}
+      <p class="p-2">You are logged in as {user.name}!</p>
+    {:else}
+      <p class="p-2">You are logged in!</p>
+    {/if}
     <p class="p-2">You are already logged in!</p>
   {:else}
+    <h2 class="h2 pt-2">Login:</h2>
     <div>
       <label class="label m-2">
         <span>username:</span>
