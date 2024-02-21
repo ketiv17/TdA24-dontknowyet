@@ -164,6 +164,62 @@ function UUIDCheck($uuid = null) {
     return $result->num_rows > 0;
 }
 
+function returnCalendar($apID = null)
+{
+    global $conn;
+
+    if ($apID !== null) {
+        $stmt = $conn->prepare("SELECT * FROM calendar WHERE meet_id = ?");
+        $stmt->bind_param("s", $apID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if (mysqli_num_rows($result) === 0) {
+            http_response_code(404);
+            convertToUtf8AndPrint(["code" => 404, "message" => "Appointment not found"]);
+            exit;
+        }
+
+        $row = $result->fetch_assoc();
+        $appointment = [
+            "meet_id" => $row["meet_id"],
+            "lecturer_uuid" => $row["lecturer_uuid"],
+            "guest_firstname" => $row["guest_firstname"],
+            "guest_lastname" => $row["guest_lastname"],
+            "guest_email" => $row["guest_email"],
+            "guest_number" => $row["guest_number"],
+            "from" => $row["from"],
+            "to" => $row["to"],
+            "description" => $row["description"],
+        ];
+        return $appointment;
+    } else {
+        $result = mysqli_query($conn, "SELECT * FROM calendar ORDER BY `from` ASC");
+        $appointments = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $date = date('Y-m-d', strtotime($row["from"]));
+
+            if (!isset($appointments[$date])) {
+                $appointments[$date] = [];
+            }
+
+            $appointments[$date][] = [
+                "meet_id" => $row["meet_id"],
+                "lecturer_uuid" => $row["lecturer_uuid"],
+                "guest_firstname" => $row["guest_firstname"],
+                "guest_lastname" => $row["guest_lastname"],
+                "guest_email" => $row["guest_email"],
+                "guest_number" => $row["guest_number"],
+                "from" => $row["from"],
+                "to" => $row["to"],
+                "description" => $row["description"],
+            ];
+        }
+        return $appointments;
+    }
+}
+
 //Generates new UUID with no external libraries
 function generateUuidV4() {
     do {
