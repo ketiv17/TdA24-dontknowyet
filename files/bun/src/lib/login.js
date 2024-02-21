@@ -1,8 +1,8 @@
-import {writable, readable} from "svelte/store";
+import {writable} from "svelte/store";
 
 export const loggedIn = writable(false);
 export const uuid = writable('');
-export let user = {};
+export const user = writable({});
 
 export async function checkLogin (response) {
   if (response.status === 200) {
@@ -16,5 +16,6 @@ export async function checkLogin (response) {
 
 async function getData (uuid) {
   const response = await fetch('/api/lecturers/'+uuid);
-  user = await response.json();
+  let resp = await response.json();
+  user.set(resp);
 }

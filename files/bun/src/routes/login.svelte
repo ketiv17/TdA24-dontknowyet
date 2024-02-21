@@ -17,8 +17,8 @@
 
 <div class="flex flex-col w-full items-center">
   {#if $loggedIn}
-    {#if user.name}
-      <p class="p-2">You are logged in as {user.name}!</p>
+    {#if $user.name}
+      <p class="p-2">You are logged in as {$user.name}!</p>
     {:else}
       <p class="p-2">You are logged in!</p>
     {/if}
