@@ -5,6 +5,19 @@
   import {AppShell, initializeStores, storePopup} from '@skeletonlabs/skeleton';
   initializeStores();
   import Nav from './Nav.svelte'
+  import {onMount} from 'svelte';
+  import {uuid} from '$lib/loginStore.js';
+
+  onMount(() => {
+    fetchauth();
+  });
+
+
+  async function fetchauth() {
+    await fetch('/api/login/auth');
+    let tempUuid = await response.json();
+    uuid.set(tempUuid);
+  }
 </script>
 <AppShell>
   <svelte:fragment slot="header"><Nav /></svelte:fragment>
