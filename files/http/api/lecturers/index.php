@@ -110,6 +110,13 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
         $data['bio'] = removeDangerousTags($data['bio']);
     }
 
+    // deny changing the username and password
+    if (isset($data['username']) || isset($data['password'])) {
+        http_response_code(400);
+        convertToUtf8AndPrint(["code" => 400, "message" => "Username and password cannot be changed"]);
+        exit;
+    }
+
     $updateFields = [];
     $updateValues = [];
 
