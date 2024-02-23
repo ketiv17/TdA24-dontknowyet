@@ -3,6 +3,11 @@
 include '../../../functions.php';
 session_start();
 
+//show errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Get the current user
 if (!isset($_SESSION['uuid'])) {
     http_response_code(403);
@@ -12,6 +17,7 @@ if (!isset($_SESSION['uuid'])) {
 $uuid = $_SESSION['uuid'];
 
 // Get the appointments
+global $conn;
 $stmt = $conn->prepare("SELECT * FROM calendar WHERE lecturer_uuid = ? ORDER BY `from` ASC");
         $stmt->bind_param("s", $uuid);
         $stmt->execute();
