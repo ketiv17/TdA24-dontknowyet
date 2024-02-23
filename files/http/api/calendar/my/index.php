@@ -1,6 +1,6 @@
 <?php
 // Return appointments only for the current user
-include '../../../functions.php';
+include '../../functions.php';
 session_start();
 
 //show errors
@@ -17,7 +17,6 @@ if (!isset($_SESSION['uuid'])) {
 $uuid = $_SESSION['uuid'];
 
 // Get the appointments
-global $conn;
 $stmt = $conn->prepare("SELECT * FROM calendar WHERE lecturer_uuid = ? ORDER BY `from` ASC");
         $stmt->bind_param("s", $uuid);
         $stmt->execute();
