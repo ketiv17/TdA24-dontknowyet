@@ -8,6 +8,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Set content type to JSON
+header('Content-Type: application/json');
+
 // Get the current user
 if (!isset($_SESSION['uuid'])) {
     http_response_code(403);
