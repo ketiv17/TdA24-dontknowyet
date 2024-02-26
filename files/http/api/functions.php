@@ -49,9 +49,8 @@ function logApiRequest($data = null) {
     $method = $_SERVER['REQUEST_METHOD'];
     $uri = $_SERVER['REQUEST_URI'];
 
-    $stmt = $conn->prepare("INSERT INTO api_logs (method, url, time, data) VALUES (?, ?, ?, ?)");
-    $time = date("Y-m-d H:i:s");
-    $stmt->bind_param("ssss", $method, $uri, $time, $data);
+    $stmt = $conn->prepare("INSERT INTO api_logs (method, url, data) VALUES (?, ?, ?)");
+    $stmt->bind_param("ssss", $method, $uri, $data);
     $stmt->execute();
 }
 
