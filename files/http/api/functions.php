@@ -50,7 +50,7 @@ function logApiRequest($data = null) {
     $uri = $_SERVER['REQUEST_URI'];
 
     $stmt = $conn->prepare("INSERT INTO api_logs (method, url, data) VALUES (?, ?, ?)");
-    $stmt->bind_param("ssss", $method, $uri, $data);
+    $stmt->bind_param("sss", $method, $uri, $data);
     $stmt->execute();
 }
 
