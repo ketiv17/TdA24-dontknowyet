@@ -43,6 +43,6 @@
         <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={password} title="password" type="password" placeholder="password" />
       </label>
     </div>
-    <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Login!</button>
+    <button id="wont-close" class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Login!</button>
   {/if}
 </div>

@@ -6,6 +6,7 @@
     event: 'click',
 	  target: 'popupClick',
 	  placement: 'bottom',
+    closeQuery: '',
     middleware: {
       offset: {
         mainAxis: 10,
