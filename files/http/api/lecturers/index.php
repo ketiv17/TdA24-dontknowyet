@@ -189,3 +189,5 @@ else {
     convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
     exit;
 }
+
+logApiRequest($data);

@@ -47,3 +47,4 @@ $stmt = $conn->prepare("SELECT * FROM calendar WHERE lecturer_uuid = ? ORDER BY 
         }
     
         echo json_encode($appointments);
+logApiRequest();
