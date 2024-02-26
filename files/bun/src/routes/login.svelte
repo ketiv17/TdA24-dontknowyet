@@ -25,7 +25,7 @@
 <div class="flex flex-col w-full items-center">
   {#if $loggedIn}
     {#if $user && Object.keys($user).length > 0}
-      <h3 class="h3">Ahoj {fullName($user)}</h3>
+      <h3 class="h3">{fullName($user)}</h3>
       <a class="btn btn-md m-2 variant-filled-tertiary" href="/account">Lektorská zóna</a>
       <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => logout()}>Logout</button>
     {:else}
@@ -43,6 +43,6 @@
         <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={password} title="password" type="password" placeholder="password" />
       </label>
     </div>
-    <button id="wont-close" class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Login!</button>
+    <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Login!</button>
   {/if}
 </div>

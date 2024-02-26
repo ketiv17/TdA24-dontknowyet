@@ -1,6 +1,7 @@
 <script>
   import {AppBar, popup} from '@skeletonlabs/skeleton'
   import Login from './login.svelte'
+  import {loggedIn, user} from '$lib/login.js'
 
   const popupSet = {
     event: 'click',
@@ -24,7 +25,11 @@
   </svelte:fragment>
 	<svelte:fragment slot="trail">
     <button class="btn-icon btn-icon-lg mr-2 variant-filled-secondary" use:popup={popupSet}>
-      <img src="/icons/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg" alt="account" class="h-1/2">
+      {#if $loggedIn === false}
+        <img src="/icons/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg" alt="account" class="h-1/2">
+      {:else}
+        <img src="{$user.picture_url}" alt="account" class="h-full rounded-full">
+      {/if}
     </button>
     <div class="card variant-filled-secondary m-2 p-2 shadow-3xl w-80" data-popup="popupClick">
       <Login />
