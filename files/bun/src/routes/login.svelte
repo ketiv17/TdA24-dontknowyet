@@ -1,6 +1,6 @@
 <script>
   import {loggedIn, user, checkLogin} from '$lib/login.js';
-  import {fullName} from '$lib/stringCheck.js'
+  import {fullName} from '$lib/string.js'
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   let username;
   let password;

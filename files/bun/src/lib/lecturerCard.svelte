@@ -1,6 +1,6 @@
 <script>
   import {Avatar} from '@skeletonlabs/skeleton';
-  import {fullName, null2string} from '$lib/stringCheck.js';
+  import {fullName, null2string, shortenString} from '$lib/string.js';
 
   export let lecturer = {};
   export let selectedTags = [];
@@ -12,18 +12,11 @@
     tags = [];
     if (lecturer.tags !== null) {
       lecturer.tags.forEach(tag => {
-        tags = [...tags, {"uuid": tag.uuid,"name": shortenString(tag.name)}]
+        tags = [...tags, {"uuid": tag.uuid,"name": shortenString(tag.name, width)}]
       });
     }
   }
 
-  function shortenString (string) {
-    let lenght = ((width - 6) / 9) ^ 0; // ^0 rounds the number down
-    if (string.length > lenght) {
-      return string.slice(0,lenght - 2).concat("...");
-    }
-    return string;
-  }
 
   function isSelected (tag) {
     return selectedTags.includes(tag.uuid);

@@ -2,7 +2,7 @@
   import "../app.css";
   import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom'; // import popup
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow }); // set stores for popup
-  import {AppShell, initializeStores, storePopup} from '@skeletonlabs/skeleton';
+  import {AppShell, initializeStores, storePopup, Modal} from '@skeletonlabs/skeleton';
   initializeStores();
   import Nav from './Nav.svelte'
   import {onMount} from 'svelte';
@@ -17,6 +17,7 @@
     checkLogin(response);
   }
 </script>
+<Modal />
 <AppShell>
   <svelte:fragment slot="header"><Nav /></svelte:fragment>
   <!--<svelte:fragment slot="sidebarLeft"></svelte:fragment>-->

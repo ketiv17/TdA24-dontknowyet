@@ -1,23 +1,70 @@
 <script>
-  export let calendarData = [];
-  let days = {};
+  import {popup, getModalStore} from '@skeletonlabs/skeleton';
+  import {formatDate, shortenString} from '$lib/string.js';
+  export let calendarData = {};
+  export let currentMonth = 0;
+  let width = 0;
 
-  // the calendarData is in format {"yyyy-mm-dd":[{event1},{event2}],...}
-  // fill in days for the that are not in calendarData and put them in days
-  $: calendarData && fillDays();
-  function fillDays() {
-    for (let i = 0; i < 28; i++) {
-      let date = new Date();
-      date.setDate(date.getDate() + i);
-      let dateStr = date.toISOString().split('T')[0];
-      if (!calendarData[dateStr]) {
-        calendarData[dateStr] = [];
-      }
-      days.push({date: calendarData[dateStr]});
-    }
-    console.log(days);  
-    console.log(currentDay);
+  const popupSetting = {
+    event: 'hover',
+	  target: 'popupDiv',
+	  placement: 'bottom'
+  };
+  let popups = [];
+
+  $: calendarData && createPopups();
+  function createPopups() {
+    let eventNum = 0;
+    popups=[];
+    for (let date in calendarData) {
+      let day = calendarData[date];
+      day.forEach(event => {
+        event.num = eventNum;
+        let newPopup = {...popupSetting};
+        newPopup.target = "popupDiv-"+event.num.toString();
+        popups = [...popups, newPopup];
+        console.log(event.num.toString());
+        eventNum++;
+      })
+    };
+    console.log(popups);
   }
-  // the current day of the week
-  let currentDay = new Date().getDay();
+
+  const modalStore = getModalStore();
+  function openModal(event) {
+    const modal = {
+      type: 'alert',
+      buttonTextCancel: 'Zavřít',
+      title: event.description,
+      body: event.guest_firstname+' '+event.guest_lastname+"<br>"+event.guest_email+"<br>"+event.guest_number+"<br>"+event.from.slice(11,16)+" - "+event.to.slice(11,16),
+    };
+    modalStore.trigger(modal);
+  }
+  
+
+  // return a boolean if the date is in the current month
+  function isCurrentMonth(date) {
+    let d = new Date(date);
+    return d.getMonth() === currentMonth;
+  }
 </script>
+
+<div class="grid grid-cols-7 justify-items-center border border-primary-500" bind:clientWidth={width}>
+  {#each Object.keys(calendarData) as day}
+    <div class="flex flex-col items-center border border-primary-500 w-full text-sm min-h-32">
+      <span class="font-bold {isCurrentMonth(day) ? "" : "text-secondary-500"}">{formatDate(day).slice(0,7)}</span>
+      {#if calendarData[day].length > 0}
+        {#each calendarData[day] as event}
+          <button class="badge variant-filled-tertiary [&>*]:pointer-events-none" use:popup={popups[event.num]} on:click={openModal(event)}>{shortenString(event.description,width/7)}</button>
+          <div class="variant-filled-primary rounded-lg p-2" data-popup="popupDiv-{event.num.toString()}">
+            <div class="flex flex-col">
+              {#each [event.description, event.guest_firstname+' '+event.guest_lastname, event.guest_email, event.guest_number, event.from.slice(11,16)+" - "+event.to.slice(11,16)] as info}
+                <span>{info}</span>
+              {/each}
+            </div>
+          </div>
+        {/each}
+      {/if}
+    </div>
+  {/each}
+</div>

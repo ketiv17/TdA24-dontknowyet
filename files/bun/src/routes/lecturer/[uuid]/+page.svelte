@@ -2,7 +2,7 @@
   import {onMount} from 'svelte';
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
-  import {fullName, null2string} from '$lib/stringCheck.js'
+  import {fullName, null2string} from '$lib/string.js'
 
   let data;
   let uuid;
