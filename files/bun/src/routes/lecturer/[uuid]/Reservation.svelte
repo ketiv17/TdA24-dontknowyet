@@ -37,7 +37,7 @@
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({date: formData.date})
+      body: JSON.stringify({date: formData.date, uuid: uuid})
     });
     let avilableTimes = await response.json();
   }
