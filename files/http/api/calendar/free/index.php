@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date = $_POST["date"];
 
     // Prepare the SQL query to retrieve the lecturer's appointments for the given date
-    $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND appointment_date = '$date'";
+    $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND DATE(from) = '$date'";
 
     // Execute the query
     $result = $conn->query($sql);
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Iterate over each appointment
             foreach ($appointments as $appointment) {
-                $appointmentHour = (int) date("H", strtotime($appointment["appointment_time"]));
+                $appointmentHour = (int) date("H", strtotime($appointment["from"]));
 
                 // Check if the appointment overlaps with the current hour
                 if ($appointmentHour === $hour) {
