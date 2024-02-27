@@ -50,7 +50,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate phone all phone numbers
     $validatedNumbers = validatePhoneNumbers($data['contact']['telephone_numbers']);
     $data['contact']['telephone_numbers'] = $validatedNumbers !== false ? $validatedNumbers : null;
-    
+
     if ($validatedNumbers !== false) {
         $data['contact']['telephone_numbers'] = $validatedNumbers;
     } else {
@@ -204,5 +204,3 @@ else {
     convertToUtf8AndPrint(["code" => 405, "message" => "Method not allowed"]);
     exit;
 }
-
-logApiRequest($data);
