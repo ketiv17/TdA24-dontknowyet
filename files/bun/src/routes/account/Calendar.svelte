@@ -58,7 +58,7 @@
       <span class="font-bold {isCurrentMonth(day) ? "" : "text-secondary-500"} badge {isCurrentDay(day) ? "variant-filled-secondary" : ""}">{formatDate(day).slice(0,7)}</span>
       {#if calendarData[day].length > 0}
         {#each calendarData[day] as event}
-          <button class="badge variant-filled-tertiary [&>*]:pointer-events-none" use:popup={popups[event.num]} on:click={openModal(event)}>{shortenString(event.description,width/7)}</button>
+          <button class="badge variant-filled-tertiary [&>*]:pointer-events-none" use:popup={popups[event.num]} on:click={openModal(event)}>{shortenString(event.guest_firstname+' '+event.guest_lastname,width/7)}</button>
           <div class="variant-filled-primary rounded-lg p-2" data-popup="popupDiv-{event.num.toString()}">
             <div class="flex flex-col">
               {#each [event.description, event.guest_firstname+' '+event.guest_lastname, event.guest_email, event.guest_number, event.from.slice(11,16)+" - "+event.to.slice(11,16)] as info}

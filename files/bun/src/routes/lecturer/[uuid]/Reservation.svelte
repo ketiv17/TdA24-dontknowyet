@@ -14,17 +14,33 @@
 
 
 	// Form Data
+  let agreement = false;
 	const formData = {
-      uuid: uuid,
-      lecturer_uuid: "",
-      guest_firstname: "",
-      guest_lastname: "",
-      guest_email: "",
-      guest_number: "",
-      date: "",
-      time: "",
-      description: ""
+    uuid: uuid,
+    lecturer_uuid: "",
+    guest_firstname: "",
+    guest_lastname: "",
+    guest_email: "",
+    guest_number: "",
+    date: "",
+    time: "",
+    description: "",
 	};
+
+  let avilableTimes = {
+    date: "",
+    availableSlots: []
+  }
+  async function getTimes() {
+    const response = await fetch(`/api/calendar/free`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({date: formData.date})
+    });
+    let avilableTimes = await response.json();
+  }
 
 	// We've created a custom submit function to pass the response and close the modal.
 	function onFormSubmit() {
@@ -62,14 +78,6 @@
 				<input class="input variant-filled-secondary" type="tel" bind:value={formData.guest_number} placeholder="123 456 789" />
 			</label>
       <label class="label">
-				<span>Čas:</span>
-        <select class="input variant-filled-secondary" bind:value={formData.time}>
-          {#each times as time}
-            <option value={time}>{time}</option>
-          {/each}
-        </select>
-      </label>
-      <label class="label">
         <span>Datum:</span>
         <input class="input variant-filled-secondary" type="date" bind:value={formData.date} />
       </label>
@@ -77,6 +85,22 @@
 				<span>Popis:</span>
 				<input class="input variant-filled-secondary" type="text" bind:value={formData.description} placeholder="Vaša zpráva pro lektora" />
 			</label>
+      <label class="label">
+        <span>Čas: ({avilableTimes.date.lenght > 0 ? avilableTimes.date:""})</span>
+        <div class="flex">
+          <button class="btn variant-filled-tertiary mr-1" on:click={()=>getTimes()}>zjistit dostupné časy</button>
+          <select class="input variant-filled-secondary" bind:value={formData.time}>
+            {#each avilableTimes.availableSlots as time}
+              <option value={time}>{time}</option>
+            {/each}
+          </select>
+        </div>
+      </label>
+      <span class="flex">
+        <input type="checkbox" bind:checked={agreement}>
+        <span class="ml-1">Souhlasím se zpracováním osobních údajů</span>
+      </span>
+
 		</form>
 		<footer class="modal-footer {parent.regionFooter}">
 			<button class="btn variant-filled-tertiary" on:click={parent.onClose}>{parent.buttonTextCancel}</button>
