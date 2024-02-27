@@ -50,7 +50,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate phone all phone numbers
     $validatedNumbers = validatePhoneNumbers($data['contact']['telephone_numbers']);
     $data['contact']['telephone_numbers'] = $validatedNumbers !== false ? $validatedNumbers : null;
-
+    
+    if ($validatedNumbers !== false) {
+        $data['contact']['telephone_numbers'] = $validatedNumbers;
+    } else {
+        $data['contact']['telephone_numbers'] = null;
+    }
     // Insert the user into the database
     $stmt = $conn->prepare("INSERT INTO users (uuid, username, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
