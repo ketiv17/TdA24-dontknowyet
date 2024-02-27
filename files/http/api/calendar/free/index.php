@@ -4,65 +4,77 @@ include '../../functions.php';
 
 // Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get the UUID and date from the request
-    $uuid = $_POST["uuid"];
-    $date = $_POST["date"];
+    // Get the raw POST data
+    $rawData = file_get_contents("php://input");
 
-    // Prepare the SQL query to retrieve the lecturer's appointments for the given date
-    $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND DATE(from) = '$date'";
+    // Decode the JSON data
+    $data = json_decode($rawData, true);
 
-    // Execute the query
-    $result = $conn->query($sql);
+    // Check if the required parameters are present in the data
+    if (isset($data["uuid"]) && isset($data["date"])) {
+        // Get the UUID and date from the data
+        $uuid = $data["uuid"];
+        $date = $data["date"];
 
-    // Check if any appointments exist for the given date
-    if ($result->num_rows > 0) {
-        // Fetch the appointments
-        $appointments = $result->fetch_all(MYSQLI_ASSOC);
+        // Prepare the SQL query to retrieve the lecturer's appointments for the given date
+        $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND DATE(from) = '$date'";
 
-        // Calculate the available time slots
-        $availableSlots = [];
-        $startHour = 8;
-        $endHour = 16;
+        // Execute the query
+        $result = $conn->query($sql);
 
-        // Iterate over each hour from the start to end hour
-        for ($hour = $startHour; $hour <= $endHour; $hour++) {
-            // Check if the hour is available
-            $isAvailable = true;
+        // Check if any appointments exist for the given date
+        if ($result->num_rows > 0) {
+            // Fetch the appointments
+            $appointments = $result->fetch_all(MYSQLI_ASSOC);
 
-            // Iterate over each appointment
-            foreach ($appointments as $appointment) {
-                $appointmentHour = (int) date("H", strtotime($appointment["from"]));
+            // Calculate the available time slots
+            $availableSlots = [];
+            $startHour = 8;
+            $endHour = 16;
 
-                // Check if the appointment overlaps with the current hour
-                if ($appointmentHour === $hour) {
-                    $isAvailable = false;
-                    break;
+            // Iterate over each hour from the start to end hour
+            for ($hour = $startHour; $hour <= $endHour; $hour++) {
+                // Check if the hour is available
+                $isAvailable = true;
+
+                // Iterate over each appointment
+                foreach ($appointments as $appointment) {
+                    $appointmentHour = (int) date("H", strtotime($appointment["from"]));
+
+                    // Check if the appointment overlaps with the current hour
+                    if ($appointmentHour === $hour) {
+                        $isAvailable = false;
+                        break;
+                    }
+                }
+
+                // If the hour is available, add it to the available slots
+                if ($isAvailable) {
+                    $availableSlots[] = str_pad($hour, 2, "0", STR_PAD_LEFT) . ":00";
                 }
             }
 
-            // If the hour is available, add it to the available slots
-            if ($isAvailable) {
-                $availableSlots[] = str_pad($hour, 2, "0", STR_PAD_LEFT) . ":00";
-            }
+            // Prepare the final result
+            $result = [
+                'date' => $date,
+                'availableSlots' => $availableSlots
+            ];
+
+            // Return the result as JSON
+            echo json_encode($result);
+        } else {
+            // No appointments found for the given date
+            echo json_encode(['date' => $date, 'availableSlots' => []]);
         }
-
-        // Prepare the final result
-        $result = [
-            'date' => $date,
-            'availableSlots' => $availableSlots
-        ];
-
-        // Return the result as JSON
-        echo json_encode($result);
     } else {
-        // No appointments found for the given date
-        echo json_encode(['date' => $date, 'availableSlots' => []]);
+        // Required parameters are missing
+        echo "Required parameters are missing.";
     }
+
+    // Close the database connection
+    $conn->close();
 } else {
     // Invalid request method
-    echo "Invalid request method. Only POST requests are allowed.";
+    echo "Invalid request method.";
 }
-
-// Close the database connection
-$conn->close();
 ?>
