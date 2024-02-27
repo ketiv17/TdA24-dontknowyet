@@ -19,15 +19,13 @@
     for (let date in calendarData) {
       let day = calendarData[date];
       day.forEach(event => {
-        event.num = eventNum;
+        event.num = eventNum; 
         let newPopup = {...popupSetting};
         newPopup.target = "popupDiv-"+event.num.toString();
         popups = [...popups, newPopup];
-        console.log(event.num.toString());
         eventNum++;
       })
     };
-    console.log(popups);
   }
 
   const modalStore = getModalStore();
@@ -47,12 +45,17 @@
     let d = new Date(date);
     return d.getMonth() === currentMonth;
   }
+  function isCurrentDay(date) {
+    let d = new Date(date);
+    let today = new Date();
+    return d.toISOString().split('T')[0] === today.toISOString().split('T')[0];
+  }
 </script>
 
 <div class="grid grid-cols-7 justify-items-center border border-primary-500" bind:clientWidth={width}>
   {#each Object.keys(calendarData) as day}
     <div class="flex flex-col items-center border border-primary-500 w-full text-sm min-h-32">
-      <span class="font-bold {isCurrentMonth(day) ? "" : "text-secondary-500"}">{formatDate(day).slice(0,7)}</span>
+      <span class="font-bold {isCurrentMonth(day) ? "" : "text-secondary-500"} badge {isCurrentDay(day) ? "variant-filled-secondary" : ""}">{formatDate(day).slice(0,7)}</span>
       {#if calendarData[day].length > 0}
         {#each calendarData[day] as event}
           <button class="badge variant-filled-tertiary [&>*]:pointer-events-none" use:popup={popups[event.num]} on:click={openModal(event)}>{shortenString(event.description,width/7)}</button>

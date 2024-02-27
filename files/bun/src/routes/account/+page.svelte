@@ -20,7 +20,6 @@
   async function fetchCalendar() {
     const response = await fetch('/api/calendar/my');
     data = await response.json();
-    console.log(data);
   }
 
   let days = {};
