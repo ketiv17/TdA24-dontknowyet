@@ -197,7 +197,7 @@ function UUIDCheck($uuid = null) {
 }
 
     //Check if given tel. numbers starts with +420 or other defined
-function validateNumbers($numbers) {
+function validatePhoneNumbers($numbers) {
     // Allowed country codes
     $allowedCountryCodes = ['+420'];
     $processedNumbers = [];
