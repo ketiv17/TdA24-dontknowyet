@@ -32,7 +32,7 @@
     availableSlots: []
   }
   async function getTimes() {
-    const response = await fetch(`/api/calendar/free`, {
+    const response = await fetch(`/api/calendar/free/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
