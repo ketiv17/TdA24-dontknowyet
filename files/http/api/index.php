@@ -2,7 +2,8 @@
 
 // Create a JSON object
 $data = array(
-  "greeting" => "Welcome to the API! :)",
+  "greeting" => "Welcome to the API",
+  "authorize" => "Please authorize to use the API"
 );
 
 // Encode the JSON object

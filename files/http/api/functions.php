@@ -2,20 +2,26 @@
 // -------------- PREPARATION --------------
 
 // -----Basic Auth-----
-if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
-    http_response_code(401);
-    header('WWW-Authenticate: Basic realm="API"');
-    convertToUtf8AndPrint(["code" => 401, "message" => "Unauthorized"]);
-    exit;
-}
 
-$username = 'Tda';
-$password = getenv('TDA_API_PASS');
+// Enable or disable basic auth for debugging purposes
+$enableAuth = true;
 
-if ($username !== 'api' || $password !== 'api') {
-    http_response_code(401);
-    convertToUtf8AndPrint(["code" => 401, "message" => "Unauthorized"]);
-    exit;
+if ($enableAuth) {
+    if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+        http_response_code(401);
+        header('WWW-Authenticate: Basic realm="API"');
+        convertToUtf8AndPrint(["code" => 401, "message" => "Unauthorized"]);
+        exit;
+    }
+
+    $username = 'Tda';
+    $password = getenv('TDA_API_PASS');
+
+    if ($_SERVER['PHP_AUTH_USER'] !== $username || $_SERVER['PHP_AUTH_PW'] !== $password) {
+        http_response_code(401);
+        convertToUtf8AndPrint(["code" => 401, "message" => "Unauthorized"]);
+        exit;
+    }
 }
 
 
