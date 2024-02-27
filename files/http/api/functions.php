@@ -1,6 +1,26 @@
 <?php
 // -------------- PREPARATION --------------
 
+// -----Basic Auth-----
+if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+    http_response_code(401);
+    header('WWW-Authenticate: Basic realm="API"');
+    convertToUtf8AndPrint(["code" => 401, "message" => "Unauthorized"]);
+    exit;
+}
+
+$username = 'Tda';
+$password = getenv('TDA_API_PASS');
+
+if ($username !== 'api' || $password !== 'api') {
+    http_response_code(401);
+    convertToUtf8AndPrint(["code" => 401, "message" => "Unauthorized"]);
+    exit;
+}
+
+
+// -----Database connection-----
+
 $servername = "tda-mysql-do-user-15726163-0.c.db.ondigitalocean.com";
 $username = "api";
 $password = getenv('DB_PASSWORD');
