@@ -18,9 +18,11 @@ RUN bun run build
 
 
 ## backend
-# Take the DB_PASSWORD action secret and make it enviromental variable
+# Take the DB_PASSWORD & TDA_API_PASS action secret and make it enviromental variable
 ARG DB_PASSWORD
 ENV DB_PASSWORD=$DB_PASSWORD
+ARG TDA_API_PASS
+ENV TDA_API_PASS=$TDA_API_PASS
 # Enable mysqli extension
 RUN echo "extension=mysqli.so" >> /etc/php/php.ini
 # Making enviromental variables usable in php
