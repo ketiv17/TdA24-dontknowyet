@@ -42,6 +42,37 @@ function convertToUtf8AndPrint($data) {
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 
+function logApiRequest($data = null) {
+    global $conn;
+
+    // Get the method and URI of the current request
+    $method = $_SERVER['REQUEST_METHOD'];
+    $uri = $_SERVER['REQUEST_URI'];
+
+    $stmt = $conn->prepare("INSERT INTO api_logs (method, url, data) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $method, $uri, $data);
+    $stmt->execute();
+}
+
+function returnApiLogs() {
+    global $conn;
+
+    $result = mysqli_query($conn, "SELECT * FROM api_logs ORDER BY time DESC");
+    $logs = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $logs[] = [
+            "method" => $row["method"],
+            "url" => $row["url"],
+            "time" => $row["time"],
+            "data" => $row["data"],
+        ];
+    }
+
+    return $logs;
+}
+
+
 //Function that is returning the data of a given UUID, if no uuid porvided it returns all users data
 function returnUUIDdata($uuid = null) {
     global $conn;
@@ -163,6 +194,30 @@ function UUIDCheck($uuid = null) {
     $result = $stmt->get_result();
 
     return $result->num_rows > 0;
+}
+
+    //Check if given tel. numbers starts with +420 or other defined
+function validatePhoneNumbers($numbers) {
+    // Allowed country codes
+    $allowedCountryCodes = ['+420'];
+    $processedNumbers = [];
+
+    foreach ($numbers as $number) {
+        // If the number already has the country code, add it to the processed numbers
+        if (preg_match('/^\+420[0-9]{9}$/', $number)) {
+            $processedNumbers[] = $number;
+        }
+        // If the number does not have country code, add +420
+        elseif (preg_match('/^[0-9]{9}$/', $number)) {
+            $processedNumbers[] = '+420' . $number;
+        }
+        // If the number doesn't match either pattern, return false
+        else {
+            return false;
+        }
+    }
+    
+    return $processedNumbers;
 }
 
 function returnCalendar($apID = null)
