@@ -1,8 +1,5 @@
 <?php
-// FILEPATH: /ketiv17/TdA24-dontknowyet/files/http/api/calendar/free/index.php
-
 // Assuming you have a database connection established
-// Replace the placeholders with your actual database credentials
 include '../../functions.php';
 
 // Check if the request method is POST
@@ -45,15 +42,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // If the hour is available, add it to the available slots
             if ($isAvailable) {
-                $availableSlots[] = $hour;
+                $availableSlots[] = str_pad($hour, 2, "0", STR_PAD_LEFT) . ":00";
             }
         }
 
-        // Return the available time slots as JSON
-        echo json_encode($availableSlots);
+        // Prepare the final result
+        $result = [
+            'date' => $date,
+            'availableSlots' => $availableSlots
+        ];
+
+        // Return the result as JSON
+        echo json_encode($result);
     } else {
         // No appointments found for the given date
-        echo "No appointments found for the given date.";
+        echo json_encode(['date' => $date, 'availableSlots' => []]);
     }
 } else {
     // Invalid request method
