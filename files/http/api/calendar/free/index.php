@@ -13,11 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Check if the required parameters are present in the data
     if (isset($data["uuid"]) && isset($data["date"])) {
         // Get the UUID and date from the data
+
         $uuid = $data["uuid"];
         $date = $data["date"];
 
+
         // Prepare the SQL query to retrieve the lecturer's appointments for the given date
-        $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND DATE(from) = '$date'";
+        $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND DATE(`from`) = '$date'";
 
         // Execute the query
         $result = $conn->query($sql);
