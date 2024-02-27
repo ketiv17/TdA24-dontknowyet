@@ -4,7 +4,6 @@
 $data = array(
   "greeting" => "Welcome to the API",
   "authorize" => "Please authorize to use the API",
-  "test" => getenv('TDA_API_PASS'),
 );
 
 // Encode the JSON object
