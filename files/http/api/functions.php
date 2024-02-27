@@ -246,7 +246,7 @@ function validatePhoneNumbers($numbers) {
     return $processedNumbers;
 }
 
-function returnCalendar($apID = null)
+function returnCalendar($apID = null, $lecturer_uuid = null)
 {
     global $conn;
 
@@ -276,7 +276,12 @@ function returnCalendar($apID = null)
         ];
         return $appointment;
     } else {
-        $result = mysqli_query($conn, "SELECT * FROM calendar ORDER BY `from` ASC");
+        $query = "SELECT * FROM calendar";
+        if ($lecturer_uuid !== null) {
+            $query .= " WHERE lecturer_uuid = '$lecturer_uuid'";
+        }
+        $query .= " ORDER BY `from` ASC";
+        $result = mysqli_query($conn, $query);
         $appointments = [];
 
         while ($row = $result->fetch_assoc()) {
