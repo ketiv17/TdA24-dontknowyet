@@ -196,6 +196,30 @@ function UUIDCheck($uuid = null) {
     return $result->num_rows > 0;
 }
 
+    //Check if given tel. numbers starts with +420 or other defined
+function validateNumbers($numbers) {
+    // Allowed country codes
+    $allowedCountryCodes = ['+420'];
+    $processedNumbers = [];
+
+    foreach ($numbers as $number) {
+        // If the number already has the country code, add it to the processed numbers
+        if (preg_match('/^\+420[0-9]{9}$/', $number)) {
+            $processedNumbers[] = $number;
+        }
+        // If the number does not have country code, add +420
+        elseif (preg_match('/^[0-9]{9}$/', $number)) {
+            $processedNumbers[] = '+420' . $number;
+        }
+        // If the number doesn't match either pattern, return false
+        else {
+            return false;
+        }
+    }
+    
+    return $processedNumbers;
+}
+
 function returnCalendar($apID = null)
 {
     global $conn;

@@ -47,6 +47,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Validate phone all phone numbers
+    $validatedNumbers = validatePhoneNumbers($data['contact']['telephone_numbers']);
+    $data['contact']['telephone_numbers'] = $validatedNumbers !== false ? $validatedNumbers : null;
+
     // Insert the user into the database
     $stmt = $conn->prepare("INSERT INTO users (uuid, username, first_name, last_name, title_before, middle_name, title_after, picture_url, location, claim, bio, price_per_hour, emails, numbers, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
@@ -115,6 +119,12 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
         http_response_code(400);
         convertToUtf8AndPrint(["code" => 400, "message" => "Username and password cannot be changed"]);
         exit;
+    }
+
+    // Validate and process telephone numbers
+    if (isset($data['contact']['telephone_numbers'])) {
+        $validatedNumbers = validatePhoneNumbers($data['contact']['telephone_numbers']);
+        $data['contact']['telephone_numbers'] = $validatedNumbers !== false ? $validatedNumbers : null;
     }
 
     $updateFields = [];
