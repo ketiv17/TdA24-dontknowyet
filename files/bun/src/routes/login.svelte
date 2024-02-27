@@ -1,6 +1,6 @@
 <script>
   import {loggedIn, user, checkLogin} from '$lib/login.js';
-  import {fullName} from '$lib/stringCheck.js'
+  import {fullName} from '$lib/string.js'
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   let username;
   let password;
@@ -25,7 +25,7 @@
 <div class="flex flex-col w-full items-center">
   {#if $loggedIn}
     {#if $user && Object.keys($user).length > 0}
-      <h3 class="h3">Ahoj {fullName($user)}</h3>
+      <h3 class="h3">{fullName($user)}</h3>
       <a class="btn btn-md m-2 variant-filled-tertiary" href="/account">Lektorská zóna</a>
       <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => logout()}>Logout</button>
     {:else}

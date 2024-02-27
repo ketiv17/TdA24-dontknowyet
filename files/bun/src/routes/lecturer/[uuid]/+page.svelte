@@ -1,8 +1,9 @@
 <script>
   import {onMount} from 'svelte';
-  import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
+  import {ProgressRadial, Avatar, getModalStore} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
-  import {fullName, null2string} from '$lib/stringCheck.js'
+  import {fullName, null2string} from '$lib/string.js'
+  import Reservation from './Reservation.svelte';
 
   let data;
   let uuid;
@@ -25,6 +26,19 @@
     "emails": "mailto:",
     "telephone_numbers": "tel:"
   }
+
+  const modalStore = getModalStore();
+  function reservation() {
+		const c = { ref: Reservation, props: {uuid: uuid} };
+		const modal = {
+			type: 'component',
+			component: c,
+			title: 'Rezervace lekce',
+			body: fullName(data),
+			response: (r) => console.log('response:', r)
+		};
+		modalStore.trigger(modal);
+	}
 </script>
 
 <svelte:head>
@@ -71,7 +85,13 @@
             {/each}
           </ul>
         </div>
-        <p>Cena za hodinu: {null2string(data.price_per_hour)} Kč/hod</p>
+        <div>
+          <p>Cena za hodinu: {null2string(data.price_per_hour)} Kč/hod</p>
+          <button class="btn btn-md variant-filled-tertiary m-2" on:click={() => reservation()}>Rezervace</button>
+        </div>
+      </div>
+      <div>
+        
       </div>
     {:else}
       <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>
