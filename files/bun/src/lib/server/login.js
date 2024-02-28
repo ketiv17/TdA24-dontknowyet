@@ -1,5 +1,5 @@
 import { loggedIn, user, uuid } from '$lib/login.js';
-import { apiPassword } from '$lib/server/apiPassword';
+import { encodedCredentials } from "$lib/server/apiPassword";
 
 export async function checkLogin (response) {
   if (response.status === 200) {

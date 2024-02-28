@@ -1,4 +1,4 @@
-//import {apiPassword} from '$lib/apiPassword'
+import { encodedCredentials } from "$lib/server/apiPassword";
 import {lecturerCache} from '$lib/server/filterCache.js';
 
 export async function load({fetch}) {
