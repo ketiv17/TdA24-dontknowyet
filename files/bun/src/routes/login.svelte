@@ -7,7 +7,7 @@
   let password;
 
   async function login () {
-    const response = await fetch('/apiRequests/login.js', {
+    const response = await fetch('/proxyApi/login.js', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
