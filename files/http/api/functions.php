@@ -14,7 +14,7 @@ if ($enableAuth) {
         exit;
     }
 
-    $username = 'Tda';
+    $username = 'TdA';
     $password = getenv('TDA_API_PASS');
 
     if ($_SERVER['PHP_AUTH_USER'] !== $username || $_SERVER['PHP_AUTH_PW'] !== $password) {
