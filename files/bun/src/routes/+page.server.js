@@ -8,7 +8,6 @@ export async function load({fetch}) {
 
   if (cache && cache.length !== 0) {
     data = cache;
-    return;
   } else {
     const response = await fetch('http://localhost/api/lecturers', {
       headers: {
