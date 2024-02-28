@@ -1,3 +1,4 @@
 <?php
 include '../functions.php';
-returnApiLogs();
+
+echo json_encode(returnApiLogs());

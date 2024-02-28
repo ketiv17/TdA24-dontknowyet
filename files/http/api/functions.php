@@ -75,8 +75,13 @@ function logApiRequest($data = null) {
     $method = $_SERVER['REQUEST_METHOD'];
     $uri = $_SERVER['REQUEST_URI'];
 
-    $stmt = $conn->prepare("INSERT INTO api_logs (method, url, data) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $method, $uri, $data);
+    if ($data != null) {
+        $stmt = $conn->prepare("INSERT INTO api_logs (method, url, data) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $method, $uri, $data);
+    } else {
+        $stmt = $conn->prepare("INSERT INTO api_logs (method, url) VALUES (?, ?)");
+        $stmt->bind_param("sss", $method, $uri);
+    }
     $stmt->execute();
 }
 
