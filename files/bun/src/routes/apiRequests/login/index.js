@@ -3,7 +3,7 @@ import { encodedCredentials } from '$lib/server/apiPassword';
 export async function post(request) {
   const { body } = request;
 
-  const response = await fetch('/api/login/', {
+  const response = await fetch('http://localhost/api/login/', {
     method: 'POST',
     body,
     headers: {
