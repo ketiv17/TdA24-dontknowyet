@@ -12,7 +12,7 @@ export async function post(request) {
   });
 
   return {
-    status: response.status,
+    status: 218,
     body: await response.text(),
     headers: response.headers,
   };
