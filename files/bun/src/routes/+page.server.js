@@ -10,7 +10,7 @@ export async function load({fetch}) {
     data = cache;
     return;
   } else {
-    const response = await fetch('/api/lecturers');
+    const response = await fetch('http://localhost/api/lecturers');
     data = await response.json();
     lecturerCache.set(data);
   }

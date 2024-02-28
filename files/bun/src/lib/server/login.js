@@ -12,7 +12,7 @@ export async function checkLogin (response) {
 }
 
 async function getData (uuid) {
-  const response = await fetch('/api/lecturers/'+uuid);
+  const response = await fetch('http://localhost:5173/api/lecturers/'+uuid);
   let resp = await response.json();
   user.set(resp);
 }
