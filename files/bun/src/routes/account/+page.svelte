@@ -6,10 +6,9 @@
   import Paginator from './pager.svelte';
   import {formatDate, fullName} from '$lib/string.js';
 
-  let data = [];
+  export let data;
 
-  onMount( () => {
-    fetchCalendar();
+  onMount( () => {;
     const unsub = loggedIn.subscribe(value => {
       if (!value) {
         goto('/');
@@ -17,10 +16,6 @@
     });
     return unsub; // unsubscribe when the component is unmounted
   });
-  async function fetchCalendar() {
-    const response = await fetch('/api/calendar/my');
-    data = await response.json();
-  }
 
   let days = {};
   let page = 0;
@@ -45,10 +40,10 @@
     days = {}; // Clear the days object
     for (let i = 0; i < 35; i++) { // Iterate 35 times for 5 weeks
       let dateStr = date.toISOString().split('T')[0];
-      if (!data[dateStr]) {
-        data[dateStr] = [];
+      if (!data.calendar[dateStr]) {
+        data.calendar[dateStr] = [];
       }
-      days[dateStr] = data[dateStr];
+      days[dateStr] = data.calendar[dateStr];
 
       date.setDate(date.getDate() + 1); // Move to the next day
     }

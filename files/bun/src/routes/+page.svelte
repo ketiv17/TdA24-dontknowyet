@@ -1,5 +1,6 @@
 <script>
-    import Katalog from './lecturer/+page.svelte';
+    import Katalog from './Katalog.svelte';
+    export let data;
 </script>
 <svelte:head>
     <title>Teacher digital Agency</title>
@@ -16,4 +17,4 @@
     <hr class="w-10/12" style="border-color: #333333;">
 </div>
 <p class="h1 text-center m-5 mt-12">Katalog Lektorů</p>
-<Katalog />
+<Katalog data={data.lecturers} />

@@ -23,6 +23,7 @@
       <img src="/icons/TdA_LOGO/TeacherDigitalAgency_LOGO_colour-white.svg" alt="Home" class="h-3/4">
     </a>
   </svelte:fragment>
+  Huh
 	<svelte:fragment slot="trail">
     <button class="btn-icon btn-icon-lg mr-2 variant-filled-secondary" use:popup={popupSet}>
       {#if $loggedIn === false}

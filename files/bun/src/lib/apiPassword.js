@@ -1,0 +1,1 @@
+export const apiPassword = process.env.TDA_API_PASS;

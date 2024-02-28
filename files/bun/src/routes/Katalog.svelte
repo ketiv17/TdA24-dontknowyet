@@ -1,34 +1,11 @@
 <script>
-  import {onMount} from 'svelte';
   import {ProgressRadial, Autocomplete, popup, Paginator} from '@skeletonlabs/skeleton';
   import RangeSlider from 'svelte-range-slider-pips';
   import LecturerCard from '$lib/lecturerCard.svelte';
 
   let tagColor = "#FECB2E"; //color of thetags  in the filter, cards are updated based on theme
 
-  // FETCH DATA
-  onMount(() =>{
-    fetchData();
-  });
-
-  let data = [];
-
-  import {lecturerCache} from '$lib/filterCache.js';
-
-  async function fetchData() {
-    let cache;
-    lecturerCache.subscribe(value => cache = value);
-
-    if (cache && cache.length !== 0) {
-      data = cache;
-      return;
-    } else {
-      const response = await fetch('/api/lecturers');
-      data = await response.json();
-      lecturerCache.set(data);
-    }
-  }
-
+  export let data;
 
   // FILTER FUNCTIONS
   $: { data, tagFilter, locationFilter, priceFilter, filterData() };
@@ -135,7 +112,7 @@
   let paginationSettings = {
   	page: 0,
   	limit: 9,
-  	size: data.length,
+  	size: 0,
   	amounts: [3,9,18,100],
   }
   $: paginationSettings.size = filtered.length;
