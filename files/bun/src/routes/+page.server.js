@@ -10,7 +10,11 @@ export async function load({fetch}) {
     data = cache;
     return;
   } else {
-    const response = await fetch('http://localhost/api/lecturers');
+    const response = await fetch('http://localhost/api/lecturers', {
+      headers: {
+        'Authorization': `Basic ${encodedCredentials}`
+      }
+    });
     data = await response.json();
     lecturerCache.set(data);
   }

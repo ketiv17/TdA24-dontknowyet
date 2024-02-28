@@ -4,7 +4,7 @@
 // -----Basic Auth-----
 
 // Enable or disable basic auth for debugging purposes
-$enableAuth = false;
+$enableAuth = true;
 
 if ($enableAuth) {
     if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {

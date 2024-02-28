@@ -1,4 +1,5 @@
 import { loggedIn, user, uuid } from '$lib/login.js';
+import { apiPassword } from '$lib/server/apiPassword';
 
 export async function checkLogin (response) {
   if (response.status === 200) {
@@ -12,7 +13,11 @@ export async function checkLogin (response) {
 }
 
 async function getData (uuid) {
-  const response = await fetch('http://localhost:5173/api/lecturers/'+uuid);
+  const response = await fetch('http://localhost/api/lecturers/'+uuid, {
+    headers: {
+      'Authorization': `Basic ${encodedCredentials}`
+    }
+  });
   let resp = await response.json();
   user.set(resp);
 }
