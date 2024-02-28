@@ -80,7 +80,7 @@ function logApiRequest($data = null) {
         $stmt->bind_param("sss", $method, $uri, $data);
     } else {
         $stmt = $conn->prepare("INSERT INTO api_logs (method, url) VALUES (?, ?)");
-        $stmt->bind_param("sss", $method, $uri);
+        $stmt->bind_param("ss", $method, $uri);
     }
     $stmt->execute();
 }
