@@ -7,6 +7,17 @@ include('../../functions.php');
 // Check if request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // Get POST data
+    $meet_id = $_POST['meet_id'];
+    $lecturer_uuid = $_POST['lecturer_uuid'];
+    $guest_firstname = $_POST['guest_firstname'];
+    $guest_lastname = $_POST['guest_lastname'];
+    $guest_email = $_POST['guest_email'];
+    $guest_number = $_POST['guest_number'];
+    $from = $_POST['from'];
+    $to = $_POST['to'];
+    $description = $_POST['description'];
+
     // Check if lecturer_uuid is a valid UUID
     if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $lecturer_uuid)) {
         http_response_code(400);
