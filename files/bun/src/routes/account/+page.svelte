@@ -63,8 +63,6 @@
 </svelte:head>
 
 <div class="flex flex-col items-center w-full">
-  <h1 class="h1 pt-8">{fullName($user)}</h1>
-  <h2 class="h2 pt-5">Kalendář</h2>
   <h4 class="h4">{monthNames[month]}</h4>
   <h6 class="h6">{formatDate(pageDates.from)+" - "+formatDate(pageDates.to)}</h6>
   <div class="w-11/12">

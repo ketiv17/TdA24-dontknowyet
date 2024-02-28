@@ -5,17 +5,8 @@
   import {AppShell, initializeStores, storePopup, Modal} from '@skeletonlabs/skeleton';
   initializeStores();
   import Nav from './Nav.svelte'
-  import {onMount} from 'svelte';
-  import {checkLogin} from '$lib/login.js';
 
-  onMount(() => {
-    fetchauth();
-  });
 
-  async function fetchauth() {
-    const response = await fetch('/api/login/auth');
-    checkLogin(response);
-  }
 </script>
 <Modal />
 <AppShell>
