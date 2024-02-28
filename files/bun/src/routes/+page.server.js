@@ -1,5 +1,5 @@
 //import {apiPassword} from '$lib/apiPassword'
-import {lecturerCache} from '$lib/filterCache.js';
+import {lecturerCache} from '$lib/server/filterCache.js';
 
 export async function load({fetch}) {
   let data = [];

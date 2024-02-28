@@ -1,6 +1,6 @@
-import {checkLogin} from '$lib/login.js';
+import {checkLogin} from '$lib/server/login.js';
 
-export async function fetchauth({fetch}) {
+export async function load({fetch}) {
   const response = await fetch('/api/login/auth');
   checkLogin(response);
 }
