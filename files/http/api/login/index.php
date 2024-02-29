@@ -1,5 +1,6 @@
 <?php
 // Include the database connection file and the functions file
+$authDisabled = true;
 include '../functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

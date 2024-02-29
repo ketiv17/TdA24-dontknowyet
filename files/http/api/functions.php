@@ -4,9 +4,10 @@
 // -----Basic Auth-----
 
 // Enable or disable basic auth for debugging purposes
+$authDisabled;
 $enableAuth = true;
 
-if ($enableAuth) {
+if ($enableAuth and is_null($authDisabled)) {
     if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
         http_response_code(401);
         header('WWW-Authenticate: Basic realm="API"');
