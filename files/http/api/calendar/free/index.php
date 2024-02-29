@@ -12,18 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     // Decode the JSON data
     $data = json_decode($rawData, true);
 
-    $data['uuid'] = '00695f7b-bb48-400b-8074-60ed947b3299';
-    $data['date'] = '2024-02-15';
-
     // Check if the required parameters are present in the data
     if (isset($data["uuid"]) && isset($data["date"])) {
         // Get the UUID and date from the data
 
-        //$uuid = $data["uuid"];
-        //$date = $data["date"];
-
-        $uuid = '00695f7b-bb48-400b-8074-60ed947b3299';
-        $date = '2024-02-15';
+        $uuid = $data["uuid"];
+        $date = $data["date"];
 
 
         // Prepare the SQL query to retrieve the lecturer's appointments for the given date
