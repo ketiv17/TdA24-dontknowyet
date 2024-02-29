@@ -17,7 +17,7 @@ RUN bun install
 RUN bun run build
 
 ## this fing line took me 2 hours to figure out and silently yell at my computer
-ENV ORIGIN="http://localhost:80"
+#ENV ORIGIN="http://localhost:80"
 ## backend
 # Take the DB_PASSWORD & TDA_API_PASS action secret and make it enviromental variable
 ARG DB_PASSWORD

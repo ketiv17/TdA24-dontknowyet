@@ -19,7 +19,7 @@ export async function load({request, fetch, event}) {
   if (check.ok) {
     let calendar = await getCalendar(session);
     const user = getUser(check.json().uuid);
-    console.log(calendar)
+    console.log(calendarcd)
     return {calendar: calendar, loggedIn: true, user: user};
   }
   return {loggedIn: false, calendar: []};
