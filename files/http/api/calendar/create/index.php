@@ -9,7 +9,7 @@ include('../../functions.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if all required data are set
-    $requiredFields = ['lecturer_uuid', 'guest_firstname', 'guest_lastname', 'guest_email', 'guest_number', 'from', 'to'];
+    $requiredFields = ['lecturer_uuid', 'guest_firstname', 'guest_lastname', 'guest_email', 'guest_number', 'time'];
     foreach ($requiredFields as $field) {
         if (!isset($_POST[$field])) {
             http_response_code(400);
@@ -23,9 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guest_lastname = $_POST['guest_lastname'];
     $guest_email = $_POST['guest_email'];
     $guest_number = $_POST['guest_number'];
-    $from = $_POST['from'];
-    $to = $_POST['to'];
     $description = isset($_POST['description']) ? $_POST['description'] : NULL;
+
+    // Validate if time is full hour
+    if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00:00$/', $_POST['time'])) {
+        http_response_code(400);
+        die('Error: Appointmnet must start at full hour (HH:00:00).');
+    }
+    // Validate if appointment is in the future and from 8:00 to 16:00
+    if (strtotime($_POST['time']) < time() || date('H', strtotime($_POST['time'])) < 8 || date('H', strtotime($_POST['time'])) >= 17) {
+        http_response_code(400);
+        die('Error: Appointment must be in the future and between 8:00 and 16:00.');
+    }
+
+    // Split time into from and to
+    $from = $_POST['time'];
+    $to = date('H:i:s', strtotime($from . ' +1 hour'));   
 
     // Check if lecturer_uuid is a valid UUID
     if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $lecturer_uuid)) {
