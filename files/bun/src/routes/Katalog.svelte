@@ -169,7 +169,7 @@
         <LecturerCard lecturer={lecturer} selectedTags={allTags.filter((tag)=>tag.selected).map((tag)=>tag.uuid)} />
       {/each}
       <div class="col-span-full">
-        <Paginator bind:settings={paginationSettings} controlVariant="variant-filled-tertiary" select="variant-filled-tertiary border-none rounded-full p-1 pr-5 pl-3" />
+        <Paginator bind:settings={paginationSettings} amountText="Lektorů" controlVariant="variant-filled-tertiary" select="variant-filled-tertiary border-none rounded-full p-1 pr-8 pl-3" />
       </div>
     {:else if data.length !== 0}
       <h3 class="h3 text-center col-span-full">Nenašli jsme nikoho kdo by odpovídal vašim filtrům</h3>

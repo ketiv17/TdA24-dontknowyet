@@ -127,7 +127,7 @@
             <input type="checkbox" name="agreement">
             <span class="ml-1">Souhlasím se zpracováním osobních údajů</span>
           </span>
-          <button class="btn variant-filled-tertiary" formaction="?/reserve">Submit Form</button>
+          <button class="btn variant-filled-tertiary" formaction="?/reserve">Rezervovat</button>
         <!-- </form> -->
       </div>
     {:else}

@@ -9,7 +9,7 @@
     middleware: {
       offset: {
         mainAxis: 10,
-        crossAxis: -150
+        crossAxis: -90
       }
     }
   };
@@ -25,7 +25,7 @@
     <button class="btn-icon btn-icon-lg mr-2 variant-filled-secondary" use:popup={popupSet}>
         <img src="/icons/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg" alt="account" class="h-1/2">
     </button>
-    <div class="card variant-filled-secondary m-2 p-2 shadow-3xl w-80" data-popup="popupClick">
+    <div class="card variant-filled-secondary m-2 p-2 shadow-3xl" data-popup="popupClick">
       <a href="/account" class="btn btn-md m-2 variant-filled-tertiary">Lektorská zóna</a>
     </div>
   </svelte:fragment>
