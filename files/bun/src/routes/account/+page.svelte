@@ -12,7 +12,7 @@
   let username = '';
   let password = '';
   async function login() {
-    const res = await fetch('/api/login', {
+    const res = await fetch('/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -21,6 +21,8 @@
     });
     if (res.ok) {
       location.reload();
+    } else {
+      console.error('login failed');
     }
   }
 
@@ -86,7 +88,7 @@
 
 <div class="flex flex-col items-center w-full">
   {#if data.loggedIn}
-    <h4 class="h4">{monthNames[month]}</h4>
+    <h4 class="h4 mt-4">{monthNames[month]}</h4>
     <h6 class="h6">{formatDate(pageDates.from)+" - "+formatDate(pageDates.to)}</h6>
     <div class="w-11/12">
       <Calendar calendarData={days} currentMonth={month} />
@@ -96,17 +98,17 @@
   {:else}
     <div>
       <h2 class="h2 pt-8">Login:</h2>
-      <form>
+      <!-- <form> -->
         <label class="label m-2">
           <span>username:</span>
-          <input class="input variant-filled-secondary focus:border-tertiary-500" name="username" bind:value={username} title="username" type="text" placeholder="jméno" />
+          <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={username} title="username" type="text" placeholder="jméno" />
         </label>
         <label class="label m-2">
           <span>password:</span>
-          <input class="input variant-filled-secondary focus:border-tertiary-500" name="password" bind:value={password} title="password" type="password" placeholder="password" />
+          <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={password} title="password" type="password" placeholder="password" />
         </label>
-        <button class="btn btn-md m-2 variant-filled-tertiary" type="submit" on:click={login()}>Login!</button>
-      </form>
+        <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Login!</button>
+      <!-- </form> -->
     </div>
   {/if}
 </div>

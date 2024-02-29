@@ -14,6 +14,6 @@ echo "bun started!";
 
 echo "done!";
 bash;
-echo "not running interactivly";
+echo "not running interactivly (hit ctrl-C to exit)";
 # so the container doesn't quit
 tail -f /dev/null;

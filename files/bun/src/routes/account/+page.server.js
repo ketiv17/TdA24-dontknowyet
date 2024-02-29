@@ -18,9 +18,9 @@ export async function load({request, fetch, event}) {
   });
   if (check.ok) {
     let calendar = await getCalendar(session);
-    const user = getUser(check.json().uuid);
-    console.log(calendarcd)
-    return {calendar: calendar, loggedIn: true, user: user};
+    // const user = getUser(check.json().uuid);
+    console.log(calendar)
+    return {calendar: calendar, loggedIn: true};
   }
   return {loggedIn: false, calendar: []};
 }
@@ -46,23 +46,23 @@ async function getUser (uuid) {
   return await response.json();
 }
 
-export const actions = {
-  login: async (event) => {
-    const data = await event.request.formData();
-    const username = data.get('username')
-    const password = data.get('password')
-    const response = await fetch('http://localhost/api/login/', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${encodedCredentials}`
-      },
-      body: JSON.stringify({username, password})
-    });
+// export const actions = {
+//   login: async (event) => {
+//     const data = await event.request.formData();
+//     const username = data.get('username')
+//     const password = data.get('password')
+//     const response = await fetch('http://localhost/api/login/', {
+//       method: 'POST',
+//       headers: {
+//         'Authorization': `Basic ${encodedCredentials}`
+//       },
+//       body: JSON.stringify({username, password})
+//     });
 
-    if (response.ok) {
-      return {
-        cookie: response.headers.get('set-cookie'),
-      }
-    }
-  }
-}
+//     if (response.ok) {
+//       return {
+//         cookie: response.headers.get('set-cookie'),
+//       }
+//     }
+//   }
+// }
