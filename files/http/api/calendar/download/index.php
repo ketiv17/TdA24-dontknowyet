@@ -42,10 +42,10 @@ function generateICalendar($appointments) {
     foreach ($appointments as $date => $appointmentsByDate) {
         foreach ($appointmentsByDate as $appointment) {
             $ics .= "BEGIN:VEVENT\r\n";
-            $ics .= "UID:" . uniqid() . "\r\n";
+            $ics .= "UID:" . $appointment["meet_id"] . "\r\n";
             $ics .= "DTSTART:" . date('Ymd\THis', strtotime($appointment['from'])) . "\r\n";
             $ics .= "DTEND:" . date('Ymd\THis', strtotime($appointment['to'])) . "\r\n";
-            $ics .= "SUMMARY:TdA metting with " . $appointment['guest_name'] . "\r\n";
+            $ics .= "SUMMARY:TdA metting with " . $appointment['guest_firstname'] . "\r\n";
             $ics .= "DESCRIPTION:" . $appointment['description'] . "\r\n";
             $ics .= "END:VEVENT\r\n";
         }
