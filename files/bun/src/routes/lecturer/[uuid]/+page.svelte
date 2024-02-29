@@ -15,6 +15,25 @@
     "emails": "mailto:",
     "telephone_numbers": "tel:"
   }
+
+  let date = "";
+  let avilableTimes = {date: "", availableSlots: []};
+  async function getTimes() {
+    console.log(JSON.stringify({uuid, date}));
+    const res = await fetch(`/api/calendar/free/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({uuid, date})
+    });
+    if (res.ok) {
+      avilableTimes = await res.json();
+      console.log(avilableTimes);
+    } else {
+      console.error('failed to get available times');
+    }
+  }
 </script>
 
 <svelte:head>
@@ -68,7 +87,7 @@
       <hr class="w-full" style="border-color: #333333;">
       <h3 class="h2">Rezervace lekce:</h3>
       <div>
-        <form class="modal-form">
+        <!-- <form class="modal-form"> -->
           <label class="label">
             <span>Jméno:</span>
             <input class="input variant-filled-secondary" type="text" name="guest_firstname" placeholder="Jan" />
@@ -87,14 +106,14 @@
           </label>
           <label class="label">
             <span>Datum:</span>
-            <input class="input variant-filled-secondary" type="date" name="date" />
+            <input class="input variant-filled-secondary" type="date" name="date" bind:value={date}/>
           </label>
           <label class="label">
             <span>Popis:</span>
             <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" />
           </label>
-          <!-- <label class="label">
-            <span>Čas: ({avilableTimes.date.lenght > 0 ? avilableTimes.date:""})</span>
+          <label class="label">
+            <span>Čas: {avilableTimes.date.lenght > 0 ? "("+avilableTimes.date+")":""}</span>
             <div class="flex">
               <button class="btn variant-filled-tertiary mr-1" on:click={()=>getTimes()}>zjistit dostupné časy</button>
               <select class="input variant-filled-secondary" name="time">
@@ -103,13 +122,13 @@
                 {/each}
               </select>
             </div>
-          </label> -->
+          </label>
           <span class="flex">
             <input type="checkbox" name="agreement">
             <span class="ml-1">Souhlasím se zpracováním osobních údajů</span>
           </span>
           <button class="btn variant-filled-tertiary" formaction="?/reserve">Submit Form</button>
-        </form>
+        <!-- </form> -->
       </div>
     {:else}
       <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>
