@@ -49,10 +49,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die('Error: guest_email is not a valid email address.');
     }
 
-    // Check if guest_number is a valid number
-    if (!preg_match('/^[0-9]+$/', $guest_number)) {
-        http_response_code(400);
-        die('Error: guest_number is not a valid number.');
+    // Check if guest_number is a valid number and add country code if missing
+
+    // If the number already has the country code, add it to the processed numbers
+    if (!preg_match('/^\+420[0-9]{9}$/', $guest_number)) {
+        // If the number does not have country code, add +420
+        if (preg_match('/^[0-9]{9}$/', $guest_number)) {
+            $guest_number = '+420' . $guest_number;
+        }
+        // If the number doesn't match either pattern, return false
+        else {
+            http_response_code(400);
+            die('Error: guest_number is not a valid phone number.');
+        }
     }
 
     // Check if from and to are valid dates
