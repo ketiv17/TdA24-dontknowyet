@@ -9,7 +9,7 @@ const zodSchema = z.object({
 
 export async function load({request, fetch, event}) {
   //const form = await superValidate(event, zodSchema);
-  const session = await request.headers.get('cookie');
+  let session = await request.headers.get('cookie');
   const check = await fetch('http://localhost/api/login/auth', {
     headers: {
       'Cookie': session,
@@ -17,12 +17,11 @@ export async function load({request, fetch, event}) {
     }
   });
   if (check.ok) {
-    let calendar = getCalendar(session);
+    let calendar = await getCalendar(session);
     const user = getUser(check.json().uuid);
-    console.log({calendar: calendar, loggedIn: true, user: user});
+    console.log(calendar)
     return {calendar: calendar, loggedIn: true, user: user};
   }
-  console.log({loggedIn: false, calendar: []});
   return {loggedIn: false, calendar: []};
 }
 
@@ -33,7 +32,9 @@ async function getCalendar (session) {
       'Authorization': `Basic ${encodedCredentials}`
     }
   });
-  return await response.json();
+  const rtn = await response.json();
+  console.log(rtn);
+  return rtn;
 }
 
 async function getUser (uuid) {
@@ -57,8 +58,11 @@ export const actions = {
       },
       body: JSON.stringify({username, password})
     });
-    console.log(response);
-    console.log(response.json());
-    return new Response({status: 200, body: 'ok', headers: {'Set-Cookie': response.headers.get('set-cookie')}});
+
+    if (response.ok) {
+      return {
+        cookie: response.headers.get('set-cookie'),
+      }
+    }
   }
 }

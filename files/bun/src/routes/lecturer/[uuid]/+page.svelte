@@ -1,8 +1,7 @@
 <script>
-  import {ProgressRadial, Avatar, getModalStore} from '@skeletonlabs/skeleton';
+  import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
   import {fullName, null2string} from '$lib/string.js'
-  import Reservation from './Reservation.svelte';
 
   export let data;
   let uuid;
@@ -16,19 +15,6 @@
     "emails": "mailto:",
     "telephone_numbers": "tel:"
   }
-
-  const modalStore = getModalStore();
-  function reservation() {
-		const c = { ref: Reservation, props: {uuid: uuid} };
-		const modal = {
-			type: 'component',
-			component: c,
-			title: 'Rezervace lekce',
-			body: fullName(data),
-			response: (r) => console.log('response:', r)
-		};
-		modalStore.trigger(modal);
-	}
 </script>
 
 <svelte:head>
@@ -77,11 +63,53 @@
         </div>
         <div>
           <p>Cena za hodinu: {null2string(data.lecturer.price_per_hour)} Kč/hod</p>
-          <button class="btn btn-md variant-filled-tertiary m-2" on:click={() => reservation()}>Rezervace</button>
         </div>
       </div>
+      <hr class="w-full" style="border-color: #333333;">
+      <h3 class="h2">Rezervace lekce:</h3>
       <div>
-        
+        <form class="modal-form">
+          <label class="label">
+            <span>Jméno:</span>
+            <input class="input variant-filled-secondary" type="text" name="guest_firstname" placeholder="Jan" />
+          </label>
+          <label class="label">
+            <span>Příjmení:</span>
+            <input class="input variant-filled-secondary" type="text" name="guest_lastname" placeholder="Novák" />
+          </label>
+          <label class="label">
+            <span>Email:</span>
+            <input class="input variant-filled-secondary" type="email" name="guest_email" placeholder="novak@email.com" />
+          </label>
+          <label class="label">
+            <span>Telefon:</span>
+            <input class="input variant-filled-secondary" type="tel" name="guest_number" placeholder="123 456 789" />
+          </label>
+          <label class="label">
+            <span>Datum:</span>
+            <input class="input variant-filled-secondary" type="date" name="date" />
+          </label>
+          <label class="label">
+            <span>Popis:</span>
+            <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" />
+          </label>
+          <!-- <label class="label">
+            <span>Čas: ({avilableTimes.date.lenght > 0 ? avilableTimes.date:""})</span>
+            <div class="flex">
+              <button class="btn variant-filled-tertiary mr-1" on:click={()=>getTimes()}>zjistit dostupné časy</button>
+              <select class="input variant-filled-secondary" name="time">
+                {#each avilableTimes.availableSlots as time}
+                  <option value={time}>{time}</option>
+                {/each}
+              </select>
+            </div>
+          </label> -->
+          <span class="flex">
+            <input type="checkbox" name="agreement">
+            <span class="ml-1">Souhlasím se zpracováním osobních údajů</span>
+          </span>
+          <button class="btn variant-filled-tertiary" formaction="?/reserve">Submit Form</button>
+        </form>
       </div>
     {:else}
       <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>

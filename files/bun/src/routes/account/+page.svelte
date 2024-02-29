@@ -6,8 +6,17 @@
   import {formatDate, fullName} from '$lib/string.js';
 
   export let data;
+  export let form;
+  console.log(data.calendar);
 
-  onMount( () => {;
+
+
+  onMount( () => {
+    if (form !== null && form.cookie) { // save the cookie
+      document.cookie = form.cookie;
+      // reload the page
+      location.reload();
+    }
     const unsub = loggedIn.subscribe(value => {
       if (!value) {
         goto('/');
@@ -73,10 +82,10 @@
     <!-- logout -->
   {:else}
     <div>
-      <h2 class="h2 pt-2">Login:</h2>
+      <h2 class="h2 pt-8">Login:</h2>
       <form method="POST" action="?/login">
         <label class="label m-2">
-          username:
+          <span>username:</span>
           <input class="input variant-filled-secondary focus:border-tertiary-500" name="username" title="username" type="text" placeholder="jméno" />
         </label>
         <label class="label m-2">

@@ -63,27 +63,27 @@
 		<form class="modal-form {cForm}">
 			<label class="label">
 				<span>Jméno:</span>
-				<input class="input variant-filled-secondary" type="text" bind:value={formData.guest_firstname} placeholder="Jan" />
+				<input class="input variant-filled-secondary" type="text" name="guest_firstname" placeholder="Jan" />
 			</label>
 			<label class="label">
 				<span>Příjmení:</span>
-				<input class="input variant-filled-secondary" type="text" bind:value={formData.guest_lastname} placeholder="Novák" />
+				<input class="input variant-filled-secondary" type="text" name="guest_lastname" placeholder="Novák" />
 			</label>
 			<label class="label">
 				<span>Email:</span>
-				<input class="input variant-filled-secondary" type="email" bind:value={formData.guest_email} placeholder="novak@email.com" />
+				<input class="input variant-filled-secondary" type="email" name="guest_email" placeholder="novak@email.com" />
 			</label>
       <label class="label">
 				<span>Telefon:</span>
-				<input class="input variant-filled-secondary" type="tel" bind:value={formData.guest_number} placeholder="123 456 789" />
+				<input class="input variant-filled-secondary" type="tel" name="guest_number" placeholder="123 456 789" />
 			</label>
       <label class="label">
         <span>Datum:</span>
-        <input class="input variant-filled-secondary" type="date" bind:value={formData.date} />
+        <input class="input variant-filled-secondary" type="date" name="date" />
       </label>
       <label class="label">
 				<span>Popis:</span>
-				<input class="input variant-filled-secondary" type="text" bind:value={formData.description} placeholder="Vaša zpráva pro lektora" />
+				<input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" />
 			</label>
       <label class="label">
         <span>Čas: ({avilableTimes.date.lenght > 0 ? avilableTimes.date:""})</span>
@@ -97,14 +97,13 @@
         </div>
       </label>
       <span class="flex">
-        <input type="checkbox" bind:checked={agreement}>
+        <input type="checkbox" name="agreement">
         <span class="ml-1">Souhlasím se zpracováním osobních údajů</span>
       </span>
-
+      <button class="btn variant-filled-tertiary" formaction="?/reserve">Submit Form</button>
 		</form>
 		<footer class="modal-footer {parent.regionFooter}">
 			<button class="btn variant-filled-tertiary" on:click={parent.onClose}>{parent.buttonTextCancel}</button>
-			<button class="btn variant-filled-tertiary" on:click={onFormSubmit}>Submit Form</button>
 		</footer>
 	</div>
 {/if}
