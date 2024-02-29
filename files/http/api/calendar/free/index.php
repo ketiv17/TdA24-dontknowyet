@@ -1,5 +1,7 @@
 <?php
 // Assuming you have a database connection established
+$authDisabled = true;
+
 include '../../functions.php';
 
 // Check if the request method is POST

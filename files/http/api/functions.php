@@ -3,11 +3,15 @@
 
 // -----Basic Auth-----
 
-// Enable or disable basic auth for debugging purposes
-$authDisabled;
+
 $enableAuth = true;
 
-if ($enableAuth and is_null($authDisabled)) {
+// Enable or disable basic auth for debugging purposes
+if (isset($authDisabled) && $authDisabled) {
+    $enableAuth = false;
+}
+
+if ($enableAuth) {
     if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
         http_response_code(401);
         header('WWW-Authenticate: Basic realm="API"');
@@ -33,6 +37,8 @@ $username = "api";
 $password = getenv('DB_PASSWORD');
 $dbname = "api";
 $port = 25060;
+
+$password = 'AVNS_RfzVUq1IS67AWXt0BHz';
 
 // Error reporting ---
 ini_set('display_errors', 1);
