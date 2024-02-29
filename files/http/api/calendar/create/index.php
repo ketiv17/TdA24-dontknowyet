@@ -8,8 +8,16 @@ include('../../functions.php');
 // Check if request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // Check if all required data are set
+    $requiredFields = ['lecturer_uuid', 'guest_firstname', 'guest_lastname', 'guest_email', 'guest_number', 'from', 'to'];
+    foreach ($requiredFields as $field) {
+        if (!isset($_POST[$field])) {
+            http_response_code(400);
+            die("Error: Missing required data - {$field}.");
+        }
+    }
+
     // Get POST data
-    $meet_id = $_POST['meet_id'];
     $lecturer_uuid = $_POST['lecturer_uuid'];
     $guest_firstname = $_POST['guest_firstname'];
     $guest_lastname = $_POST['guest_lastname'];
@@ -17,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guest_number = $_POST['guest_number'];
     $from = $_POST['from'];
     $to = $_POST['to'];
-    $description = $_POST['description'];
+    $description = isset($_POST['description']) ? $_POST['description'] : NULL;
 
     // Check if lecturer_uuid is a valid UUID
     if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $lecturer_uuid)) {
@@ -65,23 +73,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die('Error: guest_email is not a valid email address.');
     }
 
-    // If you reach here, all checks have passed
+    // Check if the lecturer is available at the given time
+    $sql = "SELECT * FROM calendar WHERE lecturer_uuid = ? AND `from` < ? AND `to` > ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $lecturer_uuid, $to, $from);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        http_response_code(400);
+        die('Error: The lecturer is not available at the given time.');
+    }
 
-
-    // Get POST data
-    $meet_id = $_POST['meet_id'];
-    $lecturer_uuid = $_POST['lecturer_uuid'];
-    $guest_firstname = $_POST['guest_firstname'];
-    $guest_lastname = $_POST['guest_lastname'];
-    $guest_email = $_POST['guest_email'];
-    $guest_number = $_POST['guest_number'];
-    $from = $_POST['from'];
-    $to = $_POST['to'];
-    $description = $_POST['description'];
 
     // Prepare SQL statement
-    $stmt = $conn->prepare("INSERT INTO calendar (meet_id, lecturer_uuid, guest_firstname, guest_lastname, guest_email, guest_number, from, to, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssss", $meet_id, $lecturer_uuid, $guest_firstname, $guest_lastname, $guest_email, $guest_number, $from, $to, $description);
+    $stmt = $conn->prepare("INSERT INTO calendar (lecturer_uuid, guest_firstname, guest_lastname, guest_email, guest_number, `from`, `to`, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssss", $lecturer_uuid, $guest_firstname, $guest_lastname, $guest_email, $guest_number, $from, $to, $description);
 
     // Execute SQL statement
     if ($stmt->execute()) {
