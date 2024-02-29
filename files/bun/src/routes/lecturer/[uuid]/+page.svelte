@@ -125,7 +125,7 @@
           </label>
           <span class="flex">
             <input type="checkbox" name="agreement">
-            <span class="ml-1">*Souhlasím se zpracováním osobních údajů</span>
+            <span class="ml-1">Souhlasím se <a href="/legislativa">zpracováním osobních údajů</a>*</span>
           </span>
           <span class="text-xs">* povinné</span><br>
           <button class="btn variant-filled-tertiary" formaction="?/reserve">Rezervovat</button>
