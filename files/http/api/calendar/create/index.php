@@ -2,6 +2,7 @@
 // index.php
 
 // Database connection
+$authDisabled = true;
 include('../../functions.php');
 
 // Check if request method is POST
