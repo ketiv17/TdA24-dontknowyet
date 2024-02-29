@@ -89,23 +89,23 @@
       <div>
         <!-- <form class="modal-form"> -->
           <label class="label">
-            <span>Jméno:</span>
+            <span>Jméno:*</span>
             <input class="input variant-filled-secondary" type="text" name="guest_firstname" placeholder="Jan" />
           </label>
           <label class="label">
-            <span>Příjmení:</span>
+            <span>Příjmení:*</span>
             <input class="input variant-filled-secondary" type="text" name="guest_lastname" placeholder="Novák" />
           </label>
           <label class="label">
-            <span>Email:</span>
+            <span>Email:*</span>
             <input class="input variant-filled-secondary" type="email" name="guest_email" placeholder="novak@email.com" />
           </label>
           <label class="label">
-            <span>Telefon:</span>
+            <span>Telefon:*</span>
             <input class="input variant-filled-secondary" type="tel" name="guest_number" placeholder="123 456 789" />
           </label>
           <label class="label">
-            <span>Datum:</span>
+            <span>Datum:*</span>
             <input class="input variant-filled-secondary" type="date" name="date" bind:value={date}/>
           </label>
           <label class="label">
@@ -113,7 +113,7 @@
             <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" />
           </label>
           <label class="label">
-            <span>Čas: {avilableTimes.date.lenght > 0 ? "("+avilableTimes.date+")":""}</span>
+            <span>Čas:* {avilableTimes.date.lenght > 0 ? "("+avilableTimes.date+")":""}</span>
             <div class="flex">
               <button class="btn variant-filled-tertiary mr-1" on:click={()=>getTimes()}>zjistit dostupné časy</button>
               <select class="input variant-filled-secondary" name="time">
@@ -125,8 +125,9 @@
           </label>
           <span class="flex">
             <input type="checkbox" name="agreement">
-            <span class="ml-1">Souhlasím se zpracováním osobních údajů</span>
+            <span class="ml-1">*Souhlasím se zpracováním osobních údajů</span>
           </span>
+          <span class="text-xs">* povinné</span><br>
           <button class="btn variant-filled-tertiary" formaction="?/reserve">Rezervovat</button>
         <!-- </form> -->
       </div>
