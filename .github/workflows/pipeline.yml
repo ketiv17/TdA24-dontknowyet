@@ -22,6 +22,7 @@ jobs:
           build-args: |
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             TDA_API_PASS=${{ secrets.TDA_API_PASS }}
+            ORIGIN=${{ secrets.ORIGIN }}
 
       - name: Upload to TdA
         uses: Tour-de-App/upload-app@tda-24

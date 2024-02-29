@@ -9,7 +9,20 @@
   export let form;
   console.log(data.calendar);
 
-
+  let username = '';
+  let password = '';
+  async function login() {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({username, password})
+    });
+    if (res.ok) {
+      location.reload();
+    }
+  }
 
   onMount( () => {
     if (form !== null && form.cookie) { // save the cookie
@@ -83,16 +96,16 @@
   {:else}
     <div>
       <h2 class="h2 pt-8">Login:</h2>
-      <form method="POST" action="?/login">
+      <form>
         <label class="label m-2">
           <span>username:</span>
-          <input class="input variant-filled-secondary focus:border-tertiary-500" name="username" title="username" type="text" placeholder="jméno" />
+          <input class="input variant-filled-secondary focus:border-tertiary-500" name="username" bind:value={username} title="username" type="text" placeholder="jméno" />
         </label>
         <label class="label m-2">
           <span>password:</span>
-          <input class="input variant-filled-secondary focus:border-tertiary-500"name="password" title="password" type="password" placeholder="password" />
+          <input class="input variant-filled-secondary focus:border-tertiary-500" name="password" bind:value={password} title="password" type="password" placeholder="password" />
         </label>
-        <button class="btn btn-md m-2 variant-filled-tertiary" type="submit">Login!</button>
+        <button class="btn btn-md m-2 variant-filled-tertiary" type="submit" on:click={login()}>Login!</button>
       </form>
     </div>
   {/if}
