@@ -1,7 +1,6 @@
 <script>
   import {onMount} from 'svelte';
   import {goto} from '$app/navigation';
-  import {loggedIn, user} from '$lib/login.js';
   import Calendar from './Calendar.svelte';
   import Paginator from './pager.svelte';
   import {formatDate, fullName} from '$lib/string.js';
@@ -26,6 +25,7 @@
   // the calendarData is in format {"yyyy-mm-dd":[{event1},{event2}],...}
   $: (page, data , fillDays());
   function fillDays() {
+    if (!data.loggedIn) return;
     let date = new Date();
     date.setMonth(date.getMonth() + page); // Set the month based on the page
     date.setDate(1); // Start from the first day of the month
@@ -63,11 +63,28 @@
 </svelte:head>
 
 <div class="flex flex-col items-center w-full">
-  <h4 class="h4">{monthNames[month]}</h4>
-  <h6 class="h6">{formatDate(pageDates.from)+" - "+formatDate(pageDates.to)}</h6>
-  <div class="w-11/12">
-    <Calendar calendarData={days} currentMonth={month} />
-  </div>
-  <Paginator bind:page={page} />
+  {#if data.loggedIn}
+    <h4 class="h4">{monthNames[month]}</h4>
+    <h6 class="h6">{formatDate(pageDates.from)+" - "+formatDate(pageDates.to)}</h6>
+    <div class="w-11/12">
+      <Calendar calendarData={days} currentMonth={month} />
+    </div>
+    <Paginator bind:page={page} />
+    <!-- logout -->
+  {:else}
+    <div>
+      <h2 class="h2 pt-2">Login:</h2>
+      <form method="POST" action="?/login">
+        <label class="label m-2">
+          username:
+          <input class="input variant-filled-secondary focus:border-tertiary-500" name="username" title="username" type="text" placeholder="jméno" />
+        </label>
+        <label class="label m-2">
+          <span>password:</span>
+          <input class="input variant-filled-secondary focus:border-tertiary-500"name="password" title="password" type="password" placeholder="password" />
+        </label>
+        <button class="btn btn-md m-2 variant-filled-tertiary" type="submit">Login!</button>
+      </form>
+    </div>
+  {/if}
 </div>
-<!-- <Paginator bind:settings={paginationSettings} controlVariant="variant-filled-tertiary" select="variant-filled-tertiary border-none rounded-full p-1 pr-5 pl-3" /> -->
