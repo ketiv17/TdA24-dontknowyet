@@ -47,11 +47,9 @@ async function getUser (uuid) {
 
 export const actions = {
   login: async (event) => {
-    console.log(encodedCredentials);
     const data = await event.request.formData();
     const username = data.get('username')
     const password = data.get('password')
-    const session = await event.request.headers.get('cookie');
     const response = await fetch('http://localhost/api/login/', {
       method: 'POST',
       headers: {
@@ -60,5 +58,7 @@ export const actions = {
       body: JSON.stringify({username, password})
     });
     console.log(response);
+    console.log(response.json());
+    return new Response({status: 200, body: 'ok', headers: {'Set-Cookie': response.headers.get('set-cookie')}});
   }
 }
