@@ -1,6 +1,8 @@
 <?php
 
+$authDisabled = true;
 include '../../functions.php';
+
 
 // Start session
 session_start();

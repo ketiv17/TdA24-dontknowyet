@@ -123,6 +123,10 @@
     </div>
     <Paginator bind:page={page} />
     <button class="btn variant-filled-tertiary" on:click={()=> logout()}>Odhlásit</button>
+    <br>
+    <button class="btn variant-filled-tertiary" on:click={() => {
+          window.open('/api/calendar/download', '_blank');
+        }}>Download iCs</button>
   {:else}
     <div>
       <h2 class="h2 pt-8">Login:</h2>
