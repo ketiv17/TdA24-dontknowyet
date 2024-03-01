@@ -174,7 +174,7 @@
     {:else if data.length !== 0}
       <h3 class="h3 text-center col-span-full">Nenašli jsme nikoho kdo by odpovídal vašim filtrům</h3>
     {:else}
-      <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20 col-span-full"/>
+      <h3 class="h3 text-center col-span-full">Aktuálně nedisponujeme žádnými lektory</h3>
     {/if}
   </div>
 </main>
