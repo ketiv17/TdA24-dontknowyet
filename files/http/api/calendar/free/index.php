@@ -5,7 +5,7 @@ $authDisabled = true;
 include '../../functions.php';
 
 // Check if the request method is POST
-if ($_SERVER["REQUEST_METHOD"] === "GET") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get the raw POST data
     $rawData = file_get_contents("php://input");
 
