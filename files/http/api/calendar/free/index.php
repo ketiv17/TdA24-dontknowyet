@@ -21,6 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $uuid = $data["uuid"];
         $date = $data["date"];
 
+        // Check if the date is weekend
+        $dayOfWeek = date("N", strtotime($date));
+        if ($dayOfWeek === "6" || $dayOfWeek === "7") {
+            // Return an empty array as the date is a weekend
+            echo json_encode(['date' => $date, 'availableSlots' => []]);
+            exit;
+        }
+
 
         // Prepare the SQL query to retrieve the lecturer's appointments for the given date
         $sql = "SELECT * FROM calendar WHERE lecturer_uuid = '$uuid' AND DATE(`from`) = '$date'";
