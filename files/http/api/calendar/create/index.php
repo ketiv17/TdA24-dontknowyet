@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Check if all required data are set
-    $requiredFields = ['lecturer_uuid', 'guest_firstname', 'guest_lastname', 'guest_email', 'guest_number', 'time'];
+    $requiredFields = ['lecturer_uuid', 'guest_firstname', 'guest_lastname', 'guest_email', 'guest_number', 'time', 'agreement'];
     foreach ($requiredFields as $field) {
         if (!isset($data[$field])) {
             http_response_code(400);
@@ -24,9 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guest_lastname = $data['guest_lastname'];
     $guest_email = $data['guest_email'];
     $guest_number = $data['guest_number'];
+    $agreement = $data['agreement'];
     $description = isset($data['description']) ? $data['description'] : NULL;
 
     logApiRequest(json_encode($data));
+
+    // Validate if agreement is true
+    if ($agreement !== true) {
+        http_response_code(400);
+        die('Error: You must accept the agreement (GDPR).');
+    }
 
     // Validate if time is full hour
     if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00$/', $data['time'])) {
@@ -52,17 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if guest_firstname and guest_lastname are valid names
     if (!preg_match("/^[a-zA-Z-' ]*$/", $guest_firstname)) {
         http_response_code(400);
-        die('Error: guest_firstname is not a valid name.');
+        die('Error: Firstname is not a valid name.');
     }
     if (!preg_match("/^[a-zA-Z-' ]*$/", $guest_lastname)) {
         http_response_code(400);
-        die('Error: guest_lastname is not a valid name.');
+        die('Error: Lastname is not a valid name.');
     }
 
     // Check if guest_email is a valid email
     if (!filter_var($guest_email, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
-        die('Error: guest_email is not a valid email address.');
+        die('Error: email is not a valid email address.');
     }
 
     // Check if guest_number is a valid number and add country code if missing
@@ -76,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // If the number doesn't match either pattern, return false
         else {
             http_response_code(400);
-            die('Error: guest_number is not a valid phone number.');
+            die('Error: number is not a valid phone number.');
         }
     }
 
@@ -90,12 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$toDate || $toDate->format('Y-m-d H:i') !== $to) {
         http_response_code(400);
         die('Error: to is not a valid datetime.');
-    }
-
-    // Check if email is valid
-    if (!filter_var($guest_email, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        die('Error: guest_email is not a valid email address.');
     }
 
     // Check if the lecturer is available at the given time
