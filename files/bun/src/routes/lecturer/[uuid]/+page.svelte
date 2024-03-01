@@ -77,7 +77,7 @@
     if (res.ok) {
       result = "Rezervace úspěšná";
     } else {
-      showFailureToast(res.text())
+      showFailureToast(await res.text())
     }
     inProgress = false;
   }

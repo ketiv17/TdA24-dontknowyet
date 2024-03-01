@@ -34,7 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         http_response_code(400);
         die('Error: You must accept the agreement (GDPR).');
     }
-
+    // Validate if time is in the correct format
+    if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $data['time'])) {
+        http_response_code(400);
+        die('Chyba: Čas není nastaven správně');
+    }
     // Validate if time is full hour
     if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00$/', $data['time'])) {
         http_response_code(400);
