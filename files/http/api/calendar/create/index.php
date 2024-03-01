@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guest_number = $data['guest_number'];
     $description = isset($data['description']) ? $data['description'] : NULL;
 
-    logApiRequest($data);
+    logApiRequest(json_encode($data));
 
     // Validate if time is full hour
     if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00$/', $data['time'])) {

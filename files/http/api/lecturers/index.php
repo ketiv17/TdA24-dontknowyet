@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
-    logApiRequest($data);
+    logApiRequest(json_encode($data));
 
     // Remove dangerous tags from bio
     if (isset($data['bio'])) {
@@ -115,7 +115,7 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
-    logApiRequest($data);
+    logApiRequest(json_encode($data));
 
     // Remove dangerous tags from bio
     if (isset($data['bio'])) {
