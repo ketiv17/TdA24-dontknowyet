@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Decode the JSON data
     $data = json_decode($rawData, true);
 
-    logApiRequest($data);
+    logApiRequest($rawData);
 
     // Check if the required parameters are present in the data
     if (isset($data["uuid"]) && isset($data["date"])) {
