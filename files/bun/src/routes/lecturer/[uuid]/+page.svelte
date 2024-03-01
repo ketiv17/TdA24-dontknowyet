@@ -2,6 +2,9 @@
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
   import {fullName, null2string, formatDate} from '$lib/string.js'
+  import { getToastStore } from '@skeletonlabs/skeleton';
+
+  const toastStore = getToastStore();
 
   export let data;
   let uuid;
@@ -50,7 +53,7 @@
   async function reserve() {
     if (inProgress) return;
     if (!form.agreement) {
-      alert("Musíte souhlasit se zpracováním osobních údajů");
+      showMissingApproveToast();
       return;
     
     }
@@ -58,7 +61,7 @@
     for (const [key, value] of Object.entries(form)) {
       if (key === "description") continue;
       if (value === "") {
-        alert("Vyplňte všechny povinné údaje");
+        showMissingToast();
         return;
       }
     }
@@ -74,8 +77,7 @@
     if (res.ok) {
       result = "Rezervace úspěšná";
     } else {
-      result = "Něco se pokazilo, zkuste to prosím znovu"
-      details = await res.text();
+      showFailureToast(res.text())
     }
     inProgress = false;
   }
@@ -83,6 +85,48 @@
     inProgress = false;
     result = "";
     details = "";
+  }
+
+  function showMissingToast() {
+    const t = {
+      message: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;"><h2><b>Chybějící údaje!</b></h2><p>Pole označené * jsou povinné</p></div>',
+      background: 'variant-filled-tertiary',
+      hideDismiss: true,
+      timeout: 5000,
+      classes: 'border-4 border-secondary-500'
+    };
+    toastStore.trigger(t);
+  }
+  function showSuccessToast() {
+    const t = {
+      message: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;"><h2><b>Rezervace úspěšná!</b></h2><p>Rezervace byla úspěšně odeslána</p></div>',
+      background: 'variant-filled-tertiary',
+      hideDismiss: true,
+      timeout: 5000,
+      classes: 'border-4 border-secondary-500'
+    };
+    toastStore.trigger(t);
+  }
+  function showFailureToast(errorMessage) {
+    const t = {
+      message: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;"><h2><b>Zkontrolujte si údaje!</b></h2><p>'+errorMessage+'</p></div>',
+      background: 'variant-filled-tertiary',
+      hideDismiss: true,
+      timeout: 5000,
+      classes: 'border-4 border-secondary-500'
+    };
+    toastStore.trigger(t);
+  }
+  function showMissingApproveToast(){
+    const t = {
+      message: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;"><h2><b>Souhlas s podmínkami!</b></h2><p>Musíte souhlasit s podmínkami</p></div>',
+      background: 'variant-filled-tertiary',
+      hideDismiss: true,
+      timeout: 5000,
+      classes: 'border-4 border-secondary-500'
+    };
+    toastStore.trigger(t);
+  
   }
 </script>
 

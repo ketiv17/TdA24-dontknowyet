@@ -59,17 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if guest_firstname and guest_lastname are valid names
     if (!preg_match("/^[a-zA-Z-' ěščřžýáíéúůďťňĚŠČŘŽÝÁÍÉÚŮĎŤŇ]*$/u", $guest_firstname)) {
         http_response_code(400);
-        die('Error: Firstname is not a valid name.');
+        die('Chyba: Jméno není platné.');
     }
     if (!preg_match("/^[a-zA-Z-' ěščřžýáíéúůďťňĚŠČŘŽÝÁÍÉÚŮĎŤŇ]*$/u", $guest_lastname)) {
         http_response_code(400);
-        die('Error: Lastname is not a valid name.');
+        die('Chyb: Příjmení není platné.');
     }
 
     // Check if guest_email is a valid email
     if (!filter_var($guest_email, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
-        die('Error: email is not a valid email address.');
+        die('Chyba: Email není platný, zkontrolujte @ a .');
     }
 
     // Check if guest_number is a valid number and add country code if missing
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // If the number doesn't match either pattern, return false
         else {
             http_response_code(400);
-            die('Error: number is not a valid phone number.');
+            die('Chyba: Telefonní číslo není platné.');
         }
     }
 
