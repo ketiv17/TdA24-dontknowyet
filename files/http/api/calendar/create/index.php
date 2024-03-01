@@ -57,11 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if guest_firstname and guest_lastname are valid names
-    if (!preg_match("/^[a-zA-Z-' ]*$/", $guest_firstname)) {
+    if (!preg_match("/^[a-zA-Z-' ěščřžýáíéúůďťňĚŠČŘŽÝÁÍÉÚŮĎŤŇ]*$/u", $guest_firstname)) {
         http_response_code(400);
         die('Error: Firstname is not a valid name.');
     }
-    if (!preg_match("/^[a-zA-Z-' ]*$/", $guest_lastname)) {
+    if (!preg_match("/^[a-zA-Z-' ěščřžýáíéúůďťňĚŠČŘŽÝÁÍÉÚŮĎŤŇ]*$/u", $guest_lastname)) {
         http_response_code(400);
         die('Error: Lastname is not a valid name.');
     }
