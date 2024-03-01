@@ -48,6 +48,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     }
+    // Check if the username is unique
+    if (usernameCheck($data['username'])) {
+        http_response_code(409);
+        convertToUtf8AndPrint(["code" => 409, "message" => "Username already exists"]);
+        exit;
+    }
     
     // Validate phone all phone numbers
     $validatedNumbers = validatePhoneNumbers($data['contact']['telephone_numbers']);
