@@ -72,7 +72,7 @@
       body: JSON.stringify({ lecturer_uuid: uuid, ...form})
     });
     if (res.ok) {
-      result = "ok";
+      result = "Rezervace úspěšná";
     } else {
       result = "Něco se pokazilo, zkuste to prosím znovu"
       details = await res.text();
@@ -142,7 +142,7 @@
         {:else}
           <div class="text-center">
             <h3 class="h3">{result}</h3>
-            <p>{result === "ok" ? "" : details}</p>
+            <p>{result === "Rezervace úspěšná" ? "" : details}</p>
             <button class="btn variant-filled-tertiary" on:click={()=>reset()}>Vyplňte znovu</button>
           </div>
         {/if}
