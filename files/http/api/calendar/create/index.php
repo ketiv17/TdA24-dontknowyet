@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate if appointment is in the future and from 8:00 to 16:00
     if (strtotime($data['time']) < time() || date('H', strtotime($data['time'])) < 8 || date('H', strtotime($data['time'])) >= 17) {
         http_response_code(400);
-        die('Error: Appointment must be in the future and between 8:00 and 16:00.');
+        die('Chyba: Schůzka nesmí být v minulosti!');
     }
 
    // Split time into from and to
