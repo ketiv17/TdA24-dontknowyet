@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guest_number = $_POST['guest_number'];
     $description = isset($_POST['description']) ? $_POST['description'] : NULL;
 
+    logApiRequest($_POST);
+
     // Validate if time is full hour
     if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00:00$/', $_POST['time'])) {
         http_response_code(400);
@@ -123,5 +125,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(405);
     echo "Invalid request method";
 }
-
-logApiRequest($_POST);

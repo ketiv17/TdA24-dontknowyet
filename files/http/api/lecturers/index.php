@@ -12,6 +12,7 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
 // Handling request methods ---
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    logApiRequest();
     if ($uuid !== null) {
         // If a UUID is provided, return the lecturer as an object
         http_response_code(200);
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
+    logApiRequest($data);
 
     // Remove dangerous tags from bio
     if (isset($data['bio'])) {
@@ -113,6 +115,7 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
+    logApiRequest($data);
 
     // Remove dangerous tags from bio
     if (isset($data['bio'])) {
@@ -171,6 +174,8 @@ elseif ($_SERVER["REQUEST_METHOD"] === "PUT") {
 }
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    logApiRequest();
+
     // Check if the user exists
     if (!UUIDCheck($uuid)) {
         http_response_code(404);

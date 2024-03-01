@@ -17,6 +17,8 @@ if (!isset($_SESSION['uuid'])) {
     exit;
 }
 
+logApiRequest($_SESSION['uuid']);
+
 // Get all appointments
 $appointments = returnCalendar(null, $_SESSION['uuid']);
 
