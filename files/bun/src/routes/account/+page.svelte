@@ -80,6 +80,10 @@
     toDate.setDate(toDate.getDate() - 1); // Go back 1 day from the last date
     pageDates.to = toDate.toISOString().split('T')[0];
   }
+  async function logout() {
+    await fetch ('/api/login/logout/');
+    location.reload();
+  }
 </script>
 
 <svelte:head>
@@ -94,7 +98,7 @@
       <Calendar calendarData={days} currentMonth={month} />
     </div>
     <Paginator bind:page={page} />
-    <!-- logout -->
+    <button class="btn variant-filled-tertiary" on:click={()=> logout()}>Odhlásit</button>
   {:else}
     <div>
       <h2 class="h2 pt-8">Login:</h2>
@@ -107,7 +111,7 @@
           <span>password:</span>
           <input class="input variant-filled-secondary focus:border-tertiary-500" bind:value={password} title="password" type="password" placeholder="password" />
         </label>
-        <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Login!</button>
+        <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => login()}>Přihlásit!</button>
       <!-- </form> -->
     </div>
   {/if}
