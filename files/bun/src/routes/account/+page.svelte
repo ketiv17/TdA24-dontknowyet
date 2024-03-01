@@ -4,6 +4,9 @@
   import Calendar from './Calendar.svelte';
   import Paginator from './pager.svelte';
   import {formatDate, fullName} from '$lib/string.js';
+  import { getToastStore } from '@skeletonlabs/skeleton';
+
+  const toastStore = getToastStore();
 
   export let data;
   export let form;
@@ -20,8 +23,10 @@
       body: JSON.stringify({username, password})
     });
     if (res.ok) {
+      localStorage.setItem('loggedIn', true);
       location.reload();
     } else {
+      showUnauthorizedToast();
       console.error('login failed');
     }
   }
@@ -31,6 +36,10 @@
       document.cookie = form.cookie;
       // reload the page
       location.reload();
+    }
+    if (localStorage.getItem('loggedIn')) {
+      showLoggedInToast(localStorage.getItem('username'));
+      localStorage.removeItem('loggedIn');
     }
   });
 
@@ -77,6 +86,27 @@
   async function logout() {
     await fetch ('/api/login/logout/');
     location.reload();
+  }
+
+  function showUnauthorizedToast() {
+    const t = {
+      message: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;"><h2><b>Nesprávné údaje!</b></h2><p>Zkontrolujte si vaše username a heslo</p></div>',
+      background: 'variant-filled-tertiary',
+      hideDismiss: true,
+      timeout: 5000,
+      classes: 'border-4 border-secondary-500'
+    };
+    toastStore.trigger(t);
+  }
+  function showLoggedInToast() {
+    const t = {
+      message: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;"><h2><b>Přihlášení proběhlo úspěšně!</b></h2><p>Vítejte v učitelské sekci</p></div>',
+      background: 'variant-filled-tertiary',
+      hideDismiss: true,
+      timeout: 5000,
+      classes: 'border-4 border-secondary-500'
+    };
+    toastStore.trigger(t);
   }
 </script>
 
