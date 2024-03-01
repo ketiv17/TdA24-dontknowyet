@@ -231,9 +231,22 @@ function UUIDCheck($uuid = null) {
 
     return $result->num_rows > 0;
 }
+function usernameCheck($username = null) {
+    if ($username === null) {
+        return false;
+    }
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT 1 FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->num_rows > 0;
+}
 
     //Check if given tel. numbers starts with +420 or other defined
-function validatePhoneNumbers($numbers) {
+    function validatePhoneNumbers($numbers) {
     // Allowed country codes
     $allowedCountryCodes = ['+420'];
     $processedNumbers = [];
@@ -335,7 +348,7 @@ function generateUuidV4() {
 
 //Checks if first and last names are present in $data body
 function RequiedFieldsCheck($data) {
-    $requiredFields = ['first_name', 'last_name', 'password'];
+    $requiredFields = ['first_name', 'last_name', 'password', 'username'];
 
     foreach ($requiredFields as $field) {
         if (!isset($data[$field])) {
