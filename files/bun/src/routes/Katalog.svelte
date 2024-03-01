@@ -71,10 +71,19 @@
       }
       lecturer.tags.forEach(tag => {
         if (!allTags.map(t => t.uuid).includes(tag.uuid)) {
+          tag.count = 1;
           allTags = [...allTags, tag];
+        } else {
+          allTags = allTags.map(t => {
+            if (t.uuid === tag.uuid) {
+              t.count++;
+            }
+            return t;
+          });
         }
       });
     });
+    allTags = allTags.sort((a,b) => b.count - a.count);
   }
 
   function getLocations() {
@@ -150,7 +159,7 @@
   <!-- tag filter -->
   <h5 class="h5">tagy:</h5>
   {#if allTags}
-    <div class="col-span-full text-center">
+    <div class="col-span-full text-center max-h-32 overflow-auto">
       {#each allTags as tag}
         <button class="badge btnAnimation text-sm rounded-full m-1 border-2" on:click={() => {tag = toggle(tag)}}
           style="border-color: {tagColor}; {tag.selected ? 'background-color:'+tagColor :''}; color: #333333;"

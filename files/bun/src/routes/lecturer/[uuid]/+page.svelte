@@ -182,7 +182,7 @@
             </label>
             <label class="label">
               <span>Popis:</span>
-              <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" bind:value={form.description} />
+              <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaše zpráva pro lektora" bind:value={form.description} />
             </label>
             <span class="flex mt-1">
               <input type="checkbox" name="agreement" bind:checked={form.agreement}>
