@@ -1,6 +1,7 @@
 <?php
 // Logout API endpoint
 // Restarts the session and unsets all session variables
+$authDisabled = true;
 include '../../functions.php';
 
     session_start();

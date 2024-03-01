@@ -30,16 +30,7 @@
   }
 
   const modalStore = getModalStore();
-  function openModal(event) {
-    const modal = {
-      type: 'alert',
-      buttonTextCancel: 'Zavřít',
-      title: event.description,
-      body: event.guest_firstname+' '+event.guest_lastname+"<br>"+event.guest_email+"<br>"+event.guest_number+"<br>"+event.from.slice(11,16)+" - "+event.to.slice(11,16),
-    };
-    modalStore.trigger(modal);
-  }
-  
+
 
   // return a boolean if the date is in the current month
   function isCurrentMonth(date) {
@@ -73,6 +64,7 @@
           <button class="badge variant-filled-tertiary [&>*]:pointer-events-none" use:popup={popups[event.num]} on:click={myModal(event)}>{shortenString(event.guest_firstname+' '+event.guest_lastname,width/7)}</button>
           <div class="variant-filled-primary rounded-lg p-2" data-popup="popupDiv-{event.num.toString()}">
             <div class="flex flex-col">
+              <span>Klikni!</span>
               {#each [event.description, event.guest_firstname+' '+event.guest_lastname, event.guest_email, event.guest_number, event.from.slice(11,16)+" - "+event.to.slice(11,16)] as info}
                 <span>{info}</span>
               {/each}
