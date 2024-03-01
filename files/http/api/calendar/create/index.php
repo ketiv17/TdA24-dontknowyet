@@ -7,40 +7,41 @@ include('../../functions.php');
 
 // Check if request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
 
     // Check if all required data are set
     $requiredFields = ['lecturer_uuid', 'guest_firstname', 'guest_lastname', 'guest_email', 'guest_number', 'time'];
     foreach ($requiredFields as $field) {
-        if (!isset($_POST[$field])) {
+        if (!isset($data[$field])) {
             http_response_code(400);
             die("Error: Missing required data - {$field}.");
         }
     }
 
     // Get POST data
-    $lecturer_uuid = $_POST['lecturer_uuid'];
-    $guest_firstname = $_POST['guest_firstname'];
-    $guest_lastname = $_POST['guest_lastname'];
-    $guest_email = $_POST['guest_email'];
-    $guest_number = $_POST['guest_number'];
-    $description = isset($_POST['description']) ? $_POST['description'] : NULL;
+    $lecturer_uuid = $data['lecturer_uuid'];
+    $guest_firstname = $data['guest_firstname'];
+    $guest_lastname = $data['guest_lastname'];
+    $guest_email = $data['guest_email'];
+    $guest_number = $data['guest_number'];
+    $description = isset($data['description']) ? $data['description'] : NULL;
 
-    logApiRequest($_POST);
+    logApiRequest($data);
 
     // Validate if time is full hour
-    if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00:00$/', $_POST['time'])) {
+    if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):00$/', $data['time'])) {
         http_response_code(400);
-        die('Error: Appointmnet must start at full hour (HH:00:00).');
+        die('Error: Appointment must start at full hour (HH:00).');
     }
     // Validate if appointment is in the future and from 8:00 to 16:00
-    if (strtotime($_POST['time']) < time() || date('H', strtotime($_POST['time'])) < 8 || date('H', strtotime($_POST['time'])) >= 17) {
+    if (strtotime($data['time']) < time() || date('H', strtotime($data['time'])) < 8 || date('H', strtotime($data['time'])) >= 17) {
         http_response_code(400);
         die('Error: Appointment must be in the future and between 8:00 and 16:00.');
     }
 
-    // Split time into from and to
-    $from = $_POST['time'];
-    $to = date('H:i:s', strtotime($from . ' +1 hour'));   
+   // Split time into from and to
+    $from = $data['time'];
+    $to = date('Y-m-d H:i', strtotime($from . ' +1 hour'));   
 
     // Check if lecturer_uuid is a valid UUID
     if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $lecturer_uuid)) {
@@ -80,13 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if from and to are valid dates
-    $fromDate = DateTime::createFromFormat('Y-m-d H:i:s', $from);
-    $toDate = DateTime::createFromFormat('Y-m-d H:i:s', $to);
-    if (!$fromDate || $fromDate->format('Y-m-d H:i:s') !== $from) {
+    $fromDate = DateTime::createFromFormat('Y-m-d H:i', $from);
+    $toDate = DateTime::createFromFormat('Y-m-d H:i', $to);
+    if (!$fromDate || $fromDate->format('Y-m-d H:i') !== $from) {
         http_response_code(400);
         die('Error: from is not a valid datetime.');
     }
-    if (!$toDate || $toDate->format('Y-m-d H:i:s') !== $to) {
+    if (!$toDate || $toDate->format('Y-m-d H:i') !== $to) {
         http_response_code(400);
         die('Error: to is not a valid datetime.');
     }
