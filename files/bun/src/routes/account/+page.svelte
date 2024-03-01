@@ -32,12 +32,6 @@
       // reload the page
       location.reload();
     }
-    const unsub = loggedIn.subscribe(value => {
-      if (!value) {
-        goto('/');
-      }
-    });
-    return unsub; // unsubscribe when the component is unmounted
   });
 
   let days = {};

@@ -1,11 +1,11 @@
 import { encodedCredentials } from "$lib/server/apiPassword";
 import {z} from 'zod';
-import {superValidate} from 'sveltekit-superforms/server';
+// import {superValidate} from 'sveltekit-superforms/server';
 
-const zodSchema = z.object({
-  username: z.string().min(1),
-  password: z.string().min(1)
-});
+// const zodSchema = z.object({
+//   username: z.string().min(1),
+//   password: z.string().min(1)
+// });
 
 export async function load({request, fetch, event}) {
   //const form = await superValidate(event, zodSchema);
@@ -33,18 +33,17 @@ async function getCalendar (session) {
     }
   });
   const rtn = await response.json();
-  console.log(rtn);
   return rtn;
 }
 
-async function getUser (uuid) {
-  const response = await fetch('http://localhost/api/lecturers/'+uuid, {
-    headers: {
-      'Authorization': `Basic ${encodedCredentials}`
-    }
-  });
-  return await response.json();
-}
+// async function getUser (uuid) {
+//   const response = await fetch('http://localhost/api/lecturers/'+uuid, {
+//     headers: {
+//       'Authorization': `Basic ${encodedCredentials}`
+//     }
+//   });
+//   return await response.json();
+// }
 
 // export const actions = {
 //   login: async (event) => {
