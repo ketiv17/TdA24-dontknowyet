@@ -10,7 +10,7 @@ if (isset($_SESSION['uuid'])) {
     header('Content-Type: application/json');
     echo json_encode($response);
 
-    logApiRequest($response);
+    logApiRequest($uuid);
 } else {
     http_response_code(401);
     echo "Unauthorized";
