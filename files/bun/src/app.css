@@ -12,6 +12,7 @@
 }
 
 html, body { @apply h-full overflow-hidden; }
+article a {@apply italic underline text-blue-500;}
 
 
 

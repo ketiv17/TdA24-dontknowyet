@@ -186,7 +186,7 @@
             </label>
             <span class="flex mt-1">
               <input type="checkbox" name="agreement" bind:checked={form.agreement}>
-              <span class="ml-1">Souhlasím se <a href="/legislativa">zpracováním osobních údajů</a>*</span>
+              <span class="ml-1">Souhlasím se <a href="/legislativa" class="italic underline text-blue-500">zpracováním osobních údajů</a>*</span>
             </span>
             <span class="text-xs">* povinné</span><br>
             <button class="btn variant-filled-tertiary" on:click={()=>reserve()}>Rezervovat</button>
