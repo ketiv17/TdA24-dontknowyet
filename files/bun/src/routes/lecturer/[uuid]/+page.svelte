@@ -1,7 +1,7 @@
 <script>
   import {ProgressRadial, Avatar} from '@skeletonlabs/skeleton';
   import {page} from '$app/stores';
-  import {fullName, null2string} from '$lib/string.js'
+  import {fullName, null2string, formatDate} from '$lib/string.js'
 
   export let data;
   let uuid;
@@ -19,7 +19,7 @@
   let date = "";
   let avilableTimes = {date: "", availableSlots: []};
   async function getTimes() {
-    console.log(JSON.stringify({uuid, date}));
+    if (date === "") alert("Vyberte datum");
     const res = await fetch(`/api/calendar/free/`, {
       method: 'POST',
       headers: {
@@ -29,10 +29,60 @@
     });
     if (res.ok) {
       avilableTimes = await res.json();
-      console.log(avilableTimes);
     } else {
       console.error('failed to get available times');
     }
+  }
+
+  let form = {
+    guest_firstname: '',
+    guest_lastname: '',
+    guest_email: '',
+    guest_number: '',
+    time: '',
+    description: '',
+    agreement: false
+  };
+
+  let inProgress = false;
+  let result = "";
+  let details = "";
+  async function reserve() {
+    if (inProgress) return;
+    if (!form.agreement) {
+      alert("Musíte souhlasit se zpracováním osobních údajů");
+      return;
+    
+    }
+    // check if all required fields are filled
+    for (const [key, value] of Object.entries(form)) {
+      if (key === "description") continue;
+      if (value === "") {
+        alert("Vyplňte všechny povinné údaje");
+        return;
+      }
+    }
+    inProgress = true;
+    form.time = date.concat(" ", form.time);
+    const res = await fetch(`/api/calendar/create/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ lecturer_uuid: uuid, ...form})
+    });
+    if (res.ok) {
+      result = "ok";
+    } else {
+      result = "Něco se pokazilo, zkuste to prosím znovu"
+      details = await res.text();
+    }
+    inProgress = false;
+  }
+  function reset () {
+    inProgress = false;
+    result = "";
+    details = "";
   }
 </script>
 
@@ -86,51 +136,63 @@
       </div>
       <hr class="w-full" style="border-color: #333333;">
       <h3 class="h2">Rezervace lekce:</h3>
-      <div>
-        <!-- <form class="modal-form"> -->
-          <label class="label">
-            <span>Jméno:*</span>
-            <input class="input variant-filled-secondary" type="text" name="guest_firstname" placeholder="Jan" />
-          </label>
-          <label class="label">
-            <span>Příjmení:*</span>
-            <input class="input variant-filled-secondary" type="text" name="guest_lastname" placeholder="Novák" />
-          </label>
-          <label class="label">
-            <span>Email:*</span>
-            <input class="input variant-filled-secondary" type="email" name="guest_email" placeholder="novak@email.com" />
-          </label>
-          <label class="label">
-            <span>Telefon:*</span>
-            <input class="input variant-filled-secondary" type="tel" name="guest_number" placeholder="123 456 789" />
-          </label>
-          <label class="label">
-            <span>Datum:*</span>
-            <input class="input variant-filled-secondary" type="date" name="date" bind:value={date}/>
-          </label>
-          <label class="label">
-            <span>Popis:</span>
-            <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" />
-          </label>
-          <label class="label">
-            <span>Čas:* {avilableTimes.date.lenght > 0 ? "("+avilableTimes.date+")":""}</span>
-            <div class="flex">
-              <button class="btn variant-filled-tertiary mr-1" on:click={()=>getTimes()}>zjistit dostupné časy</button>
-              <select class="input variant-filled-secondary" name="time">
-                {#each avilableTimes.availableSlots as time}
-                  <option value={time}>{time}</option>
-                {/each}
-              </select>
-            </div>
-          </label>
-          <span class="flex">
-            <input type="checkbox" name="agreement">
-            <span class="ml-1">Souhlasím se <a href="/legislativa">zpracováním osobních údajů</a>*</span>
-          </span>
-          <span class="text-xs">* povinné</span><br>
-          <button class="btn variant-filled-tertiary" formaction="?/reserve">Rezervovat</button>
-        <!-- </form> -->
-      </div>
+      {#if inProgress || result !== ""}
+        {#if result.length === 0}
+          <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>
+        {:else}
+          <div class="text-center">
+            <h3 class="h3">{result}</h3>
+            <p>{result === "ok" ? "" : details}</p>
+            <button class="btn variant-filled-tertiary" on:click={()=>reset()}>Vyplňte znovu</button>
+          </div>
+        {/if}
+      {:else}
+        <div>
+          <!-- <form class="modal-form"> -->
+            <label class="label">
+              <span>Jméno:*</span>
+              <input class="input variant-filled-secondary" type="text" name="guest_firstname" placeholder="Jan" bind:value={form.guest_firstname} />
+            </label>
+            <label class="label">
+              <span>Příjmení:*</span>
+              <input class="input variant-filled-secondary" type="text" name="guest_lastname" placeholder="Novák" bind:value={form.guest_lastname} />
+            </label>
+            <label class="label">
+              <span>Email:*</span>
+              <input class="input variant-filled-secondary" type="email" name="guest_email" placeholder="novak@email.com" bind:value={form.guest_email} />
+            </label>
+            <label class="label">
+              <span>Telefon:*</span>
+              <input class="input variant-filled-secondary" type="tel" name="guest_number" placeholder="123 456 789" bind:value={form.guest_number} />
+            </label>
+            <label class="label">
+              <span>Datum:*</span>
+              <input class="input variant-filled-secondary" type="date" name="date" bind:value={date} />
+            </label>
+            <label class="label">
+              <span>Čas:* {avilableTimes.date.length > 0 ? "(volné časy na: "+formatDate(avilableTimes.date)+")":""}</span>
+              <div class="flex">
+                <button class="btn variant-filled-tertiary mr-1" on:click={()=>getTimes()}>zjistit dostupné časy</button>
+                <select class="input variant-filled-secondary" name="time" on:click={()=>getTimes()} bind:value={form.time}>
+                  {#each avilableTimes.availableSlots as time}
+                    <option value={time}>{time}</option>
+                  {/each}
+                </select>
+              </div>
+            </label>
+            <label class="label">
+              <span>Popis:</span>
+              <input class="input variant-filled-secondary" type="text" name="description" placeholder="Vaša zpráva pro lektora" bind:value={form.description} />
+            </label>
+            <span class="flex mt-1">
+              <input type="checkbox" name="agreement" bind:checked={form.agreement}>
+              <span class="ml-1">Souhlasím se <a href="/legislativa">zpracováním osobních údajů</a>*</span>
+            </span>
+            <span class="text-xs">* povinné</span><br>
+            <button class="btn variant-filled-tertiary" on:click={()=>reserve()}>Rezervovat</button>
+          <!-- </form> -->
+        </div>
+      {/if}
     {:else}
       <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="w-20 m-20 self-center"/>
     {/if}
