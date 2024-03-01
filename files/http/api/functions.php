@@ -38,8 +38,6 @@ $password = getenv('DB_PASSWORD');
 $dbname = "api";
 $port = 25060;
 
-$password = 'AVNS_RfzVUq1IS67AWXt0BHz';
-
 // Error reporting ---
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
