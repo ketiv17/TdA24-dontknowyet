@@ -5,7 +5,7 @@
   async function sendMessage() {
     if (newMessage.trim() !== "") {
       messages = [...messages, newMessage];
-      let response = await fetch("/api", {
+      let response = await fetch("/api/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
