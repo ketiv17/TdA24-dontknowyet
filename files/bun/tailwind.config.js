@@ -5,7 +5,7 @@ import { join } from 'path';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 
 // import tdaTheme
-import { tdaTheme } from './tdaTheme';
+import { tdaTheme } from './tdaTheme.js';
 
 /** @type {import('tailwindcss').Config} */
 export default {
