@@ -2,10 +2,18 @@
   let messages = [];
   let newMessage = "";
 
-  function sendMessage() {
+  async function sendMessage() {
     if (newMessage.trim() !== "") {
       messages = [...messages, newMessage];
-      
+      let response = await fetch("/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: newMessage }),
+      });
+      newMessage = await response.text();
+      messages = [...messages, newMessage];
       newMessage = "";
     }
   }
