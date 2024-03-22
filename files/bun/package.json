@@ -13,7 +13,9 @@
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@tailwindcss/forms": "^0.5.7",
     "svelte": "^4.2.7",
+    "svelte-adapter-bun": "^0.5.2",
     "tailwindcss": "^3.4.1",
     "vite": "^5.0.3"
   },
