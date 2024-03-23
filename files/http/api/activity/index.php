@@ -5,6 +5,8 @@ $uuid = isset($_GET['uuid']) && !empty($_GET['uuid']) && preg_match('/^[a-f0-9]{
   ? $_GET['uuid']
   : null;
 
+  header('Content-Type: application/json; charset=utf-8');
+
 
   // Handling request methods ----
 
