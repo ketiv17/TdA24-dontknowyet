@@ -87,6 +87,18 @@ foreach ($data['links'] as $link) {
     $stmt->execute();
 }
 
+// If one of the galery pictures is empty, make it same as the first one or the second one if the first is missing
+foreach ($data['gallery'] as $gallery) {
+    if (empty($gallery['images'][0]['lowRes'])) {
+        $gallery['images'][0]['lowRes'] = $gallery['images'][1]['lowRes'];
+    }
+    if (empty($gallery['images'][0]['highRes'])) {
+        $gallery['images'][0]['highRes'] = $gallery['images'][1]['highRes'];
+    }
+}
+
+
+
 // Insert the gallery data
 foreach ($data['gallery'] as $gallery) {
     foreach ($gallery['images'] as $image) {
