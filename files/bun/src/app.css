@@ -2,4 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'lalezar';
+    src: url('/fonts/Lalezar/Lalezar-Regular.ttf');
+}
+@font-face {
+    font-family: 'open sans';
+    src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf');
+}
+
 html, body { @apply h-full overflow-hidden; }
+article a {@apply italic underline text-blue-500;}
+
+
+
+:root {  /* colors for range selector */
+  --range-slider:          white; /* slider main background color */
+  --range-handle-inactive: #00384D; /* inactive handle color */
+  --range-handle:          #00384D; /* non-focussed handle color */
+  --range-handle-focus:    #00384D; /* focussed handle color */
+  --range-handle-border:   var(--range-handle); /* handle border color */
+  --range-range-inactive:  var(--range-handle-inactive); /* inactive range bar background color */
+  --range-range:           var(--range-handle-focus); /* active range background color */
+  --range-float-inactive:  var(--range-handle-inactive); /* inactive floating label background color */
+  --range-float:           var(--range-handle-focus); /* floating label background color */
+  --range-float-text:      white; /* text color on floating label */
+}
