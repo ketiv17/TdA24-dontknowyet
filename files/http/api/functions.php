@@ -57,7 +57,7 @@ function validateData($data) {
     }
 
     // Check if all array fields are arrays
-    $arrayFields = ['objectives', 'classStructure', 'edLevel', 'tools', 'homePreparation', 'instructions', 'agenda', 'links', 'gallery'];
+    $arrayFields = ['objectives', 'edLevel', 'tools', 'homePreparation', 'instructions', 'agenda', 'links', 'gallery'];
     foreach ($arrayFields as $field) {
         if (isset($data[$field]) && !is_array($data[$field])) {
             $error = [
