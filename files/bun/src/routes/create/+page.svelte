@@ -39,25 +39,25 @@
   }
 </script>
 
-<form class="modal-form m-4" on:submit|preventDefault={submitForm}>
-  <label>
+<form class="modal-form m-8" on:submit|preventDefault={submitForm}>
+  <label class="m-4">
     Jméno aktivity: <input bind:value={form.activityName} />
   </label>
-  <label>
+  <label class="m-4">
     Popis: <input bind:value={form.description} />
   </label>
-  <label>
+  <label class="m-4">
     struktura: <input bind:value={form.classStructure} />
   </label>
-  <label>
+  <label class="m-4">
     Jak dlouho aktivita trvá: <input type="number" bind:value={form.lengthMin} />
   </label>
-  <label>
+  <label class="m-4">
     <input type="number" bind:value={form.lengthMax} />
   </label>
   Cíle: (prosíme každý cíl do nového řádku)
   {#each form.objectives as objective, i (i)}
-  <label>
+  <label class="m-4">
     <input bind:value={form.objectives[i]} />
     <button on:click|preventDefault={() => removeField('objectives', i)}>Remove</button>
   </label>
