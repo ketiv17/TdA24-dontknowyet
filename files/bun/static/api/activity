@@ -1,0 +1,73 @@
+
+[{
+  "uuid": "e3b0c442-5b8b-47ba-9d8a-e4d3d2f3d974",
+  "activityName": "Grandfinále TdA",
+  "description": "Finále 24. ročníku soutěže ve vývoji webových aplikací",
+  "objectives": [
+    "Vyzkoušet si komunikovat s fiktivním klientem.",
+    "Naučit se řídit projekt."
+  ],
+  "classStructure": "Group",
+  "lengthMin": 500,
+  "lengthMax": 700,
+  "edLevel": [
+    "secondarySchool",
+    "highSchool"
+  ],
+  "tools": [
+    "Notebook",
+    "Plyšáček",
+    "Energie v láhvi"
+  ],
+  "homePreparation": [
+    {
+      "title": "Naposlouchat dvouhodinový YouTube tutoriál o JS",
+      "warn": "Možná bude lepší se učit TS",
+      "note": "Ty s přízvukem jsou nejlepší"
+    }
+  ],
+  "instructions": [
+    {
+      "title": "Přečíst si pořádně zadání",
+      "warn": "POŘÁDNĚ",
+      "note": "OpenAI dokumentace se taky může hodit"
+    }
+  ],
+  "agenda": [
+    {
+      "duration": 600,
+      "title": "Programování",
+      "description": "Taky budeme chodit na klientské a mentorské schůzky"
+    }
+  ],
+  "links": [
+    {
+      "title": "Tour de App",
+      "url": "https://tourdeapp.cz/"
+    }
+  ],
+  "gallery": [
+    {
+      "title": "Fotky z průběhu",
+      "images": [
+        {
+          "lowRes": "https://picsum.photos/seed/a/200",
+          "highRes": "https://picsum.photos/seed/a/1200"
+        },
+        {
+            "lowRes": "https://picsum.photos/seed/a/200",
+            "highRes": "https://picsum.photos/seed/a/1200"
+          }
+      ]
+    },
+    {
+        "title": "Fotky z průběhu",
+        "images": [
+          {
+            "lowRes": "https://picsum.photos/seed/a/200",
+            "highRes": "https://picsum.photos/seed/a/1200"
+          }
+        ]
+      }
+  ]
+}]
