@@ -92,7 +92,6 @@ function validateData($data) {
 
 function getActivity($uuid = null) {
     global $conn;
-
     // Prepare the SQL statement
     if ($uuid == null) {
         $stmt = $conn->prepare("SELECT * FROM activities");
@@ -139,19 +138,23 @@ function getActivity($uuid = null) {
 
         // Group images with the same title together
         if (isset($activities[$uuid]['gallery']['images'])) {
-            $images = [];
-            foreach ($activities[$uuid]['gallery']['images'] as $image) {
-                $title = $image['title'];
-                unset($image['title']);
-                $images[$title][] = $image;
-            }
-            $activities[$uuid]['gallery']['images'] = $images;
-        }
+          $groupedImages = [];
+          foreach ($activities[$uuid]['gallery']['images'] as $image) {
+              $title = $image['title'];
+              unset($image['title']);
+              $groupedImages[$title][] = $image;
+          }
+          $activities[$uuid]['gallery'] = [];
+          foreach ($groupedImages as $title => $images) {
+              $activities[$uuid]['gallery'][] = ['title' => $title, 'images' => $images];
+          }
+      }
     }
-    $json = json_encode(array_values($activities), JSON_UNESCAPED_UNICODE);
-    if ($uuid !== null) {
-        $json = substr($json, 1, -1);
-    }
+    if ($uuid !== null && count($activities) === 1) {
+      $json = json_encode($activities[$uuid], JSON_UNESCAPED_UNICODE);
+  } else {
+      $json = json_encode(array_values($activities), JSON_UNESCAPED_UNICODE);
+  }
 
     echo $json;
 }
