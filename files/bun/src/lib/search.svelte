@@ -15,13 +15,12 @@
   function searchIt() {
     search.set(input);
     goto('/activity');
-    
   }
 
 </script>
 
-<label class="label m-2 mb-0">
-  <input class="input variant-filled-primary text-white focus:border-tertiary-500" bind:value={input} title="search" type="text" placeholder="ativita pro střední školu s tématem ekonomiky" />
+<label class="label m-2 mb-0 flex flex-col items-center">
+  <input class="input variant-filled-primary text-white focus:border-tertiary-500" bind:value={input} title="search" type="text" placeholder="aktivita pro střední školu s tématem ekonomiky" style="max-width: 30%; text-align: center;" />
   <div class="flex justify-center">
   <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => searchIt()}>Vyhledat</button>
 </div>

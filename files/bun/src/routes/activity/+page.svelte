@@ -10,14 +10,14 @@
   //call the load when search store changes
 
     $: {
-      if (get(search) !== undefined && get(search) !== ''){
+      if ($search !== undefined && $search !== ''){
         reload();
       }
     }
 
     async function reload() {
-      console.log('SEARCH:', get(search)); 
-      let response = await fetch(`/api/ai/return`, {
+      data = undefined;
+      let response = await fetch(`/api/ai/return/`, {
         method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({prompt: get(search)})
@@ -34,14 +34,15 @@
       reload();
     });
   </script>
- <Search />
-  <h1 class="h1 text-center mt-12 mb-5">Aktivity</h1>
+    <h1 class="h1 text-center mt-12 mb-5">Vyhledat Aktivitu</h1>
+  <Search />
 
 
 {#if data}
   <div class="flex flex-col items-center p-3 mx-20">
     {#each data as activity}
-      <a href="/activity/{activity.uuid}" class="card card-hover p-8 border-primary-500 border-2 w-full mt-4">
+      <div>{activity.reason}</div>
+      <a href="/activity/{activity.uuid}" class="card card-hover p-8 border-primary-500 border-2 mb-8 w-full mt-4">
         <h2 class="h2">{activity.activityName}</h2>
         <p class="font-bold">{activity.description}</p>
  
@@ -58,5 +59,9 @@
     {/each}
   </div>
 {:else}
+
+<div class="flex justify-center">
   <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20 col-span-full"/>
+</div>
+
 {/if}
