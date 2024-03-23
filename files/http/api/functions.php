@@ -156,7 +156,7 @@ function getActivity($uuid = null) {
       $json = json_encode(array_values($activities), JSON_UNESCAPED_UNICODE);
   }
 
-    echo $json;
+    return $json;
 }
 
 // Checks if given uuid already exists
