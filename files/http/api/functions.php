@@ -1,7 +1,6 @@
 <?php
 
 
-
 // This functions validates the data from the request body
 function validateData($data) {
 
@@ -116,34 +115,45 @@ function getActivity($uuid = null) {
         $activity['edLevel'] = json_decode($activity['edLevel'], true);
         $activity['tools'] = json_decode($activity['tools'], true);
 
-        // Get the additional data from the other tables
-        $tables = ['homePreparation', 'instructions', 'agenda', 'links', 'gallery'];
+        $activities[$activity['uuid']] = $activity;
+    }
+
+    // Get the additional data from the other tables
+    $tables = ['homePreparation', 'instructions', 'agenda', 'links', 'gallery'];
+    foreach ($activities as $uuid => $activity) {
         foreach ($tables as $table) {
             $stmt = $conn->prepare("SELECT * FROM $table WHERE activityId = ?");
-            $stmt->bind_param("s", $activity['uuid']);
+            $stmt->bind_param("s", $uuid);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($row = $result->fetch_assoc()) {
                 unset($row['id']);
                 unset($row['activityId']);
                 if ($table == 'gallery') {
-                    $activity[$table]['images'][] = $row;
+                    $activities[$uuid][$table]['images'][] = $row;
                 } else {
-                    $activity[$table][] = $row;
+                    $activities[$uuid][$table][] = $row;
                 }
             }
         }
 
-        $activities[] = $activity;
+        // Group images with the same title together
+        if (isset($activities[$uuid]['gallery']['images'])) {
+            $images = [];
+            foreach ($activities[$uuid]['gallery']['images'] as $image) {
+                $title = $image['title'];
+                unset($image['title']);
+                $images[$title][] = $image;
+            }
+            $activities[$uuid]['gallery']['images'] = $images;
+        }
+    }
+    $json = json_encode(array_values($activities), JSON_UNESCAPED_UNICODE);
+    if ($uuid !== null) {
+        $json = substr($json, 1, -1);
     }
 
-    // If a specific UUID was requested, return that activity
-    if ($uuid != null) {
-        return $activities[0];
-    }
-
-    // Return the data as a JSON object
-    return $activities;
+    echo $json;
 }
 
 // Checks if given uuid already exists

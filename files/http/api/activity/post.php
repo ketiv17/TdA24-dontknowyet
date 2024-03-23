@@ -97,3 +97,22 @@ foreach ($data['gallery'] as $gallery) {
 
 // Returning a success message -----
 echo json_encode(getActivity($uuid), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+/*
+// Closing the connection -----
+$conn -> close();
+$stmt -> close();
+
+// Create a short description for the activity by AI
+
+// If you're using PHP-FPM, this function can be used to send the response to the client and continue executing the script
+if (function_exists('fastcgi_finish_request')) {
+    fastcgi_finish_request();
+}
+
+// Ignore user aborts and allow the script to run forever
+ignore_user_abort(true);
+set_time_limit(0);
+
+// Here you can call the function that creates the short description
+createAiDescription($request_body); */

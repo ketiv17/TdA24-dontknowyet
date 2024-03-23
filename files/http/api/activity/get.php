@@ -3,6 +3,16 @@
 include '../functions.php';
 include '../dbconnect.php';
 
-// Usage
-$activity = getActivity($uuid); // Get all activities
-echo json_encode($activity, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+// return error if the user dont exists
+if ($uuid != null) {
+    if (!checkUuid($uuid)) {
+        $error = [
+            'code' => 404,
+            'error' => 'UUID not found',
+        ];
+        http_response_code(404);
+        echo json_encode($error);
+        die();
+    }
+}
+getActivity($uuid);

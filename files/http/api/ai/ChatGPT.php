@@ -54,7 +54,7 @@ class ChatGPT
      * @param int $maxTokens The maximum number of tokens in the generated text (default: 1000).
      * @return array An array containing 'data' and 'error' keys, representing the generated text and any errors.
      */
-    public function createTextRequest($prompt, $model = 'gpt-3.5-turbo', $temperature = 0.7)
+    public function createTextRequest($prompt, $model = 'gpt-3.5-turbo', $temperature = 0.7, $maxTokens = 200)
     {
         curl_reset($this->curl);
         $this->initialize('text');
@@ -67,7 +67,8 @@ class ChatGPT
                     "content" => $prompt
                 ]
             ],
-            "temperature" => $temperature
+            "temperature" => $temperature,
+            "max_tokens" => $maxTokens
         ];
 
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, json_encode($data));
