@@ -17,7 +17,7 @@
 
     async function reload() {
       console.log('SEARCH:', get(search)); 
-      let response = await fetch(`/api/ai/return`, {
+      let response = await fetch(`/api/ai/return/`, {
         method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({prompt: get(search)})
