@@ -6,6 +6,7 @@
   import { get } from 'svelte/store';
 
   let data;
+  let error;
 
   //call the load when search store changes
 
@@ -27,6 +28,7 @@
         console.log(data);
       } else {
         page.set({status: response.status, error: {message: response.statusText}});
+        error = "Nenašli jsme vámi zadnou aktivitu, zkuste to prosím znovu."
       }
     }
 
@@ -67,6 +69,9 @@
 
 <div class="flex justify-center">
   <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20 col-span-full"/>
+  {#if error}
+    <p>{error}</p>
+  {/if}
 </div>
 
 {/if}

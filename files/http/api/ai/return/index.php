@@ -30,7 +30,7 @@ $relevantData = $chatGPT->retrieveMostRelevant($data['prompt']);
 // The data are already decoded and sorted by relevance
 
 // return 404 if % relevancy is too low
-if ($relevantData[0]['relevant'] < 10) {
+if (count($relevantData) === 0 or $relevantData[0]['relevant'] < 50){
     $error = [
         'code' => 404,
         'error' => 'No relevant activities found',
