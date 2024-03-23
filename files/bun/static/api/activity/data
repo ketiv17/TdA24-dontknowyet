@@ -1,6 +1,5 @@
-
 {
-  "uuid": "data",
+  "uuid": "e3b0c442-5b8b-47ba-9d8a-e4d3d2f3d974",
   "activityName": "Grandfinále TdA",
   "description": "Finále 24. ročníku soutěže ve vývoji webových aplikací",
   "objectives": [
@@ -53,21 +52,21 @@
         {
           "lowRes": "https://picsum.photos/seed/a/200",
           "highRes": "https://picsum.photos/seed/a/1200"
-        },
-        {
-            "lowRes": "https://picsum.photos/seed/a/200",
-            "highRes": "https://picsum.photos/seed/a/1200"
-          }
+        }
       ]
     },
-    {
-        "title": "Fotky z průběhu",
-        "images": [
-          {
-            "lowRes": "https://picsum.photos/seed/a/200",
-            "highRes": "https://picsum.photos/seed/a/1200"
-          }
-        ]
-      }
+        {
+      "title": "Fotky z průběhu",
+      "images": [
+        {
+          "lowRes": "https://picsum.photos/seed/a/200",
+          "highRes": "https://picsum.photos/seed/a/1200"
+        },
+        {
+          "lowRes": "https://picsum.photos/seed/a/200",
+          "highRes": "https://picsum.photos/seed/a/1200"
+        }
+      ]
+    }
   ]
 }
