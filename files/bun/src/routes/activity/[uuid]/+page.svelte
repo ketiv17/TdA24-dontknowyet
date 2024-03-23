@@ -1,9 +1,11 @@
 <script>
   import {page} from '$app/stores';
+  import Carousel from 'svelte-carousel';
+
   import { onMount } from 'svelte';
   import { humanReadableTime, czech } from '$lib/utils.js';
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-  let activity;
+    let activity;
   let uuid;
   $: uuid = $page.params.uuid;
 
@@ -18,6 +20,13 @@
     }
   });
 </script>
+<svelte:head>
+  {#if activity}
+    <title>{activity.activityName} - AMOS - Teacher digital Agency</title>
+  {:else}
+    <title>AMOS - Teacher digital Agency</title>
+  {/if}
+</svelte:head>
 {#if activity}
 <div class="flex flex-col items-center p-2 sm:p-4 lg:p-8">
   <h1 class="h1">{activity.activityName}</h1>
@@ -37,50 +46,51 @@
       <h2 class="h6">Domácí Příprava</h2>
       {#each activity.homePreparation as prep}
         <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
-        <Accordion>
-            <AccordionItem >
+          <Accordion>
+            <AccordionItem>
               <svelte:fragment slot="summary"><span>{prep.title}</span></svelte:fragment>
               <svelte:fragment slot="content">
-          <p class="pl-4"><span>Pozor:</span> {prep.warn}</p>
-          <p class="pl-4"><span>ps.</span> {prep.note}</p>
-        </svelte:fragment>
-        </AccordionItem>
-        </Accordion>
+                {#if prep.warn}<p class="pl-4"><span>Pozor:</span> {prep.warn}</p>{/if}
+                {#if prep.note}<p class="pl-4"><span>ps.</span> {prep.note}</p>{/if}
+              </svelte:fragment>
+            </AccordionItem>
+          </Accordion>
         </div>
       {/each}
     </div>
-  
-<div>
-  <h2 class="h6">Instrukce</h2>
-  {#each activity.instructions as instruction}
-  <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
-    <Accordion>
-        <AccordionItem >
-          <svelte:fragment slot="summary"><span>{instruction.title}</span></svelte:fragment>
-          <svelte:fragment slot="content">
-      <p class="pl-4"><span>Pozor:</span> {instruction.warn}</p>
-      <p class="pl-4"><span>ps.</span> {instruction.note}</p>
-    </svelte:fragment>
-    </AccordionItem>
-    </Accordion>
+
+    <div>
+      <h2 class="h6">Instrukce</h2>
+      {#each activity.instructions as instruction}
+        <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
+          <Accordion>
+            <AccordionItem>
+              <svelte:fragment slot="summary"><span>{instruction.title}</span></svelte:fragment>
+              <svelte:fragment slot="content">
+                {#if instruction.warn}<p class="pl-4"><span>Pozor:</span> {instruction.warn}</p>{/if}
+                {#if instruction.note}<p class="pl-4"><span>ps.</span> {instruction.note}</p>{/if}
+              </svelte:fragment>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      {/each}
     </div>
-  {/each}
-</div>
-<div>
-  <h2  class="h6">Agenda</h2>
-  {#each activity.agenda as agendaItem}
-  <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
-    <Accordion>
-        <AccordionItem >
-          <svelte:fragment slot="summary"><span>{agendaItem.title} ({humanReadableTime(agendaItem.duration)})</span></svelte:fragment>
-          <svelte:fragment slot="content">
-      <p class="pl-4"><span>Pozor:</span> {agendaItem.description}</p> 
-       </svelte:fragment>
-    </AccordionItem>
-    </Accordion>
+
+    <div>
+      <h2 class="h6">Agenda</h2>
+      {#each activity.agenda as agendaItem}
+        <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
+          <Accordion>
+            <AccordionItem>
+              <svelte:fragment slot="summary"><span>{agendaItem.title} ({humanReadableTime(agendaItem.duration)})</span></svelte:fragment>
+              <svelte:fragment slot="content">
+                {#if agendaItem.description}<p class="pl-4"><span>Pozor:</span> {agendaItem.description}</p>{/if}
+              </svelte:fragment>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      {/each}
     </div>
-  {/each}
-</div>
 <div>
   <h2  class="h6">Odkazy</h2>
   {#each activity.links as link}
@@ -88,14 +98,20 @@
   {/each}
 </div>
 </div>
+</div>
+<div class=" p-2 sm:p-4 lg:p-8">
   <h2 class="h4">Galerie</h2>
   {#each activity.gallery as gallery}
     <div class="p-1 pt-4">
       <h3><span>{gallery.title}:</span></h3>
-      <div class="flex">
-        {#each gallery.images as image}
-      <img class="max-h-96 m-1 shadow-2xl" src={image.highRes} alt={image.title} />
-        {/each}
+      <div>
+          <Carousel>
+            {#each gallery.images as image}
+              <div>
+                <img class="max-h-96 m-1" src={image.highRes} alt={image.title} />
+              </div>
+            {/each}
+          </Carousel>
     </div>
     </div>
   {/each}

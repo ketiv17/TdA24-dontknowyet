@@ -14,7 +14,10 @@
 html, body { @apply h-full overflow-hidden; }
 article a {@apply italic underline text-blue-500;}
 
-
+input {
+  color: #FFF ;
+  font-weight: 700;
+}
 
 :root {  /* colors for range selector */
   --range-slider:          white; /* slider main background color */
