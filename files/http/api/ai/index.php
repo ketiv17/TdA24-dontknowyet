@@ -6,14 +6,9 @@ error_reporting(E_ALL);
 
 
 require_once "ChatGPT.php";
+header('Content-Type: application/json');
 
 // Decode POST json
-$promt = json_decode(file_get_contents('php://input'), true)['message'] ?? 'tell';
-
-if (empty($promt)) {
-    echo json_encode(['error' => 'message is required']);
-    exit();
-}
-
+$request_body = file_get_contents('php://input');
 $ai = new ChatGPT();
-echo $ai->createTextRequest($promt)['data'] ?? 'ERROR!';
+echo $ai->generateActivityDescription($request_body)['data'] ?? 'ERROR!';

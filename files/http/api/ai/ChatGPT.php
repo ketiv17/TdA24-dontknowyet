@@ -1,12 +1,4 @@
-<!-- Simple ChatGPT Class that enables both text and image prompt
-to use this class in another file just import it and call one of the 2 functions createTextRequest() or generateImage() with your prompt (or options)
 
-Code Example:
-
-include_once('ChatGPT.php'); // include class from folder
-$ai = new ChatGPT(); // initialize class object
-echo $ai->generateImage('a cat on a post lamp')['data'] ?? 'ERROR!'; // print the image URL or error text
-echo $ai->createTextRequest('what is the weather in Romania?')['data'] ?? 'ERROR!'; // print the text response or error text -->
 
 
 <?php
@@ -79,6 +71,12 @@ class ChatGPT
         $output['data'] = $response['choices'][0]['message']['content'] ?? null;
         $output['error'] = $response['error']['code'] ?? null;
         return $output;
+    }
+
+    public function generateActivityDescription($prompt)
+    {
+        $question = "Generate a description for an educational activity based on the following JSON prompt: " . $prompt . "your description will be used for more efficient search and it should contain max 25 words. Please respond with a description only.";
+        return $this->createTextRequest($question);
     }
 
     /**
