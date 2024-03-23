@@ -8,6 +8,19 @@ include '../dbconnect.php';
 $request_body = file_get_contents('php://input');
 $data = json_decode($request_body, true);
 
+// Validating the data -----
+validateData($data);
+
+if (checkUuid($data['uuid']))
+{
+    $error = [
+        'code' => 400,
+        'error' => 'UUID already exists',
+    ];
+    echo json_encode($error, JSON_UNESCAPED_UNICODE);
+    die();
+}
+
 // Assigning the data to variables -----
 $uuid = $data['uuid'];
 $activityName = $data['activityName'];
@@ -24,19 +37,6 @@ $agenda = $data['agenda']; // This is an array of associative arrays
 $links = $data['links']; // This is an array of associative arrays
 $gallery = $data['gallery']; // This is an array of associative arrays
 
-
-
-// Validating the data -----
-validateData($data);
-if (checkUuid($data['uuid']))
-{
-    $error = [
-        'code' => 400,
-        'error' => 'UUID already exists',
-    ];
-    echo json_encode($error, JSON_UNESCAPED_UNICODE);
-    die();
-}
 
 // Encode the arrays to JSON -----
 $objectives = json_encode($objectives, JSON_UNESCAPED_UNICODE);
@@ -94,3 +94,6 @@ foreach ($data['gallery'] as $gallery) {
         $stmt->execute();
     }
 }
+
+// Returning a success message -----
+echo json_encode(getActivity($uuid), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
