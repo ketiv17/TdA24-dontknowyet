@@ -14,5 +14,7 @@ if ($uuid != null) {
         echo json_encode($error);
         die();
     }
-}
-getActivity($uuid);
+    getActivity($uuid);
+  }else{
+getActivity();
+  }

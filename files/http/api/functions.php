@@ -92,7 +92,6 @@ function validateData($data) {
 
 function getActivity($uuid = null) {
     global $conn;
-
     // Prepare the SQL statement
     if ($uuid == null) {
         $stmt = $conn->prepare("SELECT * FROM activities");
@@ -148,10 +147,11 @@ function getActivity($uuid = null) {
             $activities[$uuid]['gallery']['images'] = $images;
         }
     }
-    $json = json_encode(array_values($activities), JSON_UNESCAPED_UNICODE);
-    if ($uuid !== null) {
-        $json = substr($json, 1, -1);
-    }
+    if ($uuid !== null && count($activities) === 1) {
+      $json = json_encode($activities[$uuid], JSON_UNESCAPED_UNICODE);
+  } else {
+      $json = json_encode(array_values($activities), JSON_UNESCAPED_UNICODE);
+  }
 
     echo $json;
 }
