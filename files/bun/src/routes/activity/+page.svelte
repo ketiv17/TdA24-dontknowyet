@@ -7,7 +7,6 @@
 
   let error = "";
   let data;
-  let error;
 
   //call the load when search store changes
 
