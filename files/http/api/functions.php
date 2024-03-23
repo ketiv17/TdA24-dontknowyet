@@ -138,14 +138,17 @@ function getActivity($uuid = null) {
 
         // Group images with the same title together
         if (isset($activities[$uuid]['gallery']['images'])) {
-            $images = [];
-            foreach ($activities[$uuid]['gallery']['images'] as $image) {
-                $title = $image['title'];
-                unset($image['title']);
-                $images[$title][] = $image;
-            }
-            $activities[$uuid]['gallery']['images'] = $images;
-        }
+          $groupedImages = [];
+          foreach ($activities[$uuid]['gallery']['images'] as $image) {
+              $title = $image['title'];
+              unset($image['title']);
+              $groupedImages[$title][] = $image;
+          }
+          $activities[$uuid]['gallery'] = [];
+          foreach ($groupedImages as $title => $images) {
+              $activities[$uuid]['gallery'][] = ['title' => $title, 'images' => $images];
+          }
+      }
     }
     if ($uuid !== null && count($activities) === 1) {
       $json = json_encode($activities[$uuid], JSON_UNESCAPED_UNICODE);
