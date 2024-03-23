@@ -34,6 +34,11 @@
       reload();
     });
   </script>
+
+<svelte:head>
+  <title>Vzhledávání - AMOS</title>
+</svelte:head>
+
     <h1 class="h1 text-center mt-12 mb-5">Vyhledat Aktivitu</h1>
   <Search />
 

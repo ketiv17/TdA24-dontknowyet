@@ -19,12 +19,12 @@
 
 </script>
 
-<label class="label m-2 mb-0 flex flex-col items-center">
+<form class="label m-2 mb-0 flex flex-col items-center" on:submit|preventDefault={() => searchIt()}>
   <input class="input variant-filled-primary text-white focus:border-tertiary-500" bind:value={input} title="search" type="text" placeholder="aktivita pro střední školu s tématem ekonomiky" style="max-width: 30%; text-align: center;" />
   <div class="flex justify-center">
-  <button class="btn btn-md m-2 variant-filled-tertiary" on:click={() => searchIt()}>Vyhledat</button>
-</div>
-</label>
+    <button class="btn btn-md m-2 variant-filled-tertiary" type="submit">Vyhledat</button>
+  </div>
+</form>
 <style>
   input::placeholder {
     color: white;
