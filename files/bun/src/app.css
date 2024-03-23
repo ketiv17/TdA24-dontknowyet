@@ -16,7 +16,7 @@ article a {@apply italic underline text-blue-500;}
 
 input {
   color: #FFF ;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 :root {  /* colors for range selector */
