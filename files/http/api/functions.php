@@ -21,10 +21,12 @@ function validateData($data) {
 
             $error = [
                 'code' => 400,
-                'error' => 'Invalid data',
+                'error' => 'Missing data',
                 'field' => $field
             ];
-            return $error;
+            http_response_code(400);
+            echo json_encode($error, JSON_UNESCAPED_UNICODE);
+            die();
         }
     }
 
@@ -35,6 +37,7 @@ function validateData($data) {
             'error' => 'Invalid data',
             'field' => 'uuid'
         ];
+        http_response_code(400);
         echo json_encode($error, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -48,7 +51,9 @@ function validateData($data) {
             'error' => 'Invalid data',
             'field' => 'lengthMin/lengthMax'
         ];
-        return $error;
+        http_response_code(400);
+        echo json_encode($error, JSON_UNESCAPED_UNICODE);
+        die();
     }
 
     // Check if all array fields are arrays
@@ -60,7 +65,9 @@ function validateData($data) {
                 'error' => 'Invalid data',
                 'field' => $field
             ];
-            return $error;
+            http_response_code(400);
+            echo json_encode($error, JSON_UNESCAPED_UNICODE);
+            die();
         }
     }
 
@@ -73,7 +80,9 @@ function validateData($data) {
                     'error' => 'Invalid data',
                     'field' => 'agenda duration'
                 ];
-                return $error;
+                http_response_code(400);
+                echo json_encode($error, JSON_UNESCAPED_UNICODE);
+                die();
             }
         }
     }
