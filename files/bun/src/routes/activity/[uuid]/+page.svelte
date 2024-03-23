@@ -44,9 +44,10 @@
     </div>
     <div>
       <h2 class="h6">Domácí Příprava</h2>
+      <Accordion>
       {#each activity.homePreparation as prep}
         <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
-          <Accordion>
+
             <AccordionItem>
               <svelte:fragment slot="summary"><span>{prep.title}</span></svelte:fragment>
               <svelte:fragment slot="content">
@@ -54,16 +55,18 @@
                 {#if prep.note}<p class="pl-4"><span>ps.</span> {prep.note}</p>{/if}
               </svelte:fragment>
             </AccordionItem>
-          </Accordion>
+
         </div>
       {/each}
+    </Accordion>
     </div>
 
     <div>
       <h2 class="h6">Instrukce</h2>
+      <Accordion>
       {#each activity.instructions as instruction}
         <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
-          <Accordion>
+
             <AccordionItem>
               <svelte:fragment slot="summary"><span>{instruction.title}</span></svelte:fragment>
               <svelte:fragment slot="content">
@@ -71,25 +74,28 @@
                 {#if instruction.note}<p class="pl-4"><span>ps.</span> {instruction.note}</p>{/if}
               </svelte:fragment>
             </AccordionItem>
-          </Accordion>
+
         </div>
       {/each}
+    </Accordion>
     </div>
 
     <div>
       <h2 class="h6">Agenda</h2>
+      <Accordion>
       {#each activity.agenda as agendaItem}
         <div class="rounded-container-token variant-filled-secondary m-2 mt-0 !pt-2">
-          <Accordion>
+
             <AccordionItem>
               <svelte:fragment slot="summary"><span>{agendaItem.title} ({humanReadableTime(agendaItem.duration)})</span></svelte:fragment>
               <svelte:fragment slot="content">
                 {#if agendaItem.description}<p class="pl-4"><span>Pozor:</span> {agendaItem.description}</p>{/if}
               </svelte:fragment>
             </AccordionItem>
-          </Accordion>
+
         </div>
       {/each}
+    </Accordion>
     </div>
 <div>
   <h2  class="h6">Odkazy</h2>

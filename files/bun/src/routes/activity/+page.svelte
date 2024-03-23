@@ -5,6 +5,7 @@
   import Search from '$lib/search.svelte';
   import { get } from 'svelte/store';
 
+  let error = "";
   let data;
 
   //call the load when search store changes
@@ -17,6 +18,7 @@
 
     async function reload() {
       data = undefined;
+      error = "";
       let response = await fetch(`/api/ai/return/`, {
         method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
@@ -26,7 +28,7 @@
         data = await response.json();
         console.log(data);
       } else {
-        page.set({status: response.status, error: {message: response.statusText}});
+        error = "Nic jsme nenašli. Zkuste jiný dotaz.";
       }
     }
 
@@ -65,7 +67,9 @@
   </div>
 {:else}
 
-<div class="flex justify-center">
+<div class="flex flex-col items-center">
+  <p>{error}</p>
+
   <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20 col-span-full"/>
 </div>
 
