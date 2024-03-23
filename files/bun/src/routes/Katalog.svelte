@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { ProgressRadial, Autocomplete, popup, Paginator } from '@skeletonlabs/skeleton';
-
+  import {humanReadableTime, czech} from '$lib/utils.js';
   let data;
 
   onMount(async () => {
@@ -13,21 +13,6 @@
       page.set({status: response.status, error: {message: response.statusText}});
     }
   });
-
-  let czech = {
-    primarySchool: "Základní škola",
-    secondarySchool: "Střední škola",
-    highSchool: "Vysoká škola",
-    Individual: "Individuální", 
-    Group: "Skupina",
-    All: "Všechny"
-  }
-
-  function humanReadableTime(minutes) {
-    const hours = (minutes / 60)^0;
-    const remainingMinutes = minutes % 60;
-    return `${hours}h ${remainingMinutes}min`;
-  }
 </script>
 
 {#if data}
