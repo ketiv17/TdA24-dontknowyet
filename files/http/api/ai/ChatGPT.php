@@ -1,12 +1,4 @@
-<!-- Simple ChatGPT Class that enables both text and image prompt
-to use this class in another file just import it and call one of the 2 functions createTextRequest() or generateImage() with your prompt (or options)
 
-Code Example:
-
-include_once('ChatGPT.php'); // include class from folder
-$ai = new ChatGPT(); // initialize class object
-echo $ai->generateImage('a cat on a post lamp')['data'] ?? 'ERROR!'; // print the image URL or error text
-echo $ai->createTextRequest('what is the weather in Romania?')['data'] ?? 'ERROR!'; // print the text response or error text -->
 
 
 <?php
@@ -79,6 +71,51 @@ class ChatGPT
         $output['data'] = $response['choices'][0]['message']['content'] ?? null;
         $output['error'] = $response['error']['code'] ?? null;
         return $output;
+    }
+
+    public function generateActivityDescription($prompt, $uuid)
+    {
+        $question = "Vytvoř krátký popisek z JSON aktivity pro školy která je zde: " . $prompt . "Tento popisek bude následně použit pro vyhledávání které taky dělá AI a uživatel díky tomu najde svoji aktivitu jednodušeji. Následně k tomu taky připiš věkovou skupinu pro kterou to celkově je. Měj napaměti že tvoje odpověď bude uložena do databáze a další AI ji bude číst a proto je důležité aby obsahovala jen relevantní informace a jednala se o čistý popisek. MAX. povolená délka popisku je 50 slov";
+        // Insert the description into the database
+        $response = $this->createTextRequest($question);
+        
+        // Create connection
+        global $conn;
+        // Prepare an insert statement
+        $stmt = $conn->prepare("UPDATE activities SET aiDescription = ? WHERE uuid = ?");
+        $stmt->bind_param("ss", $response['data'], $uuid);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function retrieveMostRelevant($prompt)
+    {
+        // Retrieve all activity descriptions from the database
+        global $conn;
+        $stmt = $conn->prepare("SELECT uuid, aiDescription FROM activities");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $descriptions = [];
+        while ($row = $result->fetch_assoc()) {
+            if ($row['aiDescription'] !== null) {
+                $descriptions[] = [
+                    'uuid' => $row['uuid'],
+                    'aiDescription' => $row['aiDescription'],
+                ];
+            }
+        }
+        // Generate the most relevant activity description based on the prompt
+        $jsonExample = '[{"uuid":"<uuid>","relevant":"70%","reason":"Fotbal je vhodný pro větší skupiny a vyžaduje minimální vybavení"},{"uuid":"<uuid>","relevant":"20%","reason":"Tato hra je vhodná pro menší skupiny a může být zábavným způsobem, jak zapojit žáky do aktivního učení."},{"uuid":"<uuid>","relevant":"10%","reason":"Tato hra může být vhodná pro menší skupiny, ale vyžaduje specifické znalosti v oblasti chemie, které by mohly být omezující pro všechny žáky ve třídě."}]';
+        $question = "Here is list of descriptions for school subject in JSON: " . json_encode($descriptions) . "Please return three most relevant activities for following text: " . $prompt . " List them in the order from most relevant to the least relevant. For each result, add relevance in percent and short reason for selection in Czech language. Provide results in and put them into JSON format. The final result will look like this: " . $jsonExample . " Make sure that the response will be raw JSON data AND DO NOT CHANGE THE UUID, KEEP IT STILL THE SAME.";
+
+        $response = $this->createTextRequest($question, 'gpt-3.5-turbo', 0.7, 500);
+
+        // Get the uuid and reason of activities from the response
+        $activities = json_decode($response['data'], true);
+
+        return $activities;
     }
 
     /**

@@ -3,6 +3,7 @@
 // Script for handling POST requests to the API (creating a new activity)
 include '../functions.php';
 include '../dbconnect.php';
+include '../ai/ChatGPT.php';
 
 // Retrieving the request body and decoding it
 $request_body = file_get_contents('php://input');
@@ -96,14 +97,8 @@ foreach ($data['gallery'] as $gallery) {
 }
 
 // Returning a success message -----
-echo json_encode(getActivity($uuid), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+echo getActivity($uuid);
 
-/*
-// Closing the connection -----
-$conn -> close();
-$stmt -> close();
-
-// Create a short description for the activity by AI
 
 // If you're using PHP-FPM, this function can be used to send the response to the client and continue executing the script
 if (function_exists('fastcgi_finish_request')) {
@@ -114,5 +109,10 @@ if (function_exists('fastcgi_finish_request')) {
 ignore_user_abort(true);
 set_time_limit(0);
 
-// Here you can call the function that creates the short description
-createAiDescription($request_body); */
+// Create a short description for the activity by AI
+$ai = new ChatGPT();
+$ai->generateActivityDescription($request_body, $uuid);
+
+// Closing the connection -----
+$conn -> close();
+$stmt -> close();
