@@ -7,6 +7,7 @@
 
   let error = "";
   let data;
+  let error;
 
   //call the load when search store changes
 
@@ -71,6 +72,9 @@
   <p>{error}</p>
 
   <ProgressRadial value={undefined} stroke="50" track="stroke-tertiary-500/30" meter="stroke-tertiary-500" strokeLinecap="round" class="btn w-20 m-20 col-span-full"/>
+  {#if error}
+    <p>{error}</p>
+  {/if}
 </div>
 
 {/if}

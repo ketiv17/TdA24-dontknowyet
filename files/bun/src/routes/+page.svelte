@@ -10,7 +10,7 @@
       <!--<p class="text-2xl text-center">Katalog špičkových odborníků z řad učitelů, lektorů a tutorů.</p>-->
       <h2 class="h2 mt-10">O nás</h2>
       <article class="md:text-2xl text-lg">
-          amos je katalog aktivit pro lektory
+        Jsme Teacher Digital Agency, váš partner ve vzdělávání. Snažíme se inovovat vzdělávací prostředí v České republice prostřednictvím našich interaktivních projektů. Amos, naše metodická knihovna, je místo, kde učitelé a lektoři nacházejí inspiraci a sdílí své vzdělávací nápady s kolegy. S novým designem a responzivním rozhraním chceme posunout vzdělávání na další úroveň.
       </article>
   </div>
   <hr class="w-10/12" style="border-color: #333333;">
@@ -19,5 +19,4 @@
 <Search />
 <p class="font-light text-center">Vyhledávání pomocí umělé inteligence</p>
 <div class="flex justify-center m-8">
-<a href="/create" class="btn btn-md variant-filled-tertiary">Vytvoř novou Aktivitu</a>
 </div>

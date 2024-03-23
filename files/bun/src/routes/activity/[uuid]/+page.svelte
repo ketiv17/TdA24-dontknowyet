@@ -31,6 +31,8 @@
 <div class="flex flex-col items-center p-2 sm:p-4 lg:p-8">
   <h1 class="h1">{activity.activityName}</h1>
   <p class="font-bold">{activity.description}</p>
+  <br>
+  <br>
   <div class="grid grid-cols-2 padding">
     <div class="!pt-10">
     <p><span>Struktura:</span> {czech[activity.classStructure]}</p>
@@ -106,25 +108,29 @@
 </div>
 </div>
 <div class=" p-2 sm:p-4 lg:p-8">
-  <h2 class="h4">Galerie</h2>
+  <center><h2 class="h4">Galerie</h2></center>
   {#each activity.gallery as gallery}
     <div class="p-1 pt-4">
       <h3><span>{gallery.title}:</span></h3>
       <div>
+        {#if gallery.images.length === 1}
+          <img class="rounded max-h-64 m-1" src={gallery.images[0].highRes} alt={gallery.images[0].title} />
+        {:else}
           <Carousel>
             {#each gallery.images as image}
               <div>
-                <img class="max-h-96 m-1" src={image.highRes} alt={image.title} />
+                <img class="rounded max-h-64 m-1" src={image.highRes} alt={image.title} />
               </div>
             {/each}
           </Carousel>
-    </div>
+        {/if}
+      </div>
     </div>
   {/each}
-</div>
-{:else}
-  <p>Loading...</p>
-{/if}
+  </div>
+  {:else}
+    <p>Loading...</p>
+  {/if}
 
 <style>
   .padding div {
